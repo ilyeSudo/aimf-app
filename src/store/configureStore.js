@@ -1,6 +1,6 @@
 
 
-import { AsyncStorage } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import { enableBatching } from "redux-batched-actions";
 import { persistStore, persistReducer } from "redux-persist";
