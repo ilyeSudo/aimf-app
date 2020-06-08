@@ -32,7 +32,7 @@ class PostScreen extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps): void {
+  UNSAFE_componentWillReceiveProps(nextProps): void {
     if (this.props.loading && !nextProps.loading && !nextProps.errorMessage) {
       let title = null;
       let description = null;

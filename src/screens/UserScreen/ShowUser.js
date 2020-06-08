@@ -32,7 +32,7 @@ class ShowUser extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps): void {
+  UNSAFE_componentWillReceiveProps(nextProps): void {
     this.setState({
       isAuthorized: isAuthorized(nextProps.data),
       isSuperAdmin: isSuperAdmin(nextProps.data),
