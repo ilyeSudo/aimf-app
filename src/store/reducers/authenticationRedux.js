@@ -92,7 +92,7 @@ export const login = (email, password, deviceToken) => {
             )
           );
           axios.defaults.headers.Authorization = `Bearer ${response.data.access_token}`;
-          dispatch(getLiveVideo());
+          dispatch(getLiveVideo(response.data));
         }, 500);
       })
       .catch(function (error) {

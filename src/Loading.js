@@ -4,13 +4,17 @@ import { connect } from "react-redux";
 import * as PropTypes from "prop-types";
 import axios from "axios";
 import NavigationService from "./Utils/NavigationService";
-import { navigate } from "./Utils/Account";
 import { getLiveVideo } from "./store/reducers/liveVideoRedux";
 import { fcmService } from "./services/FCMService";
 import { localNotificationService } from "./services/LocalNotificationService";
 import { storeTokenDevice } from "./store/reducers/accountRedux";
 import { logout } from "./store/reducers/authenticationRedux";
-import { ACTIVE_USER } from "./Utils/Constants/Notifications";
+import Notifications from "./services/Notifications";
+import {
+  ACTIVE_USER,
+  END_LIVE,
+  NEW_LIVE,
+} from "./Utils/Constants/Notifications";
 import NotificationHandler from "./Utils/NotificationHandler";
 
 const styles = StyleSheet.create({
@@ -31,11 +35,17 @@ class Loading extends React.Component {
   }
 
   componentDidMount() {
+    NavigationService.setInstance(this.props.navigation);
+    this.notification = new Notifications(
+      this.onRegister.bind(this),
+      this.onNotification.bind(this)
+    );
+
     if (this.props.account && this.props.account.access_token) {
       axios.defaults.headers.Authorization = `Bearer ${this.props.account.access_token}`;
-      if (!this.props.video) {
-        this.props.getLiveVideo();
-      }
+      this.props.getLiveVideo(this.props.account);
+    } else {
+      this.props.navigation.navigate("Login");
     }
 
     NavigationService.setInstance(this.props.navigation);
@@ -56,8 +66,6 @@ class Loading extends React.Component {
   }
 
   onRegister = (token) => {
-    console.log('[App] onRegister: ', token);
-
     if (!this.props.tokenDevice) {
       this.props.storeTokenDevice(token);
     }
@@ -81,7 +89,6 @@ class Loading extends React.Component {
 
   onOpenNotification = (notification) => {
     console.log('[App] onOpenNotification: ', notification);
-    alert('Open Notification: ' + notification.body);
     const action = notification.action
       ? notification.action
       : notification.data.action;
@@ -91,12 +98,19 @@ class Loading extends React.Component {
     }
 
     NotificationHandler(this.props.navigation, action);
+    if (action === NEW_LIVE || action === END_LIVE) {
+      this.props.getLiveVideo(this.props.account);
+    }
+
+    if (!notification.foreground) {
+      NotificationHandler(this.props.navigation, action);
+    }
   };
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>Loading</Text>
+        <Text>Chargement</Text>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -104,18 +118,16 @@ class Loading extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { video } = state.liveVideoStore;
   const { tokenDevice } = state.accountStore;
   return {
     account: state.accountStore,
-    video,
     tokenDevice,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getLiveVideo: () => dispatch(getLiveVideo()),
+    getLiveVideo: (account) => dispatch(getLiveVideo(account)),
     storeTokenDevice: (tokenDevice) => dispatch(storeTokenDevice(tokenDevice)),
     logout: () => dispatch(logout()),
   };
@@ -123,7 +135,6 @@ const mapDispatchToProps = (dispatch) => {
 Loading.propTypes = {
   account: PropTypes.object,
   navigation: PropTypes.object,
-  video: PropTypes.object,
   getLiveVideo: PropTypes.func,
   storeTokenDevice: PropTypes.func,
   tokenDevice: PropTypes.object,

@@ -8,7 +8,6 @@ import ErrorModal from "./Components/ErrorModal";
 import { CREDENTIALS_EMPTY_ERROR } from "./Utils/Constants";
 import { dispatchErrorMessage } from "./store/reducers/errorMessageRedux";
 import { login } from "./store/reducers/authenticationRedux";
-import { navigate } from "./Utils/Account";
 
 const styles = StyleSheet.create({
   bodyWrapper: {
@@ -51,17 +50,6 @@ class Login extends React.Component {
       email: "",
       password: "",
     };
-  }
-
-  componentDidUpdate() {
-    if (this.props.loadingLiveVideo === false) {
-      navigate(
-        this.props.account,
-        this.props.navigation,
-        "Login",
-        !!this.props.video
-      );
-    }
   }
 
   handleLogin = () => {

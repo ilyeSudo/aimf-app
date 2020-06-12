@@ -37,13 +37,13 @@ export const navigate = (
 
     if (isAdmin(account.user) || isSuperAdmin(account.user)) {
       navigation.navigate(
-        youtube
+        youtube === true
           ? "adminUserWithYoutubeLiveTabNavigator"
           : "adminUserTabNavigator"
       );
     } else if (isMember(account.user)) {
       navigation.navigate(
-        youtube
+        youtube === true
           ? "activeUserWithYoutubeLiveTabNavigator"
           : "activeUserTabNavigator"
       );
