@@ -95,6 +95,9 @@ class FCMService {
                     notification = remoteMessage.data.notification
                 } else {
                     notification = remoteMessage.notification
+                    notification = {
+                        ...notification, action: remoteMessage.data.action
+                    }
                 }
                 onNotification(notification)
             }

@@ -77,7 +77,11 @@ class Loading extends React.Component {
         notification,
         options,
       );
-    
+  };
+
+  onOpenNotification = (notification) => {
+    console.log('[App] onOpenNotification: ', notification);
+    alert('Open Notification: ' + notification.body);
     const action = notification.action
       ? notification.action
       : notification.data.action;
@@ -87,11 +91,6 @@ class Loading extends React.Component {
     }
 
     NotificationHandler(this.props.navigation, action);
-  };
-
-  onOpenNotification = (notification) => {
-    console.log('[App] onOpenNotification: ', notification);
-    alert('Open Notification: ' + notification.body);
   };
 
   render() {

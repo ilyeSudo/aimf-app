@@ -58,9 +58,10 @@ class LocalNotificationService {
             /* iOS and Android properties */
             title: title || "",
             message: message || "",
+            action: data.action, 
             playSound: options.playSound || false,
             soundName: options.soundName || 'default',
-            userInteraction: false // BOOLEAN: If the notification was opened by the user from the notification area or not
+            userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
         });
     }
 
