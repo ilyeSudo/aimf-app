@@ -6,7 +6,8 @@ import axios from "axios";
 import NavigationService from "./Utils/NavigationService";
 import { navigate } from "./Utils/Account";
 import { getLiveVideo } from "./store/reducers/liveVideoRedux";
-import Notifications from "./services/Notifications";
+import { fcmService } from "./services/FCMService";
+import { localNotificationService } from "./services/LocalNotificationService";
 import { storeTokenDevice } from "./store/reducers/accountRedux";
 import { logout } from "./store/reducers/authenticationRedux";
 import { ACTIVE_USER } from "./Utils/Constants/Notifications";
@@ -24,6 +25,9 @@ class Loading extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.fcmService = null;
+    this.localNotificationService = null;
+
   }
 
   componentDidMount() {
@@ -33,6 +37,7 @@ class Loading extends React.Component {
         this.props.getLiveVideo();
       }
     }
+
     NavigationService.setInstance(this.props.navigation);
     navigate(
       this.props.account,
@@ -41,19 +46,38 @@ class Loading extends React.Component {
       this.props.video && this.props.video.youtube_id
     );
 
-    this.notification = new Notifications(
-      this.onRegister.bind(this),
-      this.onNotification.bind(this)
-    );
+    this.fcmService = fcmService;
+    this.localNotificationService = localNotificationService;
+
+    this.fcmService.registerAppWithFCM();
+    this.fcmService.register(this.onRegister, this.onNotification, this.onOpenNotification);
+    this.localNotificationService.configure(this.onOpenNotification);
+    
   }
 
   onRegister = (token) => {
+    console.log('[App] onRegister: ', token);
+
     if (!this.props.tokenDevice) {
       this.props.storeTokenDevice(token);
     }
   };
 
   onNotification = (notification) => {
+      console.log('[App] onNotification: ', notification);
+      const options = {
+        soundName: 'default',
+        playSound: true,
+      };
+
+      this.localNotificationService.showNotification(
+        0,
+        notification.title,
+        notification.body,
+        notification,
+        options,
+      );
+    
     const action = notification.action
       ? notification.action
       : notification.data.action;
@@ -63,6 +87,11 @@ class Loading extends React.Component {
     }
 
     NotificationHandler(this.props.navigation, action);
+  };
+
+  onOpenNotification = (notification) => {
+    console.log('[App] onOpenNotification: ', notification);
+    alert('Open Notification: ' + notification.body);
   };
 
   render() {

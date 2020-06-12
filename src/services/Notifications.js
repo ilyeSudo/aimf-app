@@ -1,17 +1,30 @@
 import PushNotification from "react-native-push-notification";
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import { Platform } from "react-native"
 
-export default class Notifications {
-  constructor(onRegister, onNotification) {
-    this.configure(onRegister, onNotification);
-  }
+PushNotificationIOS.addEventListener('register', this.appRegistrationHandlerIos);
+
+class Notifications {
 
   configure = (onRegister, onNotification) => {
+    console.log("[Notification] configure");
+
     PushNotification.configure({
       // (optional) Called when Token is generated (iOS and Android)
-      onRegister, // (required) Called when a remote or local notification is opened or received,
-
+      // (required) Called when a remote or local notification is opened or received,
+      onRegister: function(token) {
+        onRegister(token);
+        console.log("[Notification] onRegister: ", token);
+      },
       // (required) Called when a remote or local notification is opened or received
-      onNotification, // this._onNotification,
+      // onNotification, // this._onNotification,
+      onNotification: function(notification) {
+        // process the notification
+        // required on iOS only
+        onNotification(notification);
+        console.log("Je suis dans onNotification");
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+      },
 
       // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
       senderID: "621874050263",
@@ -35,4 +48,15 @@ export default class Notifications {
       requestPermissions: true,
     });
   };
+
+  localNotification = () => {
+    PushNotification.localNotification({
+      /* iOS and Android properties */
+      title: "My Notification Title", // (optional)
+      message: "My Notification Message", // (required)
+    });
+
+  };
 }
+
+export default notifications = new Notifications();

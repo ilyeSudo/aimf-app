@@ -104,6 +104,7 @@ class HomeScreen extends Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log(state);
   const { errorMessage } = state.errorMessageStore;
   const {
     articles,
