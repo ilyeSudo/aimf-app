@@ -22,7 +22,6 @@ class Notifications {
         // process the notification
         // required on iOS only
         onNotification(notification);
-        console.log("Je suis dans onNotification");
         notification.finish(PushNotificationIOS.FetchResult.NoData);
       },
 
