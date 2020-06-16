@@ -8,7 +8,6 @@ import ErrorModal from "./Components/ErrorModal";
 import { CREDENTIALS_EMPTY_ERROR } from "./Utils/Constants";
 import { dispatchErrorMessage } from "./store/reducers/errorMessageRedux";
 import { login } from "./store/reducers/authenticationRedux";
-import { navigate } from "./Utils/Account";
 
 const styles = StyleSheet.create({
   bodyWrapper: {
@@ -53,17 +52,6 @@ class Login extends React.Component {
     };
   }
 
-  componentDidUpdate() {
-    if (this.props.loadingLiveVideo === false) {
-      navigate(
-        this.props.account,
-        this.props.navigation,
-        "Login",
-        !!this.props.video
-      );
-    }
-  }
-
   handleLogin = () => {
     const { email, password } = this.state;
     if (!email || !password) {
@@ -71,7 +59,7 @@ class Login extends React.Component {
       return;
     }
 
-    this.props.login(email, password);
+    this.props.login(email, password, this.props.tokenDevice);
   };
 
   render() {
@@ -129,18 +117,21 @@ const mapStateToProps = (state) => {
   const { errorMessage } = state.errorMessageStore;
   const { loading } = state.authenticationStore;
   const { loading: loadingLiveVideo, video } = state.liveVideoStore;
+  const { tokenDevice } = state.accountStore;
   return {
     errorMessage,
     loading,
     loadingLiveVideo,
     video,
     account: state.accountStore,
+    tokenDevice,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (email, password) => dispatch(login(email, password)),
+    login: (email, password, deviceToken) =>
+      dispatch(login(email, password, deviceToken)),
     dispatchErrorMessage: (errorMessage) =>
       dispatch(dispatchErrorMessage(errorMessage)),
   };
@@ -155,6 +146,7 @@ Login.propTypes = {
   account: PropTypes.object,
   loadingLiveVideo: PropTypes.bool,
   video: PropTypes.object,
+  tokenDevice: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -41,11 +41,14 @@ const rootReducer = combineReducers({
 
 const appReducer = (state, action) => {
   let newState = state;
+
   if (
     action.type === DISPATCH_UNAUTHORIZED_ERROR ||
     action.type === POST_LOGOUT_SUCCESS
   ) {
-    newState = undefined;
+    newState = {
+      accountStore: { tokenDevice: newState.accountStore.tokenDevice },
+    };
   }
 
   return rootReducer(newState, action);
@@ -66,7 +69,7 @@ const logoutUser = (store) => (next) => (action) => {
     action.meta.batch &&
     action.payload[0].type === DISPATCH_UNAUTHORIZED_ERROR
   ) {
-    NavigationService.navigate("Login");
+    NavigationService.navigate("Loading");
   }
   return next(action);
 };
