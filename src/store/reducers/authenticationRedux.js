@@ -1,25 +1,25 @@
-import { batchActions } from "redux-batched-actions";
-import axios from "axios";
+import {batchActions} from 'redux-batched-actions';
+import axios from 'axios';
 import {
   GET_SECURITY_QUESTIONS_URI,
   POST_LOGIN_URI,
   POST_LOGOUT_URI,
-} from "../../Utils/ApiUrl";
-import getAxiosInstance from "../../Utils/axios";
-import { dispatchError } from "./errorMessageRedux";
-import { storeAccount } from "./accountRedux";
-import getRandomQuestionIndex from "../../Components/ProfileForm/Functions";
-import { getLiveVideo } from "./liveVideoRedux";
+} from '../../Utils/ApiUrl';
+import getAxiosInstance from '../../Utils/axios';
+import {dispatchError} from './errorMessageRedux';
+import {storeAccount} from './accountRedux';
+import getRandomQuestionIndex from '../../Components/AccountForm/Functions';
+import {getLiveVideo} from './liveVideoRedux';
 
-const POST_REQUEST = "POST_REQUEST";
-const POST_LOGIN_SUCCESS = "POST_LOGIN_SUCCESS";
-export const POST_LOGOUT_SUCCESS = "POST_LOGOUT_SUCCESS";
-const POST_LOGIN_ERROR = "POST_LOGIN_ERROR";
-const POST_BATCH_LOGIN_ERROR = "POST_BATCH_LOGIN_ERROR";
-const POST_BATCH_LOGIN_SUCCESS = "POST_BATCH_LOGIN_SUCCESS";
+const POST_REQUEST = 'POST_REQUEST';
+const POST_LOGIN_SUCCESS = 'POST_LOGIN_SUCCESS';
+export const POST_LOGOUT_SUCCESS = 'POST_LOGOUT_SUCCESS';
+const POST_LOGIN_ERROR = 'POST_LOGIN_ERROR';
+const POST_BATCH_LOGIN_ERROR = 'POST_BATCH_LOGIN_ERROR';
+const POST_BATCH_LOGIN_SUCCESS = 'POST_BATCH_LOGIN_SUCCESS';
 
-const GET_QUESTIONS_ERROR = "GET_QUESTIONS_ERROR";
-const GET_QUESTIONS_SUCCESS = "GET_QUESTIONS_SUCCESS";
+const GET_QUESTIONS_ERROR = 'GET_QUESTIONS_ERROR';
+const GET_QUESTIONS_SUCCESS = 'GET_QUESTIONS_SUCCESS';
 
 const postRequest = () => {
   return {
@@ -33,28 +33,28 @@ const postRequest = () => {
 const postLoginError = () => {
   return {
     type: POST_LOGIN_ERROR,
-    payload: { loading: false },
+    payload: {loading: false},
   };
 };
 
 const postLoginSuccess = () => {
   return {
     type: POST_LOGIN_SUCCESS,
-    payload: { loading: false },
+    payload: {loading: false},
   };
 };
 
 const postLogoutSuccess = () => {
   return {
     type: POST_LOGOUT_SUCCESS,
-    payload: { loading: false },
+    payload: {loading: false},
   };
 };
 
 const getQuestionsError = () => {
   return {
     type: GET_QUESTIONS_ERROR,
-    payload: { loading: false },
+    payload: {loading: false},
   };
 };
 
@@ -87,8 +87,8 @@ export const login = (email, password) => {
           dispatch(
             batchActions(
               [storeAccount(response.data), postLoginSuccess()],
-              POST_BATCH_LOGIN_SUCCESS
-            )
+              POST_BATCH_LOGIN_SUCCESS,
+            ),
           );
           axios.defaults.headers.Authorization = `Bearer ${response.data.access_token}`;
           dispatch(getLiveVideo());
@@ -99,8 +99,8 @@ export const login = (email, password) => {
           dispatch(
             batchActions(
               [dispatchError(error), postLoginError()],
-              POST_BATCH_LOGIN_ERROR
-            )
+              POST_BATCH_LOGIN_ERROR,
+            ),
           );
         }, 500);
       });
@@ -119,8 +119,8 @@ export const getQuestions = () => {
         dispatch(
           batchActions(
             [dispatchError(error), getQuestionsError()],
-            POST_BATCH_LOGIN_ERROR
-          )
+            POST_BATCH_LOGIN_ERROR,
+          ),
         );
       });
   };
@@ -138,14 +138,14 @@ export const logout = () => {
         dispatch(
           batchActions(
             [dispatchError(error), postLoginError()],
-            POST_BATCH_LOGIN_ERROR
-          )
+            POST_BATCH_LOGIN_ERROR,
+          ),
         );
       });
   };
 };
 
-const initialState = { loading: false };
+const initialState = {loading: false};
 
 export const authenticationReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -155,7 +155,7 @@ export const authenticationReducer = (state = initialState, action) => {
     case POST_LOGIN_ERROR:
     case GET_QUESTIONS_SUCCESS:
     case GET_QUESTIONS_ERROR: {
-      return { ...state, ...action.payload };
+      return {...state, ...action.payload};
     }
     default: {
       return state;

@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { ScrollView, PixelRatio, Dimensions, Text, View } from "react-native";
-import YouTube from "react-native-youtube";
+import React, {Component} from 'react';
+import {ScrollView, PixelRatio, Dimensions, Text, View} from 'react-native';
+import YouTube from 'react-native-youtube';
 
-import { Thumbnail } from "native-base";
-import * as PropTypes from "prop-types";
-import { connect } from "react-redux";
-import styles from "./YouTubeScreen/css";
+import {Thumbnail} from 'native-base';
+import * as PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import styles from './YouTubeScreen/css';
 
 class YouTubeScreen extends Component {
   static navigationOptions = {
@@ -19,12 +19,12 @@ class YouTubeScreen extends Component {
     this.state = {
       isPlaying: true,
       isLooping: true,
-      playerWidth: Dimensions.get("window").width,
+      playerWidth: Dimensions.get('window').width,
     };
   }
 
   render() {
-    const logo = require("../../assets/images/tamejida_47.jpg");
+    const logo = require('../../assets/images/tamejida_47.jpg');
     return (
       <ScrollView style={styles.container}>
         <YouTube
@@ -38,7 +38,7 @@ class YouTubeScreen extends Component {
           style={[
             {
               height: PixelRatio.roundToNearestPixel(
-                this.state.playerWidth / (16 / 9)
+                this.state.playerWidth / (16 / 9),
               ),
             },
             styles.player,
@@ -47,28 +47,24 @@ class YouTubeScreen extends Component {
         <View
           style={{
             margin: 25,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <View style={{ width: "80%" }}>
-            <Text style={{ fontSize: 17, fontWeight: "bold" }}>
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <View style={{width: '80%'}}>
+            <Text style={{fontSize: 17, fontWeight: 'bold'}}>
               {this.props.video && this.props.video.title}
             </Text>
           </View>
-          <View style={{ marginLeft: 10 }}>
+          <View style={{marginLeft: 10}}>
             <Thumbnail source={logo} />
-            <Text style={{ fontSize: 14, fontWeight: "bold" }}>
-              Tamejida 47
-            </Text>
+            <Text style={{fontSize: 14, fontWeight: 'bold'}}>Tamejida 47</Text>
           </View>
         </View>
         <View
           style={{
             margin: 25,
-          }}
-        >
-          <Text style={{ fontSize: 16}}>
+          }}>
+          <Text style={{fontSize: 16}}>
             {this.props.video && this.props.video.description}
           </Text>
         </View>
@@ -78,7 +74,7 @@ class YouTubeScreen extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { video } = state.liveVideoStore;
+  const {video} = state.liveVideoStore;
   return {
     video,
   };

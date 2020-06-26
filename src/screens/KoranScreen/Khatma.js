@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   ScrollView,
   View,
@@ -7,31 +7,31 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
-} from "react-native";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { Container } from "native-base";
-import CostumHeader from "../../Components/KoranScreen/CostumHeader";
-import CostumItemList from "../../Components/KoranScreen/CostumItemList";
-import TextButton from "../../Components/KoranScreen/TextButton";
+} from 'react-native';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {Container} from 'native-base';
+import CostumHeader from '../../Components/KoranScreen/CostumHeader';
+import CostumItemList from '../../Components/KoranScreen/CostumItemList';
+import TextButton from '../../Components/KoranScreen/TextButton';
 import {
   saveUserPicksReads,
   saveUserReads,
   updateKhatma,
-} from "../../store/reducers/khatmaRedux";
-import { formatDateWithDayAndMonthName } from "../../Utils/Functions";
-import { gray3, black } from "../../Utils/colors";
-import { isAdmin } from "../../Utils/Account";
+} from '../../store/reducers/khatmaRedux';
+import {formatDateWithDayAndMonthName} from '../../Utils/Functions';
+import {gray3, black} from '../../Utils/colors';
+import {isAdmin} from '../../Utils/Account';
 
 const styles = StyleSheet.create({
   textHeader: {
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: '700',
     color: black,
   },
   textDetails: {
     fontSize: 16,
-    fontWeight: "300",
+    fontWeight: '300',
     paddingHorizontal: 5,
     marginTop: 10,
     marginBottom: 10,
@@ -39,6 +39,9 @@ const styles = StyleSheet.create({
 });
 
 class Khatma extends Component {
+  static navigationOptions = {
+    header: null,
+  };
   constructor(props) {
     super(props);
 
@@ -49,7 +52,7 @@ class Khatma extends Component {
   }
 
   componentDidMount = () => {
-    const { userReadList, userToReadList, isOpen } = this.props;
+    const {userReadList, userToReadList, isOpen} = this.props;
 
     this.setState({
       toggleUserToReadList: userToReadList,
@@ -59,32 +62,32 @@ class Khatma extends Component {
   };
 
   onChangeOpenKhetma = () => {
-    const { khatma, dispatch } = this.props;
+    const {khatma, dispatch} = this.props;
     const newState = !this.state.isOpen;
 
-    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
+    this.setState((prevState) => ({isOpen: !prevState.isOpen}));
     dispatch(updateKhatma(khatma.id, newState));
   };
 
   onChangeToggleToRead = (id) => {
-    const { toggleUserToReadList } = this.state;
-    const { userToReadList, koranStore } = this.props;
+    const {toggleUserToReadList} = this.state;
+    const {userToReadList, koranStore} = this.props;
     const include = Object.values(toggleUserToReadList).includes(id);
     const includeInToRead = Object.values(userToReadList).includes(id);
     const koranListe = koranStore.koranListe.data;
 
     if (includeInToRead) {
       Alert.alert(
-        "Opération non permise",
+        'Opération non permise',
         `Vous avez déjà validé la selection de  ${koranListe[id - 1].name}.
-            Vous ne pouvez pas annuler une selection déjâ validée`
+            Vous ne pouvez pas annuler une selection déjâ validée`,
       );
     } else {
       // eslint-disable-next-line no-unused-expressions
       include
         ? this.setState((prevState) => ({
             toggleUserToReadList: prevState.toggleUserToReadList.filter(
-              (item) => item !== id
+              (item) => item !== id,
             ),
           }))
         : this.setState((prevState) => ({
@@ -94,24 +97,24 @@ class Khatma extends Component {
   };
 
   onChangeToggleRead = (id) => {
-    const { toggleUserReadList } = this.state;
-    const { userReadList, koranStore } = this.props;
+    const {toggleUserReadList} = this.state;
+    const {userReadList, koranStore} = this.props;
     const include = Object.values(toggleUserReadList).includes(id);
     const includeInRead = Object.values(userReadList).includes(id);
     const koranListe = koranStore.koranListe.data;
 
     if (includeInRead) {
       Alert.alert(
-        "Opération non permise",
+        'Opération non permise',
         `Vous avez déjà validé la lecture de  ${koranListe[id - 1].name}.
-            Vous ne pouvez pas annuler une lecture déjâ validée`
+            Vous ne pouvez pas annuler une lecture déjâ validée`,
       );
     } else {
       // eslint-disable-next-line no-unused-expressions
       include
         ? this.setState((prevState) => ({
             toggleUserReadList: prevState.toggleUserReadList.filter(
-              (item) => item !== id
+              (item) => item !== id,
             ),
           }))
         : this.setState((prevState) => ({
@@ -121,66 +124,66 @@ class Khatma extends Component {
   };
 
   dispatchAndNavigate = () => {
-    const { dispatch, khatma, navigation } = this.props;
-    const { toggleUserToReadList, toggleUserReadList, isOpen } = this.state;
+    const {dispatch, khatma, navigation} = this.props;
+    const {toggleUserToReadList, toggleUserReadList, isOpen} = this.state;
     if (isOpen) {
       dispatch(
-        saveUserPicksReads(khatma.id, toggleUserToReadList, toggleUserReadList)
+        saveUserPicksReads(khatma.id, toggleUserToReadList, toggleUserReadList),
       );
     } else {
       dispatch(saveUserReads(khatma.id, toggleUserReadList));
     }
-    navigation.navigate("KoranTimeLine");
+    navigation.navigate('KoranTimeLine');
   };
 
   validateUserChoise = (event) => {
     event.preventDefault();
 
-    const { toggleUserToReadList, toggleUserReadList } = this.state;
+    const {toggleUserToReadList, toggleUserReadList} = this.state;
 
     if (toggleUserToReadList.length || toggleUserReadList.length) {
       Alert.alert(
-        "Confirmation",
+        'Confirmation',
         // body
-        "Vous êtes sur le point de valider votre selection",
+        'Vous êtes sur le point de valider votre selection',
         [
           {
-            text: "Confirmer",
+            text: 'Confirmer',
             onPress: () => this.dispatchAndNavigate(),
           },
           {
-            text: "Annuler",
+            text: 'Annuler',
             onPress: () => {},
-            style: "cancel",
+            style: 'cancel',
           },
         ],
-        { cancelable: false }
+        {cancelable: false},
         // clicking out side of alert will not cancel
       );
     } else {
       Alert.alert(
-        "Aucune selection",
-        "Merci de bien vouloir sélectioner une Takheroubt à lire"
+        'Aucune selection',
+        'Merci de bien vouloir sélectioner une Takheroubt à lire',
       );
     }
   };
 
   render() {
-    const { toggleUserToReadList, toggleUserReadList, isOpen } = this.state;
-    const { koranStore, khatma, userToReadList, account } = this.props;
+    const {toggleUserToReadList, toggleUserReadList, isOpen} = this.state;
+    const {koranStore, khatma, userToReadList, account} = this.props;
     const numberOfToRead = userToReadList.length;
     const koranListe = koranStore.koranListe.data;
 
     if (koranStore.loading) {
       return (
-        <View style={{ flex: 1, justifyContent: "center" }}>
+        <View style={{flex: 1, justifyContent: 'center'}}>
           <ActivityIndicator animating size="large" />
         </View>
       );
     }
 
     return (
-      <View style={{ flex: 1, backgroundColor: gray3 }}>
+      <View style={{flex: 1, backgroundColor: gray3}}>
         <Container>
           <CostumHeader
             title="Khatmat"
@@ -193,29 +196,27 @@ class Khatma extends Component {
             {isAdmin(account.user) &&
               (isOpen ? (
                 <TextButton
-                  style={{ marginTop: 10 }}
-                  onPress={this.onChangeOpenKhetma}
-                >
+                  style={{marginTop: 10}}
+                  onPress={this.onChangeOpenKhetma}>
                   Fermer Khetma
                 </TextButton>
               ) : (
                 <TextButton
-                  style={{ marginTop: 10 }}
-                  onPress={this.onChangeOpenKhetma}
-                >
+                  style={{marginTop: 10}}
+                  onPress={this.onChangeOpenKhetma}>
                   Ouvrir Khetma
                 </TextButton>
               ))}
 
             {numberOfToRead > 0 && (
               <View>
-                <View style={{ marginTop: 40, paddingHorizontal: 20 }}>
+                <View style={{marginTop: 40, paddingHorizontal: 20}}>
                   <Text style={styles.textHeader}>
                     Valider la lecture de vos Tekheroubines
                   </Text>
                   <Text style={styles.textDetails}>
-                    Vous avez choisi dans cette Khatma {numberOfToRead}{" "}
-                    {numberOfToRead === 1 ? "Takheroubt" : " Tikheroubine"}.
+                    Vous avez choisi dans cette Khatma {numberOfToRead}{' '}
+                    {numberOfToRead === 1 ? 'Takheroubt' : ' Tikheroubine'}.
                     Merci de confirmer vos lectures.
                   </Text>
                 </View>
@@ -223,7 +224,7 @@ class Khatma extends Component {
                 <View>
                   {userToReadList.map((id) => {
                     const alreadyReadByAuthedUser = Object.values(
-                      toggleUserReadList
+                      toggleUserReadList,
                     ).includes(id);
                     const numberOfReader = 0;
                     return (
@@ -245,7 +246,7 @@ class Khatma extends Component {
 
             {isOpen && (
               <View>
-                <View style={{ marginTop: 40, paddingHorizontal: 20 }}>
+                <View style={{marginTop: 40, paddingHorizontal: 20}}>
                   <Text style={styles.textHeader}>
                     Choisir une ou plusieurs Tekheroubine
                   </Text>
@@ -266,7 +267,7 @@ class Khatma extends Component {
                 <View>
                   {Object.keys(koranListe).map((index) => {
                     const alreadyPickedByAuthedUser = Object.values(
-                      toggleUserToReadList
+                      toggleUserToReadList,
                     ).includes(koranListe[index].id);
                     const numberOfReader =
                       khatma.takharoubts[index].pickedTimes;
@@ -295,30 +296,30 @@ class Khatma extends Component {
   }
 }
 
-const mapStateToProps = (state, { navigation }) => {
-  const { khatmaIdParam } = navigation.state.params;
+const mapStateToProps = (state, {navigation}) => {
+  const {khatmaIdParam} = navigation.state.params;
   const currentKhatma = Object.values(state.khatmaStore.khatma).filter(
     (khatma) => {
       return khatma.id === khatmaIdParam;
-    }
+    },
   );
   const currentUserKhatma = Object.values(state.khatmaStore.userKhatma).filter(
     (userKhatma) => {
       return userKhatma.id === khatmaIdParam;
-    }
+    },
   );
   const userToReadList = currentUserKhatma.length
     ? Object.values(currentUserKhatma[0].userTakharoubts).map(
         (userTakharoubts) => {
           return userTakharoubts.takharoubt;
-        }
+        },
       )
     : [];
   const read = currentUserKhatma.length
     ? Object.values(currentUserKhatma[0].userTakharoubts).filter(
         (userTakharoubts) => {
           return userTakharoubts.isRead;
-        }
+        },
       )
     : [];
 

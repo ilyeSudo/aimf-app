@@ -1,17 +1,17 @@
-import React from "react";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
-import { connect } from "react-redux";
-import * as PropTypes from "prop-types";
-import axios from "axios";
-import NavigationService from "./Utils/NavigationService";
-import { navigate } from "./Utils/Account";
-import { getLiveVideo } from "./store/reducers/liveVideoRedux";
+import React from 'react';
+import {View, Text, ActivityIndicator, StyleSheet} from 'react-native';
+import {connect} from 'react-redux';
+import * as PropTypes from 'prop-types';
+import axios from 'axios';
+import NavigationService from './Utils/NavigationService';
+import {navigate} from './Utils/Account';
+import {getLiveVideo} from './store/reducers/liveVideoRedux';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
@@ -27,8 +27,8 @@ class Loading extends React.Component {
     navigate(
       this.props.account,
       this.props.navigation,
-      "Login",
-      this.props.video && this.props.video.youtube_id
+      'Login',
+      this.props.video && this.props.video.youtube_id,
     );
   }
 
@@ -43,7 +43,7 @@ class Loading extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { video } = state.liveVideoStore;
+  const {video} = state.liveVideoStore;
   return {
     account: state.accountStore,
     video,

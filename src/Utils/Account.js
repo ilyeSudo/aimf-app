@@ -1,5 +1,5 @@
-import axios from "axios";
-import { ADMIN_ROLE, MEMBER_ROLE, SUPER_ADMIN_ROLE } from "./Constants";
+import axios from 'axios';
+import {ADMIN_ROLE, MEMBER_ROLE, SUPER_ADMIN_ROLE} from './Constants';
 
 export const isSuperAdmin = (user) => {
   if (user && user.roles) {
@@ -29,8 +29,8 @@ export const isAuthorized = (user) => {
 export const navigate = (
   account,
   navigation,
-  defaultNavigation = "Login",
-  youtube = false
+  defaultNavigation = 'Login',
+  youtube = false,
 ) => {
   if (account.user && account.access_token) {
     axios.defaults.headers.Authorization = `Bearer ${account.access_token}`;
@@ -38,17 +38,17 @@ export const navigate = (
     if (isAdmin(account.user) || isSuperAdmin(account.user)) {
       navigation.navigate(
         youtube
-          ? "adminUserWithYoutubeLiveTabNavigator"
-          : "adminUserTabNavigator"
+          ? 'adminUserWithYoutubeLiveTabNavigator'
+          : 'adminUserTabNavigator',
       );
     } else if (isMember(account.user)) {
       navigation.navigate(
         youtube
-          ? "activeUserWithYoutubeLiveTabNavigator"
-          : "activeUserTabNavigator"
+          ? 'activeUserWithYoutubeLiveTabNavigator'
+          : 'activeUserTabNavigator',
       );
     } else {
-      navigation.navigate("unActiveUserTabNavigator");
+      navigation.navigate('unActiveUserTabNavigator');
     }
     return;
   }

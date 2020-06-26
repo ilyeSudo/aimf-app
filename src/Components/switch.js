@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import {
-  StyleSheet, Switch, Text, View,
-} from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, Switch, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 
 const style = StyleSheet.create({
@@ -38,7 +36,7 @@ const style = StyleSheet.create({
     bottom: 0,
     left: 0,
   },
-  titleWrapper: { flex: 1, position: 'relative' },
+  titleWrapper: {flex: 1, position: 'relative'},
 });
 
 class SettingsSwitch extends Component {
@@ -82,38 +80,51 @@ class SettingsSwitch extends Component {
 
   render() {
     const {
-      containerProps, containerStyle, titleProps, titleStyle, title, disabled, switchProps,
-      disabledOverlayStyle, switchWrapperProps, switchWrapperStyle, value,
-      trackColor, onValueChange, descriptionProps, descriptionStyle, description,
+      containerProps,
+      containerStyle,
+      titleProps,
+      titleStyle,
+      title,
+      disabled,
+      switchProps,
+      disabledOverlayStyle,
+      switchWrapperProps,
+      switchWrapperStyle,
+      value,
+      trackColor,
+      onValueChange,
+      descriptionProps,
+      descriptionStyle,
+      description,
     } = this.props;
 
     return (
-      <View {...containerProps} style={[style.defaultContainerStyle, containerStyle]}>
+      <View
+        {...containerProps}
+        style={[style.defaultContainerStyle, containerStyle]}>
         <View style={style.titleWrapper}>
-          <Text
-            {...titleProps}
-            style={[style.defaultTitleStyle, titleStyle]}
-          >
+          <Text {...titleProps} style={[style.defaultTitleStyle, titleStyle]}>
             {title}
           </Text>
           {description ? (
             <Text
               {...descriptionProps}
-              style={[style.defaultDescriptionStyle, descriptionStyle]}
-            >
+              style={[style.defaultDescriptionStyle, descriptionStyle]}>
               {description}
             </Text>
           ) : null}
-          {(disabled) ? (
+          {disabled ? (
             <View
-              style={[style.defaultDisabledOverlayStyle, (disabled) ? disabledOverlayStyle : null]}
+              style={[
+                style.defaultDisabledOverlayStyle,
+                disabled ? disabledOverlayStyle : null,
+              ]}
             />
           ) : null}
         </View>
         <View
           {...switchWrapperProps}
-          style={[style.defaultSwitchWrapperStyle, switchWrapperStyle]}
-        >
+          style={[style.defaultSwitchWrapperStyle, switchWrapperStyle]}>
           <Switch
             value={value}
             trackColor={trackColor}

@@ -1,28 +1,28 @@
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
-import { connect } from "react-redux";
-import * as PropTypes from "prop-types";
-import { Item, Input } from "native-base";
-import SpinnerButton from "react-native-spinner-button";
-import ErrorModal from "./Components/ErrorModal";
-import { CREDENTIALS_EMPTY_ERROR } from "./Utils/Constants";
-import { dispatchErrorMessage } from "./store/reducers/errorMessageRedux";
-import { login } from "./store/reducers/authenticationRedux";
-import { navigate } from "./Utils/Account";
+import React from 'react';
+import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import {connect} from 'react-redux';
+import * as PropTypes from 'prop-types';
+import {Item, Input} from 'native-base';
+import SpinnerButton from 'react-native-spinner-button';
+import ErrorModal from './Components/ErrorModal';
+import {CREDENTIALS_EMPTY_ERROR} from './Utils/Constants';
+import {dispatchErrorMessage} from './store/reducers/errorMessageRedux';
+import {login} from './store/reducers/authenticationRedux';
+import {navigate} from './Utils/Account';
 
 const styles = StyleSheet.create({
   bodyWrapper: {
     height: 550,
     paddingTop: 50,
-    alignItems: "center",
-    justifyContent: "space-evenly",
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
   createAccount: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   inputItem: {
-    marginLeft: "auto",
-    marginRight: "auto",
+    marginLeft: 'auto',
+    marginRight: 'auto',
     paddingHorizontal: 10,
     width: 300,
     borderRadius: 10,
@@ -31,16 +31,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   loginButton: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 50,
     width: 150,
     borderRadius: 10,
-    backgroundColor: "#cb8347",
+    backgroundColor: '#cb8347',
   },
   nextButtonText: {
     fontSize: 18,
-    color: "#fff",
+    color: '#fff',
   },
 });
 
@@ -48,8 +48,8 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     };
   }
 
@@ -58,14 +58,14 @@ class Login extends React.Component {
       navigate(
         this.props.account,
         this.props.navigation,
-        "Login",
-        !!this.props.video
+        'Login',
+        !!this.props.video,
       );
     }
   }
 
   handleLogin = () => {
-    const { email, password } = this.state;
+    const {email, password} = this.state;
     if (!email || !password) {
       this.props.dispatchErrorMessage(CREDENTIALS_EMPTY_ERROR);
       return;
@@ -75,17 +75,17 @@ class Login extends React.Component {
   };
 
   render() {
-    const { email, password } = this.state;
-    const logo = require("../assets/images/logo_transparent.png");
+    const {email, password} = this.state;
+    const logo = require('../assets/images/logo_transparent.png');
     return (
       <>
         <View style={styles.bodyWrapper}>
-          <Image style={{ width: 120, height: 120 }} source={logo} />
+          <Image style={{width: 120, height: 120}} source={logo} />
           <Item rounded style={styles.inputItem}>
             <Input
               style={styles.input}
               keyboardType="email-address"
-              onChangeText={(value) => this.setState({ email: value })}
+              onChangeText={(value) => this.setState({email: value})}
               placeholder="Adresse email"
               value={email}
             />
@@ -94,7 +94,7 @@ class Login extends React.Component {
             <Input
               secureTextEntry
               style={styles.input}
-              onChangeText={(value) => this.setState({ password: value })}
+              onChangeText={(value) => this.setState({password: value})}
               placeholder="Mot de passe"
               value={password}
             />
@@ -103,15 +103,13 @@ class Login extends React.Component {
             buttonStyle={styles.loginButton}
             isLoading={this.props.loading}
             onPress={this.handleLogin}
-            spinnerType="SkypeIndicator"
-          >
+            spinnerType="SkypeIndicator">
             <Text style={styles.nextButtonText}>Connexion</Text>
           </SpinnerButton>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("SignUp")}
+            onPress={() => this.props.navigation.navigate('SignUp')}
             style={styles.touchable}
-            activeOpacity={0.6}
-          >
+            activeOpacity={0.6}>
             <Text style={styles.createAccount}>
               Vous n&apos;`avez pas encore un compte?
             </Text>
@@ -126,9 +124,9 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { errorMessage } = state.errorMessageStore;
-  const { loading } = state.authenticationStore;
-  const { loading: loadingLiveVideo, video } = state.liveVideoStore;
+  const {errorMessage} = state.errorMessageStore;
+  const {loading} = state.authenticationStore;
+  const {loading: loadingLiveVideo, video} = state.liveVideoStore;
   return {
     errorMessage,
     loading,
