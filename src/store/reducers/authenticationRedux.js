@@ -1,4 +1,5 @@
 import { batchActions } from "redux-batched-actions";
+import axios from "axios";
 import {
   GET_SECURITY_QUESTIONS_URI,
   POST_LOGIN_URI,
@@ -6,16 +7,16 @@ import {
 } from "../../Utils/ApiUrl";
 import getAxiosInstance from "../../Utils/axios";
 import { dispatchError } from "./errorMessageRedux";
-import { clearStoreAccount, storeAccount } from "./accountRedux";
+import { storeAccount } from "./accountRedux";
 import getRandomQuestionIndex from "../../Components/ProfileForm/Functions";
+import { getLiveVideo } from "./liveVideoRedux";
 
 const POST_REQUEST = "POST_REQUEST";
 const POST_LOGIN_SUCCESS = "POST_LOGIN_SUCCESS";
-const POST_LOGOUT_SUCCESS = "POST_LOGOUT_SUCCESS";
+export const POST_LOGOUT_SUCCESS = "POST_LOGOUT_SUCCESS";
 const POST_LOGIN_ERROR = "POST_LOGIN_ERROR";
 const POST_BATCH_LOGIN_ERROR = "POST_BATCH_LOGIN_ERROR";
 const POST_BATCH_LOGIN_SUCCESS = "POST_BATCH_LOGIN_SUCCESS";
-const POST_BATCH_LOGOUT_SUCCESS = "POST_BATCH_LOGOUT_SUCCESS";
 
 const GET_QUESTIONS_ERROR = "GET_QUESTIONS_ERROR";
 const GET_QUESTIONS_SUCCESS = "GET_QUESTIONS_SUCCESS";
@@ -89,6 +90,8 @@ export const login = (email, password) => {
               POST_BATCH_LOGIN_SUCCESS
             )
           );
+          axios.defaults.headers.Authorization = `Bearer ${response.data.access_token}`;
+          dispatch(getLiveVideo());
         }, 500);
       })
       .catch(function (error) {
@@ -129,12 +132,7 @@ export const logout = () => {
     getAxiosInstance()
       .post(POST_LOGOUT_URI, {})
       .then(function () {
-        dispatch(
-          batchActions(
-            [clearStoreAccount(), postLogoutSuccess()],
-            POST_BATCH_LOGOUT_SUCCESS
-          )
-        );
+        dispatch(postLogoutSuccess());
       })
       .catch(function (error) {
         dispatch(

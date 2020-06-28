@@ -1,3 +1,5 @@
+import { DAYS, MONTHS, THAKHAROUBTS } from "./Constants";
+
 export const isCorrectName = (name) => {
   return !!(
     !name ||
@@ -24,11 +26,21 @@ export const isCorrectPhoneNumber = (phone) => {
 };
 
 export const getFrDate = (date, time = false) => {
-  return `${date.getDate().toString().padStart(2, "0")}/${`${
-    parseInt(date.getMonth().toString(), 10) + 1
-  }`.padStart(2, "0")}/${date.getFullYear()}${
-    time ? ` ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}` : ""
-  }`;
+  if (date instanceof Date) {
+    return `${date.getDate().toString().padStart(2, "0")}/${`${
+      parseInt(date.getMonth().toString(), 10) + 1
+    }`.padStart(2, "0")}/${date.getFullYear()}${
+      time ? date.toLocaleTimeString("fr") : ""
+    }`;
+  }
+  return date;
+};
+
+export const isoDateToFr = (isoDate: string) => {
+  const fullDate = isoDate.split(" ");
+  const date = fullDate[0].split("-");
+  const time = fullDate.length === 2 ? fullDate[1] : "";
+  return `${date[2]}/${date[1]}/${date[0]} ${time}`;
 };
 
 export const getIsoDate = (date) => {
@@ -40,9 +52,43 @@ export const getIsoDate = (date) => {
   return date;
 };
 
-export const getDateFromFr = (frDate) => {
-  const date = frDate.split("/");
-  return new Date(`${date[2]}-${date[1]}-${date[0]}`);
+export const formatDateAsApiDate = (dateMillseconde) => {
+  const d = new Date(dateMillseconde);
+  const year = d.getFullYear(); // 2019
+  const month = `${parseInt(d.getMonth().toString(), 10) + 1}`.padStart(2, "0"); // 12
+  const day = d.getDate().toString().padStart(2, "0"); // 01
+  const hours = d.getHours(); // 18
+  const minutes = d.getMinutes(); // 00
+
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+};
+
+export const formatDateWithDayAndMonthName = (apiDate) => {
+  let date = null;
+  if (typeof apiDate === "number" || typeof apiDate === "object") {
+    date = new Date(apiDate);
+  } else {
+    date = new Date(`${apiDate.substring(0, 10)}T${apiDate.substring(11, 19)}`);
+  }
+
+  return `${DAYS[date.getDay()]} ${date.getDate()} ${
+    MONTHS[date.getMonth()]
+  } ${date.getFullYear()}`;
+};
+
+export const getDateFromIso = (isoDate: string) => {
+  const fullDate = isoDate.split(" ");
+  const date = fullDate[0].split("-");
+  const time =
+    fullDate.length === 2 ? fullDate[1].split(":") : ["00", "00", "00"];
+  return new Date(
+    date[0],
+    parseInt(date[1], 10) - 1,
+    date[2],
+    time[0],
+    time[1],
+    time[2]
+  );
 };
 
 export const getFullName = ({ lastName, firstName }) => {
@@ -51,4 +97,20 @@ export const getFullName = ({ lastName, firstName }) => {
         .charAt(0)
         .toUpperCase()}${firstName.slice(1).toLowerCase()}`
     : "";
+};
+
+export const formatKhatma = (id, beginAt, isOpen) => {
+  return {
+    id,
+    beginAt,
+    isOpen,
+    takharoubts: THAKHAROUBTS,
+  };
+};
+
+export const replaceElement = (arr, newElement) => {
+  const newArr = Object.values(arr).filter((element) => {
+    return element.id !== newElement.id;
+  });
+  return newArr.concat(newElement);
 };
