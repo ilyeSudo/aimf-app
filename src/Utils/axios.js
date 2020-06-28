@@ -9,7 +9,9 @@ import {
 
 const getAxiosInstance = () => {
   return axios.create({
-    // baseURL: "http://192.168.1.16:8080",
+    //baseURL: "http://192.168.1.16:8080",
+    //baseURL: "http://192.168.0.24:8080",
+
     baseURL: "http://aimf.siroukane.tech",
     timeout: parseInt(API_TIMEOUT, 10),
     headers: {

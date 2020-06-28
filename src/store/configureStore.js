@@ -16,15 +16,12 @@ import {
 } from "./reducers/authenticationRedux";
 import { accountReducer } from "./reducers/accountRedux";
 import { profileReducer } from "./reducers/profileRedux";
-<<<<<<< HEAD
 import {bookReducer} from "./reducers/bookRedux";
-=======
 import { koranReducer } from "./reducers/koranRedux";
 import { khatmaReducer } from "./reducers/khatmaRedux";
 import NavigationService from "../Utils/NavigationService";
 import { articleReducer } from "./reducers/articlesRedux";
 import { liveVideoReducer } from "./reducers/liveVideoRedux";
->>>>>>> origin/develop
 
 const persistConfig = {
   key: "root",
@@ -39,12 +36,9 @@ const rootReducer = combineReducers({
   authenticationStore: authenticationReducer,
   accountStore: accountReducer,
   profileStore: profileReducer,
-<<<<<<< HEAD
-    bookStore: bookReducer,
-=======
+  bookStore: bookReducer,
   articleStore: articleReducer,
   liveVideoStore: liveVideoReducer,
->>>>>>> origin/develop
 });
 
 const appReducer = (state, action) => {
