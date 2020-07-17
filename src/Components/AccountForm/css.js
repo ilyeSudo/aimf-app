@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   logo: {
@@ -13,10 +13,10 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     borderRadius: 10,
     height: 45,
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
   },
   label: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 14,
     marginLeft: 30,
     width: 300,
@@ -26,44 +26,40 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   registerButton: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 50,
     width: 150,
     borderRadius: 10,
-    backgroundColor: "#cb8347",
+    backgroundColor: '#cb8347',
     marginTop: 35,
-    marginLeft: "auto",
-    marginRight: "auto",
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 
   refreshButton: {
     height: 20,
     width: 20,
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
     borderRadius: 80,
   },
   nextButtonText: {
     fontSize: 18,
-    color: "#fff",
+    color: '#fff',
   },
 
   loginLink: {
     marginTop: 30,
     marginBottom: 50,
-    marginLeft: "auto",
-    marginRight: "auto",
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 
   green: {
-    color: "green",
+    color: 'green',
   },
   red: {
-    color: "red",
-  },
-
-  datePicker: {
-    color: "#f3aa2329",
+    color: 'red',
   },
 });
 

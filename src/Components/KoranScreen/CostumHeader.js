@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Platform } from "react-native";
+import React, {Component} from 'react';
+import {Platform} from 'react-native';
 import {
   Header,
   Left,
@@ -10,12 +10,12 @@ import {
   Button,
   Icon,
   Text,
-} from "native-base";
+} from 'native-base';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class CostumHeader extends Component {
   render() {
-    const { title, subtile, isHome, validate, navigation } = this.props;
+    const {title, subtile, isHome, validate, navigation} = this.props;
 
     return (
       <Header>
@@ -26,16 +26,16 @@ class CostumHeader extends Component {
             </Button>
           </Left>
         )}
-        {isHome && Platform.OS === "android" && <Left />}
-        <Body style={{ flex: 1, justifyContent: "center" }}>
-          <Title style={{ fontSize: 14, textAlign: "center" }}>{title}</Title>
+        {isHome && Platform.OS === 'android' && <Left />}
+        <Body style={{flex: 1, justifyContent: 'center'}}>
+          <Title style={{fontSize: 14, textAlign: 'center'}}>{title}</Title>
           {!(subtile === undefined) && (
-            <Subtitle style={{ fontSize: 12, textAlign: "center" }}>
+            <Subtitle style={{fontSize: 12, textAlign: 'center'}}>
               {subtile}
             </Subtitle>
           )}
         </Body>
-        {isHome && Platform.OS === "android" && <Right />}
+        {isHome && Platform.OS === 'android' && <Right />}
         {!isHome && (
           <Right>
             <Button hasText transparent onPress={(event) => validate(event)}>

@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import * as PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { getIsoDate } from "./Utils/Functions";
-import Loader from "./Components/Loader";
-import ErrorModal from "./Components/ErrorModal";
-import { CREATE_ACTION } from "./Utils/Constants";
-import ProfileForm from "./Components/ProfileForm";
-import { register } from "./store/reducers/profileRedux";
-import { dispatchErrorMessage } from "./store/reducers/errorMessageRedux";
-import { navigate } from "./Utils/Account";
-import checkFormValues from "./Components/ProfileForm/Validate";
-import { getQuestions } from "./store/reducers/authenticationRedux";
+import React, {Component} from 'react';
+import * as PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {getIsoDate} from './Utils/Functions';
+import Loader from './Components/Loader';
+import ErrorModal from './Components/ErrorModal';
+import {CREATE_ACTION} from './Utils/Constants';
+import AccountForm from './Components/AccountForm';
+import {register} from './store/reducers/accountRedux';
+import {dispatchErrorMessage} from './store/reducers/errorMessageRedux';
+import {navigate} from './Utils/Account';
+import checkFormValues from './Components/AccountForm/Validate';
+import {getQuestions} from './store/reducers/authenticationRedux';
 
 class SignUp extends Component {
   constructor(props) {
@@ -18,18 +18,18 @@ class SignUp extends Component {
     this.state = {
       gender: null,
       maritalStatus: null,
-      email: "",
-      password: "",
-      confirmPassword: "",
-      lastName: "",
-      fatherName: "",
-      middleName: "",
-      firstName: "",
+      email: '',
+      password: '',
+      confirmPassword: '',
+      lastName: '',
+      fatherName: '',
+      middleName: '',
+      firstName: '',
       birthday: new Date(),
-      zipCode: "",
-      phoneNumber: "",
-      response1: "",
-      response2: "",
+      zipCode: '',
+      phoneNumber: '',
+      response1: '',
+      response2: '',
       question1: null,
       question2: null,
     };
@@ -40,7 +40,7 @@ class SignUp extends Component {
   }
 
   componentDidUpdate() {
-    navigate(this.props.account, this.props.navigation, "SignUp");
+    navigate(this.props.account, this.props.navigation, 'SignUp');
   }
 
   getDataFromState = () => {
@@ -84,7 +84,7 @@ class SignUp extends Component {
   };
 
   onSubmit = () => {
-    const data = { ...this.getDataFromState(true), action: CREATE_ACTION };
+    const data = {...this.getDataFromState(true), action: CREATE_ACTION};
     const error = checkFormValues(data);
     if (error) {
       this.props.dispatchErrorMessage(error);
@@ -107,8 +107,8 @@ class SignUp extends Component {
   };
 
   render() {
-    let { question1, question2 } = this.state;
-    const { questions1, questions2 } = this.props;
+    let {question1, question2} = this.state;
+    const {questions1, questions2} = this.props;
     if (!question1 || !question2) {
       question1 = this.props.question1;
       question2 = this.props.question2;
@@ -116,7 +116,7 @@ class SignUp extends Component {
     return (
       <>
         {question1 && question2 && (
-          <ProfileForm
+          <AccountForm
             scrollViewOpacity={
               this.props.loadingQuestion ||
               this.props.loadingRegister ||
@@ -151,8 +151,8 @@ class SignUp extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { errorMessage } = state.errorMessageStore;
-  const { action, loading: loadingRegister } = state.profileStore;
+  const {errorMessage} = state.errorMessageStore;
+  const {action, loading: loadingRegister} = state.accountStore;
   const {
     questions1,
     questions2,

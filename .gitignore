@@ -24,6 +24,8 @@ project.xcworkspace
 
 # Android/IntelliJ
 #
+
+android/*.hprof
 build/
 .idea
 .gradle
@@ -61,4 +63,4 @@ buck-out/
 
 # Personal working files
 admin@aimf-api.fr
-commun build faills 
+commun build faills

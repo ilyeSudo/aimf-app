@@ -1,25 +1,25 @@
-import { batchActions } from "redux-batched-actions";
-import getAxiosInstance from "../../Utils/axios";
-import { GET_ARTICLES_URI, GET_DRAFT_ARTICLE_URI } from "../../Utils/ApiUrl";
-import { dispatchError } from "./errorMessageRedux";
+import {batchActions} from 'redux-batched-actions';
+import getAxiosInstance from '../../Utils/axios';
+import {GET_ARTICLES_URI, GET_DRAFT_ARTICLE_URI} from '../../Utils/ApiUrl';
+import {dispatchError} from './errorMessageRedux';
 import {
   DRAFT_ARTICLE_STATUS,
   PUBLISHED_ARTICLE_STATUS,
-} from "../../Utils/Constants";
+} from '../../Utils/Constants';
 
-const GET_ARTICLES_REQUEST = "GET_ARTICLES_REQUEST";
-const GET_ARTICLES_SUCCESS = "GET_ARTICLES_SUCCESS";
-const GET_ARTICLES_ERROR = "GET_ARTICLES_ERROR";
+const GET_ARTICLES_REQUEST = 'GET_ARTICLES_REQUEST';
+const GET_ARTICLES_SUCCESS = 'GET_ARTICLES_SUCCESS';
+const GET_ARTICLES_ERROR = 'GET_ARTICLES_ERROR';
 
-const GET_DRAFT_ARTICLE_REQUEST = "GET_DRAFT_ARTICLE_REQUEST";
-const GET_DRAFT_ARTICLE_SUCCESS = "GET_DRAFT_ARTICLE_SUCCESS";
-const GET_DRAFT_ARTICLE_ERROR = "GET_DRAFT_ARTICLE_ERROR";
+const GET_DRAFT_ARTICLE_REQUEST = 'GET_DRAFT_ARTICLE_REQUEST';
+const GET_DRAFT_ARTICLE_SUCCESS = 'GET_DRAFT_ARTICLE_SUCCESS';
+const GET_DRAFT_ARTICLE_ERROR = 'GET_DRAFT_ARTICLE_ERROR';
 
-const POST_ARTICLES_REQUEST = "POST_ARTICLES_REQUEST";
-const POST_ARTICLES_SUCCESS = "POST_ARTICLES_SUCCESS";
-const POST_ARTICLES_ERROR = "POST_ARTICLES_ERROR";
+const POST_ARTICLES_REQUEST = 'POST_ARTICLES_REQUEST';
+const POST_ARTICLES_SUCCESS = 'POST_ARTICLES_SUCCESS';
+const POST_ARTICLES_ERROR = 'POST_ARTICLES_ERROR';
 
-const BATCH_ARTICLES_ERROR = "BATCH_ARTICLES_ERROR";
+const BATCH_ARTICLES_ERROR = 'BATCH_ARTICLES_ERROR';
 
 const getArticlesRequest = (refreshing, handleMore) => {
   return {
@@ -93,7 +93,7 @@ export const getArticles = (
   currentArticles,
   page,
   refreshing = false,
-  handleMore = false
+  handleMore = false,
 ) => {
   return (dispatch) => {
     dispatch(getArticlesRequest(refreshing, handleMore));
@@ -113,15 +113,15 @@ export const getArticles = (
             page,
             lastPage:
               response.data.meta.last_page === response.data.meta.current_page,
-          })
+          }),
         );
       })
       .catch(function (error) {
         dispatch(
           batchActions(
             [dispatchError(error), getArticlesError()],
-            BATCH_ARTICLES_ERROR
-          )
+            BATCH_ARTICLES_ERROR,
+          ),
         );
       });
   };
@@ -142,8 +142,8 @@ export const savePost = (data) => {
         dispatch(
           batchActions(
             [dispatchError(error), postArticleError()],
-            BATCH_ARTICLES_ERROR
-          )
+            BATCH_ARTICLES_ERROR,
+          ),
         );
       });
   };
@@ -161,8 +161,8 @@ export const getDraftArticle = () => {
         dispatch(
           batchActions(
             [dispatchError(error), getDraftArticleError()],
-            BATCH_ARTICLES_ERROR
-          )
+            BATCH_ARTICLES_ERROR,
+          ),
         );
       });
   };
@@ -175,7 +175,7 @@ export const articleReducer = (state = initialState, action) => {
     case GET_ARTICLES_REQUEST:
     case GET_DRAFT_ARTICLE_REQUEST:
     case POST_ARTICLES_REQUEST:
-      return { ...state, ...action.data };
+      return {...state, ...action.data};
     case GET_ARTICLES_SUCCESS: {
       return {
         ...state,
@@ -188,7 +188,7 @@ export const articleReducer = (state = initialState, action) => {
     case GET_DRAFT_ARTICLE_SUCCESS: {
       return {
         ...state,
-        draftArticle: { ...action.data },
+        draftArticle: {...action.data},
         loading: false,
       };
     }

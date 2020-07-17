@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Card, CardItem, Thumbnail, Text, Left, Body } from "native-base";
-import * as PropTypes from "prop-types";
+import React, {Component} from 'react';
+import {Card, CardItem, Thumbnail, Text, Left, Body} from 'native-base';
+import * as PropTypes from 'prop-types';
 
 class FeedCard extends Component {
   render() {
-    const logo = require("../../../assets/images/logo_transparent.png");
+    const logo = require('../../../assets/images/logo_transparent.png');
     return (
-      <Card style={{ flex: 0, marginLeft: 10, marginRight: 10 }}>
-        <CardItem style={{ backgroundColor: this.props.backgroundColor }}>
+      <Card style={{flex: 0, marginLeft: 10, marginRight: 10}}>
+        <CardItem style={{backgroundColor: this.props.backgroundColor}}>
           <Left>
             <Thumbnail source={logo} />
             <Body>
@@ -16,7 +16,7 @@ class FeedCard extends Component {
             </Body>
           </Left>
         </CardItem>
-        <CardItem style={{ backgroundColor: this.props.backgroundColor }}>
+        <CardItem style={{backgroundColor: this.props.backgroundColor}}>
           <Body>
             <Text>{this.props.description}</Text>
           </Body>
