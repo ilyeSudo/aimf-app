@@ -1,10 +1,10 @@
 export const CREDENTIALS_EMPTY_ERROR =
   'Merci de saisir votre login et mot de passse';
-export const DRAFT_ANNONCE_ID = 'sfLi1twfOW0yKnnpJ9Y1';
 export const LIST_ACTION = 'list';
 export const SHOW_ACTION = 'show';
 export const CREATE_ACTION = 'create';
 export const UPDATE_ACTION = 'update';
+export const SHOW_CONDITION_ACTION = 'show_condition';
 export const MARRIED = 'married';
 export const SINGLE = 'single';
 

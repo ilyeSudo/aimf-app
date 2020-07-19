@@ -4,11 +4,11 @@ import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
 import {Item, Input} from 'native-base';
 import SpinnerButton from 'react-native-spinner-button';
-import ErrorModal from './Components/ErrorModal';
-import {CREDENTIALS_EMPTY_ERROR} from './Utils/Constants';
-import {dispatchErrorMessage} from './store/reducers/errorMessageRedux';
-import {login} from './store/reducers/authenticationRedux';
-import {navigate} from './Utils/Account';
+import ErrorModal from '../Components/ErrorModal';
+import {CREDENTIALS_EMPTY_ERROR} from '../Utils/Constants';
+import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
+import {login} from '../store/reducers/authenticationRedux';
+import {navigate} from '../Utils/Account';
 
 const styles = StyleSheet.create({
   bodyWrapper: {
@@ -76,7 +76,7 @@ class Login extends React.Component {
 
   render() {
     const {email, password} = this.state;
-    const logo = require('../assets/images/logo_transparent.png');
+    const logo = require('../../assets/images/logo_transparent.png');
     return (
       <>
         <View style={styles.bodyWrapper}>
