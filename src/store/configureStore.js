@@ -18,6 +18,7 @@ import {khatmaReducer} from './reducers/khatmaRedux';
 import NavigationService from '../Utils/NavigationService';
 import {articleReducer} from './reducers/articlesRedux';
 import {liveVideoReducer} from './reducers/liveVideoRedux';
+import {associationReducer} from './reducers/associationRedux';
 
 const persistConfig = {
   key: 'root',
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
   accountStore: accountReducer,
   articleStore: articleReducer,
   liveVideoStore: liveVideoReducer,
+  associationStore: associationReducer,
 });
 
 const appReducer = (state, action) => {
