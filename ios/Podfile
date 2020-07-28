@@ -44,6 +44,8 @@ target 'AIMF_APP' do
 
   pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
 
+  pod 'RNFastImage', :path => '../node_modules/react-native-fast-image'
+
 end
 
 target 'AIMF_APP-tvOS' do
