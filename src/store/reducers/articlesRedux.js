@@ -101,6 +101,7 @@ export const getArticles = (
       .get(GET_ARTICLES_URI, {
         params: {
           page,
+          with_association: 1,
         },
       })
       .then(function (response) {
@@ -131,7 +132,7 @@ export const savePost = (data) => {
   return (dispatch) => {
     dispatch(saveArticleRequest());
     getAxiosInstance()
-      .post(GET_ARTICLES_URI, data)
+      .post(GET_ARTICLES_URI + '?with_association=1', data)
       .then(function (response) {
         if (response.data.data.status === PUBLISHED_ARTICLE_STATUS) {
           dispatch(getArticles([], 1, true));
@@ -153,7 +154,7 @@ export const getDraftArticle = () => {
   return (dispatch) => {
     dispatch(getDraftArticleRequest());
     getAxiosInstance()
-      .get(GET_DRAFT_ARTICLE_URI)
+      .get(GET_DRAFT_ARTICLE_URI, {params: {with_association: 1}})
       .then(function (response) {
         dispatch(getDraftArticleSuccess(response.data.data));
       })

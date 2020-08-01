@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import * as PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {getIsoDate} from './Utils/Functions';
-import Loader from './Components/Loader';
-import ErrorModal from './Components/ErrorModal';
-import {CREATE_ACTION} from './Utils/Constants';
-import AccountForm from './Components/AccountForm';
-import {register} from './store/reducers/accountRedux';
-import {dispatchErrorMessage} from './store/reducers/errorMessageRedux';
-import {navigate} from './Utils/Account';
-import checkFormValues from './Components/AccountForm/Validate';
-import {getQuestions} from './store/reducers/authenticationRedux';
+import {getIsoDate} from '../Utils/Functions';
+import Loader from '../Components/Loader';
+import ErrorModal from '../Components/ErrorModal';
+import {CREATE_ACTION} from '../Utils/Constants';
+import AccountForm from '../Components/AccountForm';
+import {register} from '../store/reducers/accountRedux';
+import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
+import {navigate} from '../Utils/Account';
+import checkFormValues from '../Components/AccountForm/Validate';
+import {getQuestions} from '../store/reducers/authenticationRedux';
 
 class SignUp extends Component {
   constructor(props) {

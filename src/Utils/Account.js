@@ -15,6 +15,13 @@ export const isAdmin = (user) => {
   return false;
 };
 
+export const isAssociationAdmin = (user) => {
+  if (user && user.roles) {
+    return !!user.roles.find((role) => role.name.substring(0, 6) === 'admin_');
+  }
+  return false;
+};
+
 export const isMember = (user) => {
   if (user && user.roles) {
     return !!user.roles.find((role) => role.name === MEMBER_ROLE);
@@ -23,7 +30,16 @@ export const isMember = (user) => {
 };
 
 export const isAuthorized = (user) => {
-  return isSuperAdmin(user) || isAdmin(user) || isMember(user);
+  return (
+    isSuperAdmin(user) ||
+    isAdmin(user) ||
+    isMember(user) ||
+    isAssociationAdmin(user)
+  );
+};
+
+export const hasUserAdminRole = (user) => {
+  return isSuperAdmin(user) || isAdmin(user) || isAssociationAdmin(user);
 };
 
 export const navigate = (
@@ -35,7 +51,7 @@ export const navigate = (
   if (account.user && account.access_token) {
     axios.defaults.headers.Authorization = `Bearer ${account.access_token}`;
 
-    if (isAdmin(account.user) || isSuperAdmin(account.user)) {
+    if (hasUserAdminRole(account.user)) {
       navigation.navigate(
         youtube
           ? 'adminUserWithYoutubeLiveTabNavigator'
