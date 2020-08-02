@@ -59,7 +59,7 @@ class Login extends React.Component {
         this.props.account,
         this.props.navigation,
         'Login',
-        !!this.props.video,
+        !!this.props.video && this.props.video.youtube_id,
       );
     }
   }
