@@ -38,7 +38,9 @@ class SelectAssociation extends Component {
               icon={(item) => (
                 <Image
                   style={{width: 30, height: 30}}
-                  source={{uri: item.logo}}
+                  source={{
+                    uri: item.logo,
+                  }}
                 />
               )}
             />
