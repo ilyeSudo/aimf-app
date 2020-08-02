@@ -3,9 +3,9 @@ import {View, Text, ActivityIndicator, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
 import axios from 'axios';
-import NavigationService from './Utils/NavigationService';
-import {navigate} from './Utils/Account';
-import {getLiveVideo} from './store/reducers/liveVideoRedux';
+import NavigationService from '../Utils/NavigationService';
+import {navigate} from '../Utils/Account';
+import {getLiveVideo} from '../store/reducers/liveVideoRedux';
 
 const styles = StyleSheet.create({
   container: {
