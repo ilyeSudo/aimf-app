@@ -28,8 +28,7 @@ const styles = StyleSheet.compose({
 class AddKhatma extends Component {
   constructor(props) {
     super(props);
-    this.state = {chosenDate: 0};
-    this.setDate = this.setDate.bind(this);
+    this.state = {chosenDate: new Date()};
   }
 
   setDate(newDate) {
@@ -85,9 +84,9 @@ class AddKhatma extends Component {
           <DatePicker
             labelStyle={{marginLeft: 0, width: 320, ...styles.title}}
             label="Sélectionner la data de la prochaine Khatma"
-            defaultDate={new Date()}
+            defaultDate={this.state.chosenDate}
             minimumDate={new Date()}
-            onCustomChange={(date) => this.setDate(date)}
+            onCustomChange={(date) => this.setState({chosenDate: date})}
           />
         </View>
       </View>

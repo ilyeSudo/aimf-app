@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View, TextInput, ScrollView} from 'react-native';
-import {Icon, Input, Item, Label} from 'native-base';
+import {Icon, Item, Label} from 'native-base';
 import SpinnerButton from 'react-native-spinner-button';
 import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
@@ -10,12 +10,15 @@ import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import Loader from '../Components/Loader';
 import {savePost, getDraftArticle} from '../store/reducers/articlesRedux';
 import {
+  AIMF_ASSOCIATION_ID,
   DRAFT_ARTICLE_STATUS,
   PUBLISHED_ARTICLE_STATUS,
 } from '../Utils/Constants';
 import RenderInput from '../Components/RenderInput';
 import DatePicker from '../Components/DatePicker';
 import moment from 'moment';
+import SelectAssociation from '../Components/SelectAssociation';
+import {isAdmin, isSuperAdmin} from '../Utils/Account';
 
 class PostScreen extends Component {
   static navigationOptions = {
@@ -28,14 +31,25 @@ class PostScreen extends Component {
       title: '',
       description: '',
       expiredAt: null,
+      associationId: AIMF_ASSOCIATION_ID,
     };
   }
 
   componentDidMount() {
     this.props.getDraftArticle();
     if (this.props.draftArticle && this.props.draftArticle.title) {
-      const {title, description, expiredAt} = this.props.draftArticle;
-      this.setState({title, description, expiredAt: new Date(expiredAt)});
+      const {
+        title,
+        description,
+        expiredAt,
+        association,
+      } = this.props.draftArticle;
+      this.setState({
+        title,
+        description,
+        expiredAt: expiredAt,
+        associationId: association.id,
+      });
     }
   }
 
@@ -44,13 +58,20 @@ class PostScreen extends Component {
       let title = null;
       let description = null;
       let expiredAt = null;
+      let associationId = AIMF_ASSOCIATION_ID;
       if (nextProps.draftArticle && nextProps.draftArticle.title) {
         title = nextProps.draftArticle.title;
         description = nextProps.draftArticle.description;
         expiredAt = nextProps.draftArticle.expiredAt;
+        associationId = nextProps.draftArticle.association.id;
       }
 
-      this.setState({title, description, expiredAt});
+      this.setState({
+        title,
+        description,
+        expiredAt: expiredAt,
+        associationId,
+      });
     }
   }
 
@@ -71,16 +92,21 @@ class PostScreen extends Component {
       );
       return;
     }
+    const association =
+      isSuperAdmin(this.props.user) || isAdmin(this.props.user)
+        ? {association_id: this.state.associationId}
+        : {};
     this.props.savePost({
       status,
       description: description.trim(),
       title: title.trim(),
       expiredAt: expiredAt && moment(expiredAt).format('YYYY-MM-DD'),
+      ...association,
     });
   };
 
   render() {
-    const {description, title, expiredAt} = this.state;
+    const {description, title, expiredAt, associationId} = this.state;
 
     return (
       <>
@@ -89,6 +115,17 @@ class PostScreen extends Component {
             ...styles.view,
             opacity: this.props.loading || this.props.errorMessage ? 0.6 : 1,
           }}>
+          {(isSuperAdmin(this.props.user) || isAdmin(this.props.user)) &&
+            associationId && (
+              <SelectAssociation
+                selectedAssociationId={associationId}
+                onChangeItem={(item) => {
+                  this.setState({
+                    associationId: item.id,
+                  });
+                }}
+              />
+            )}
           <RenderInput
             label="Titre"
             onChange={(value) => this.setState({title: value})}
@@ -98,10 +135,9 @@ class PostScreen extends Component {
           <DatePicker
             minimumDate={new Date()}
             label="Date d'expiration*"
-            defaultDate={expiredAt ? expiredAt : null}
+            defaultDate={expiredAt && moment(expiredAt).toDate()}
             onCustomChange={(date) => this.setDate(date)}
           />
-
           <Label style={styles.label}>Message*</Label>
           <Item rounded style={styles.textItem}>
             <TextInput
@@ -187,6 +223,7 @@ PostScreen.propTypes = {
   draftArticle: PropTypes.object,
   savePost: PropTypes.func,
   getDraftArticle: PropTypes.func,
+  user: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostScreen);

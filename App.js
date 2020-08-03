@@ -14,6 +14,8 @@ import {
   adminUserTabNavigator,
   adminUserWithYoutubeLiveTabNavigator,
   activeUserTabNavigator,
+  adminAssociationTabNavigator,
+  adminAssociationWithYoutubeLiveTabNavigator,
 } from './src/MainTabNavigator';
 import {store, persistor} from './src/store/configureStore';
 // create our app's navigation stack
@@ -27,6 +29,8 @@ const switchNavigator = createSwitchNavigator(
     adminUserTabNavigator,
     adminUserWithYoutubeLiveTabNavigator,
     activeUserTabNavigator,
+    adminAssociationTabNavigator,
+    adminAssociationWithYoutubeLiveTabNavigator,
   },
   {
     initialRouteName: 'Loading',

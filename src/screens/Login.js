@@ -59,7 +59,7 @@ class Login extends React.Component {
         this.props.account,
         this.props.navigation,
         'Login',
-        !!this.props.video,
+        !!this.props.video && this.props.video.youtube_id,
       );
     }
   }
@@ -111,7 +111,7 @@ class Login extends React.Component {
             style={styles.touchable}
             activeOpacity={0.6}>
             <Text style={styles.createAccount}>
-              Vous n&apos;`avez pas encore un compte?
+              Vous n&apos;avez pas encore un compte?
             </Text>
           </TouchableOpacity>
         </View>
