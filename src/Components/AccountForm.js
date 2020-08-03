@@ -28,6 +28,7 @@ import RenderInput from './RenderInput';
 import ImageRadioButton from './ImageRadioButton';
 import TextRadioButton from './TextRadioButton';
 import DatePicker from './DatePicker';
+import moment from "moment";
 
 export default class AccountForm extends Component {
   constructor(props) {
@@ -276,10 +277,10 @@ export default class AccountForm extends Component {
           />
 
           <DatePicker
-            minimumDate={Date(1900, 1, 1)}
-            maximumDate={Date()}
+            minimumDate={moment('1900-01-01').toDate()}
+            maximumDate={new Date()}
             label="Date de naissance*"
-            defaultDate={new Date(birthday)}
+            defaultDate={birthday && moment(birthday).toDate()}
             onCustomChange={(date) => this.setDate(date)}
           />
 

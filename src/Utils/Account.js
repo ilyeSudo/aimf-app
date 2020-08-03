@@ -38,10 +38,6 @@ export const isAuthorized = (user) => {
   );
 };
 
-export const hasUserAdminRole = (user) => {
-  return isSuperAdmin(user) || isAdmin(user) || isAssociationAdmin(user);
-};
-
 export const navigate = (
   account,
   navigation,
@@ -51,11 +47,17 @@ export const navigate = (
   if (account.user && account.access_token) {
     axios.defaults.headers.Authorization = `Bearer ${account.access_token}`;
 
-    if (hasUserAdminRole(account.user)) {
+    if (isAdmin(account.user) || isSuperAdmin(account.user)) {
       navigation.navigate(
         youtube
           ? 'adminUserWithYoutubeLiveTabNavigator'
           : 'adminUserTabNavigator',
+      );
+    } else if (isAssociationAdmin(account.user)) {
+      navigation.navigate(
+        youtube
+          ? 'adminAssociationTabNavigator'
+          : 'adminAssociationWithYoutubeLiveTabNavigator',
       );
     } else if (isMember(account.user)) {
       navigation.navigate(
