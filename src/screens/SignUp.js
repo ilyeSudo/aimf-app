@@ -4,13 +4,19 @@ import {connect} from 'react-redux';
 import {getIsoDate} from '../Utils/Functions';
 import Loader from '../Components/Loader';
 import ErrorModal from '../Components/ErrorModal';
-import {CREATE_ACTION} from '../Utils/Constants';
+import {
+  CREATE_ACTION,
+  MARRIED,
+  SHOW_CONDITION_ACTION,
+  SINGLE,
+} from '../Utils/Constants';
 import AccountForm from '../Components/AccountForm';
 import {register} from '../store/reducers/accountRedux';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import {navigate} from '../Utils/Account';
 import checkFormValues from '../Components/AccountForm/Validate';
 import {getQuestions} from '../store/reducers/authenticationRedux';
+import TermsOfUse from './SignUp/TermsOfUse';
 
 class SignUp extends Component {
   constructor(props) {
@@ -32,6 +38,8 @@ class SignUp extends Component {
       response2: '',
       question1: null,
       question2: null,
+      acceptTermsOfUse: false,
+      action: CREATE_ACTION,
     };
   }
 
@@ -61,6 +69,7 @@ class SignUp extends Component {
       question1,
       question2,
       gender,
+      acceptTermsOfUse,
     } = this.state;
 
     return {
@@ -80,6 +89,7 @@ class SignUp extends Component {
       question1,
       question2,
       gender,
+      acceptTermsOfUse,
     };
   };
 
@@ -106,6 +116,10 @@ class SignUp extends Component {
     });
   };
 
+  updateAction = (action) => {
+    this.setState({action});
+  };
+
   render() {
     let {question1, question2} = this.state;
     const {questions1, questions2} = this.props;
@@ -115,7 +129,7 @@ class SignUp extends Component {
     }
     return (
       <>
-        {question1 && question2 && (
+        {this.state.action === CREATE_ACTION && question1 && question2 && (
           <AccountForm
             scrollViewOpacity={
               this.props.loadingQuestion ||
@@ -136,9 +150,12 @@ class SignUp extends Component {
             navigation={this.props.navigation}
             updateState={(state) => this.setState(state)}
             onSubmit={() => this.onSubmit()}
+            updateAction={(action) => this.updateAction(action)}
           />
         )}
-
+        {this.state.action === SHOW_CONDITION_ACTION && (
+          <TermsOfUse updateAction={this.updateAction} />
+        )}
         {this.props.errorMessage && (
           <ErrorModal visible message={this.props.errorMessage} />
         )}

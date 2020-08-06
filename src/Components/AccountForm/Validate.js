@@ -82,6 +82,11 @@ const checkFormValues = (values) => {
   ) {
     return 'Veuillez remplir le nouveau mot de passe et la confirmation de celui-ci';
   }
+
+  if (values.action === CREATE_ACTION && !values.acceptTermsOfUse) {
+    return 'Veuillez accepter les conditions générales';
+  }
+
   return null;
 };
 
