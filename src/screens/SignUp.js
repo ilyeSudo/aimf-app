@@ -4,14 +4,19 @@ import {connect} from 'react-redux';
 import {getIsoDate} from '../Utils/Functions';
 import Loader from '../Components/Loader';
 import ErrorModal from '../Components/ErrorModal';
-import {CREATE_ACTION, SHOW_CONDITION_ACTION} from '../Utils/Constants';
+import {
+  CREATE_ACTION,
+  MARRIED,
+  SHOW_CONDITION_ACTION,
+  SINGLE,
+} from '../Utils/Constants';
 import AccountForm from '../Components/AccountForm';
 import {register} from '../store/reducers/accountRedux';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import {navigate} from '../Utils/Account';
 import checkFormValues from '../Components/AccountForm/Validate';
 import {getQuestions} from '../store/reducers/authenticationRedux';
-import GeneralCondition from './SignUp/GeneralCondition';
+import TermsOfUse from './SignUp/TermsOfUse';
 
 class SignUp extends Component {
   constructor(props) {
@@ -33,7 +38,7 @@ class SignUp extends Component {
       response2: '',
       question1: null,
       question2: null,
-      acceptCondition: false,
+      acceptTermsOfUse: false,
       action: CREATE_ACTION,
     };
   }
@@ -64,7 +69,7 @@ class SignUp extends Component {
       question1,
       question2,
       gender,
-      acceptCondition,
+      acceptTermsOfUse,
     } = this.state;
 
     return {
@@ -84,7 +89,7 @@ class SignUp extends Component {
       question1,
       question2,
       gender,
-      acceptCondition,
+      acceptTermsOfUse,
     };
   };
 
@@ -149,7 +154,7 @@ class SignUp extends Component {
           />
         )}
         {this.state.action === SHOW_CONDITION_ACTION && (
-          <GeneralCondition updateAction={this.updateAction} />
+          <TermsOfUse updateAction={this.updateAction} />
         )}
         {this.props.errorMessage && (
           <ErrorModal visible message={this.props.errorMessage} />

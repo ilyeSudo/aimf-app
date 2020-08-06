@@ -178,7 +178,7 @@ export default class AccountForm extends Component {
       functionName,
       birthday,
       gender,
-      acceptCondition,
+      acceptTermsOfUse,
     } = this.props.data;
 
     const genderOptions = [
@@ -386,11 +386,11 @@ export default class AccountForm extends Component {
               style={{marginLeft: 10, marginRight: 30, flexDirection: 'row'}}>
               <CheckBox
                 containerStyle={{marginTop: -10}}
-                checked={acceptCondition}
+                checked={acceptTermsOfUse}
                 checkedColor="#cb8347"
                 uncheckedColor="#cb8347"
                 onPress={() =>
-                  this.props.updateState({acceptCondition: !acceptCondition})
+                  this.props.updateState({acceptTermsOfUse: !acceptTermsOfUse})
                 }
               />
               <Text style={{marginRight: 40}}>
