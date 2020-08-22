@@ -4,10 +4,7 @@ import {connect} from 'react-redux';
 import {getIsoDate} from '../Utils/Functions';
 import Loader from '../Components/Loader';
 import ErrorModal from '../Components/ErrorModal';
-import {
-  CREATE_ACTION,
-  SHOW_CONDITION_ACTION,
-} from '../Utils/Constants';
+import {CREATE_ACTION, SHOW_CONDITION_ACTION} from '../Utils/Constants';
 import AccountForm from '../Components/AccountForm';
 import {register} from '../store/reducers/accountRedux';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
@@ -37,6 +34,7 @@ class SignUp extends Component {
       question1: null,
       question2: null,
       acceptTermsOfUse: false,
+      readTermsOfUse: false,
       action: CREATE_ACTION,
     };
   }
@@ -68,6 +66,7 @@ class SignUp extends Component {
       question2,
       gender,
       acceptTermsOfUse,
+      readTermsOfUse,
     } = this.state;
 
     return {
@@ -88,6 +87,7 @@ class SignUp extends Component {
       question2,
       gender,
       acceptTermsOfUse,
+      readTermsOfUse,
     };
   };
 
