@@ -6,9 +6,7 @@ import Loader from '../Components/Loader';
 import ErrorModal from '../Components/ErrorModal';
 import {
   CREATE_ACTION,
-  MARRIED,
   SHOW_CONDITION_ACTION,
-  SINGLE,
 } from '../Utils/Constants';
 import AccountForm from '../Components/AccountForm';
 import {register} from '../store/reducers/accountRedux';
