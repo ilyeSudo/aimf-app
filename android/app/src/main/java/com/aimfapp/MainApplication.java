@@ -3,6 +3,9 @@ package com.aimfapp;
 import android.app.Application;
 import android.content.Context;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.rnpermissions.RNPermissionsPackage;
+import org.reactnative.camera.RNCameraPackage;
+import com.horcrux.svg.SvgPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
@@ -36,6 +39,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNPermissionsPackage(),
+            new RNCameraPackage(),
+            new SvgPackage(),
             new AsyncStoragePackage(),
             new ReactNativeYouTube(),
             new AppCenterReactNativeCrashesPackage(MainApplication.this, getResources().getString(R.string.appCenterCrashes_whenToSendCrashes)),

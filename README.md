@@ -39,3 +39,14 @@ Note : after switch between branch, it's recommended to refresh env with this co
 ```
 sudo npm run refresh:env
 ```
+Pour react-native-camera
+Modifying build.gradle
+Modify the following lines in android/app/build.gradle:
+
+android {
+  ...
+  defaultConfig {
+    ...
+    missingDimensionStrategy 'react-native-camera', 'mlkit' // <--- replace general with mlkit
+  }
+}

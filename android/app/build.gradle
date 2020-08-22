@@ -129,6 +129,8 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true  // needed for firestore:
+        missingDimensionStrategy 'react-native-camera', 'mlkit' // <--- replace general with mlkit
+
     }
     signingConfigs {
         release {
