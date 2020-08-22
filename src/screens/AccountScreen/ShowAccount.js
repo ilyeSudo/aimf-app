@@ -4,6 +4,7 @@ import {Button, Icon, Text} from 'native-base';
 import * as PropTypes from 'prop-types';
 import styles from './css';
 import {FEMALE_GENDER, MALE_GENDER, UPDATE_ACTION} from '../../Utils/Constants';
+import {isAuthorized} from '../../Utils/Account';
 
 class ShowAccount extends Component {
   static navigationOptions = {
@@ -31,6 +32,13 @@ class ShowAccount extends Component {
             style={{alignSelf: 'center', borderRadius: 30, paddingBottom: 15}}>
             <Icon name="edit" type="AntDesign" style={styles.updateIcon} />
           </Button>
+        </View>
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+          {!isAuthorized(this.props.user) && (
+            <Text style={styles.accountValidationText}>
+              Compte en attente de validation par un administrateur
+            </Text>
+          )}
         </View>
         <Button
           rounded

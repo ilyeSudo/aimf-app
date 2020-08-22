@@ -30,7 +30,8 @@ import ImageRadioButton from './ImageRadioButton';
 import TextRadioButton from './TextRadioButton';
 import DatePicker from './DatePicker';
 import {CheckBox} from 'react-native-elements';
-import moment from "moment";
+import moment from 'moment';
+import RenderPassword from "./RenderPassoword";
 
 export default class AccountForm extends Component {
   constructor(props) {
@@ -343,37 +344,31 @@ export default class AccountForm extends Component {
             : null}
 
           {this.props.action === UPDATE_ACTION ? (
-            <RenderInput
-              checkFunction={isCorrectPassword}
+            <RenderPassword
               label="Ancien mot de passe"
-              secureTextEntry
               onChange={(value) => this.props.updateState({oldPassword: value})}
               required={this.props.action === CREATE_ACTION}
               value={oldPassword}
             />
           ) : null}
 
-          <RenderInput
-            checkFunction={isCorrectPassword}
+          <RenderPassword
             label={
               this.props.action === UPDATE_ACTION
                 ? 'Nouveau mot de passe'
                 : 'Mot de passe'
             }
-            secureTextEntry
             onChange={(value) => this.props.updateState({password: value})}
             required={this.props.action === CREATE_ACTION}
             value={password}
           />
-          <RenderInput
-            checkFunction={isCorrectPassword}
+          <RenderPassword
             label="Confirmer mot de passe"
             error={
               confirmPassword.length > 0 &&
               (!isCorrectPassword(confirmPassword) ||
                 password !== confirmPassword)
             }
-            secureTextEntry
             onChange={(value) =>
               this.props.updateState({confirmPassword: value})
             }
@@ -401,9 +396,10 @@ export default class AccountForm extends Component {
                     fontWeight: 'bold',
                     textDecorationLine: 'underline',
                   }}
-                  onPress={() =>
-                    this.props.updateAction(SHOW_CONDITION_ACTION)
-                  }>
+                  onPress={() => {
+                    this.props.updateState({readTermsOfUse: true});
+                    this.props.updateAction(SHOW_CONDITION_ACTION);
+                  }}>
                   Conditions générale et la politique de confidentialité
                 </Text>
               </Text>
