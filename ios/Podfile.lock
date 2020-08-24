@@ -596,7 +596,7 @@ PODS:
     - ReactCommon/callinvoker (= 0.62.2)
   - RNCAsyncStorage (1.11.0):
     - React
-  - RNDateTimePicker (2.4.3):
+  - RNDateTimePicker (2.6.0):
     - React
   - Yoga (1.14.0)
   - YoutubePlayer-in-WKWebView (0.3.4)
@@ -776,8 +776,8 @@ SPEC CHECKSUMS:
   React-RCTText: fae545b10cfdb3d247c36c56f61a94cfd6dba41d
   React-RCTVibration: 4356114dbcba4ce66991096e51a66e61eda51256
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
-  RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
-  RNDateTimePicker: 6cba311a3ba473624d97cc762fd270b2a3cfca49
+  RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
+  RNDateTimePicker: 8784fb27ddd12a9f0eaf6d994bfe3892f0f319cf
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YoutubePlayer-in-WKWebView: af2f5929fc78882d94bfdfeea999b661b78d9717
 

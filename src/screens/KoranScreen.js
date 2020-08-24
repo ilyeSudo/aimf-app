@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable array-callback-return */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
@@ -9,18 +10,31 @@ import {
   Text,
   RefreshControl,
   YellowBox,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  Animated,
 } from 'react-native';
-import {Container, Icon, Button} from 'native-base';
+import SlidingUpPanel from 'rn-sliding-up-panel';
+import {Button} from 'native-base';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
-import CostumHeader from '../Components/KoranScreen/CostumHeader';
 import {formatDateWithDayAndMonthName} from '../Utils/Functions';
 import KoranItem from '../Components/KoranScreen/KoranItem';
+import AssociationMenu from '../Components/AssociationMenu';
 import {
   ayncReceiveKhatma,
   asyncReceiveUserKhatma,
 } from '../store/reducers/khatmaRedux';
 import {receiveKoran} from '../store/reducers/koranRedux';
-import {gray3, black, gray, orange2} from '../Utils/colors';
+import {
+  white,
+  gray3,
+  black,
+  gray,
+  orange2,
+  orangeBackgroud,
+} from '../Utils/colors';
 import HistoryItem from '../Components/KoranScreen/HistoryItem';
 import {isAdmin} from '../Utils/Account';
 
@@ -29,17 +43,27 @@ YellowBox.ignoreWarnings([
 ]);
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: orangeBackgroud,
+    paddingTop: 0,
+  },
   textHeader: {
-    fontSize: 24,
-    fontWeight: '700',
+    fontSize: 20,
+    fontWeight: '600',
     color: black,
   },
-  textDetails: {
-    fontSize: 15,
-    fontWeight: '400',
-    color: gray,
+  panelHandle: {
+    height: 5,
+    width: 50,
+    backgroundColor: orange2,
+    borderRadius: 6,
+    alignSelf: 'center',
+    marginTop: 6,
   },
 });
+
+const {width, height} = Dimensions.get('window');
 
 class KoranScreen extends Component {
   static navigationOptions = {
@@ -48,7 +72,14 @@ class KoranScreen extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {active: false};
+    this.state = {
+      active: false,
+      _draggedValue: new Animated.Value(-20),
+      dragRange: {
+        top: height - 20,
+        bottom: 0,
+      },
+    };
   }
 
   onRefresh = () => {
@@ -82,6 +113,7 @@ class KoranScreen extends Component {
         title={date}
         numberofPartDispo={numberofPartDispo}
         loading={loading}
+        associationName={item.association.name}
         navigate={() => navigation.navigate('Khatma', {khatmaIdParam: item.id})}
       />
     );
@@ -106,6 +138,7 @@ class KoranScreen extends Component {
         numberOfPicks={numberOfPicks}
         numberOfRead={numberOfRead}
         loading={loading}
+        associationName={item.association.name}
         navigate={() => navigation.navigate('Khatma', {khatmaIdParam: item.id})}
       />
     );
@@ -113,99 +146,139 @@ class KoranScreen extends Component {
 
   render() {
     const {khatmaHistory, openKhatma, loading, account} = this.props;
+    const {dragRange, _draggedValue} = this.state;
 
     return (
-      <View style={{flex: 1, backgroundColor: loading ? '#f7f7f7' : gray3}}>
-        <Container>
-          <CostumHeader title="Mon Espace Khatma" isHome />
-          <ScrollView
-            scrollEventThrottle={16}
+      <View style={styles.container}>
+        <AssociationMenu screenerTitle="Khatma" />
+        <ScrollView scrollEventThrottle={16}>
+          <View style={{marginTop: 15, paddingHorizontal: 15}}>
+            <Text style={styles.textHeader}>Mes Prochaines Khatma</Text>
+          </View>
+          <View style={{flex: 1}}>
+            {openKhatma.length === 0 && (
+              <View style={{marginTop: 10, paddingHorizontal: 15}}>
+                <Text style={styles.textDetails}>
+                  Aucune Khatma n'est ouverte à ce jour.
+                </Text>
+              </View>
+            )}
+          </View>
+          <FlatList
+            data={Object.values(openKhatma).sort((a, b) => {
+              const dateA = new Date(a.beginAt);
+              const dateB = new Date(b.beginAt);
+              return dateB - dateA;
+            })}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={this.renderKoranItem}
+            horizontal
             refreshControl={
               <RefreshControl
                 refreshing={loading}
                 onRefresh={this.onRefresh}
                 title="Chargement..."
               />
-            }>
-            <View style={{marginTop: 10, paddingHorizontal: 10}}>
-              <Text style={styles.textHeader}>Mes Prochaines Khatma</Text>
-            </View>
-            <View style={{flex: 1}}>
-              {openKhatma.length === 0 && (
-                <View style={{marginTop: 10, paddingHorizontal: 15}}>
-                  <Text style={styles.textDetails}>
-                    Aucune Khatma n'est ouverte à ce jour.
-                  </Text>
-                </View>
-              )}
-
-              <FlatList
-                data={Object.values(openKhatma).sort((a, b) => b.id - a.id)}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={this.renderKoranItem}
-              />
-            </View>
-            <View
-              style={{marginTop: 20, marginBottom: 10, paddingHorizontal: 15}}>
-              <Text style={styles.textHeader}>Mon Historique</Text>
-            </View>
-            <View style={{flex: 1}} accessible={!loading}>
-              {khatmaHistory.length === 0 && (
-                <View style={{marginBottom: 10, paddingHorizontal: 15}}>
-                  <Text style={styles.textDetails}>
-                    Vous n'avez à ce jour partcipé à aucune Khatma
-                  </Text>
-                </View>
-              )}
-              <FlatList
-                data={Object.values(khatmaHistory).sort((a, b) => b.id - a.id)}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={this.renderHistoryItem}
-              />
-            </View>
-          </ScrollView>
-          {isAdmin(account.user) && (
-            <View
-              style={{
-                flexDirection: 'row-reverse',
-              }}>
-              <Button
-                transparent
+            }
+          />
+          <View style={{flex: 1}}>
+            <SlidingUpPanel
+              ref={(c) => (this._panel = c)}
+              draggableRange={dragRange}
+              animatedValue={_draggedValue}
+              backdropOpacity={0}
+              snappingPoints={[360]}
+              height={height - 20}
+              friction={0.9}>
+              <View
                 style={{
-                  borderRadius: 50,
-                  marginRight: 20,
-                  marginBottom: 10,
-                  width: 46,
-                  backgroundColor: orange2,
-                }}
-                onPress={() => this.props.navigation.navigate('AddKhatma')}>
-                <Icon name="add" style={{color: '#FFF'}} />
-              </Button>
-            </View>
-          )}
-        </Container>
+                  flex: 1,
+                  backgroundColor: white,
+                  borderRadius: 24,
+                  padding: 14,
+                }}>
+                <View style={styles.panelHandle} />
+                <View>
+                  <Text style={styles.textHeader}>Mon Historique</Text>
+                </View>
+                <View style={{marginBottom: 10, marginTop: 15}}>
+                  {khatmaHistory.length === 0 && (
+                    <View style={{marginBottom: 10, paddingHorizontal: 15}}>
+                      <Text style={styles.textDetails}>
+                        Vous n'avez à ce jour partcipé à aucune Khatma
+                      </Text>
+                    </View>
+                  )}
+                  <FlatList
+                    data={Object.values(khatmaHistory).sort((a, b) => {
+                      const dateA = new Date(a.beginAt);
+                      const dateB = new Date(b.beginAt);
+                      return dateB - dateA;
+                    })}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={this.renderHistoryItem}
+                  />
+                </View>
+              </View>
+            </SlidingUpPanel>
+          </View>
+        </ScrollView>
+        {isAdmin(account.user) && (
+          <View
+            style={{
+              flexDirection: 'row-reverse',
+            }}>
+            <Button
+              transparent
+              style={{
+                borderRadius: 50,
+                marginRight: 20,
+                marginBottom: 10,
+                width: 46,
+                backgroundColor: orange2,
+                justifyContent: 'center',
+              }}
+              onPress={() => this.props.navigation.navigate('AddKhatma')}>
+              <Icon
+                name="plus"
+                color={white}
+                size={24}
+                style={{alignSelf: 'center', justifyContent: 'center'}}
+              />
+            </Button>
+          </View>
+        )}
       </View>
     );
   }
 }
 
 function mapStateToProps(state) {
+  const {userAssociationList} = state.associationStore;
+
   const openKhatma = Object.values(state.khatmaStore.khatma).filter(
     (khatma) => {
-      return khatma.isOpen;
+      return (
+        khatma.isOpen &&
+        Object.values(userAssociationList).includes(khatma.association.id)
+      );
     },
   );
 
   const khatmaHistory = Object.values(state.khatmaStore.userKhatma).filter(
     (khatma) => {
-      return !khatma.isOpen && khatma.userTakharoubts.length > 0;
+      return (
+        !khatma.isOpen &&
+        khatma.userTakharoubts.length > 0 &&
+        Object.values(userAssociationList).includes(khatma.association.id)
+      );
     },
   );
 
   return {
     khatmaHistory,
     openKhatma,
-    loading: state.khatmaStore.loading,
+    loading: state.khatmaStore.loading || state.associationStore.loading,
     account: state.accountStore,
   };
 }

@@ -83,7 +83,7 @@ export const asyncReceiveUserKhatma = () => {
   return (dispatch) => {
     dispatch(loadingUserKhatmaData());
     getAxiosInstance()
-      .get(`${GET_USER_KHATMA_URI}?with_user_takharoubts=1`)
+      .get(`${GET_USER_KHATMA_URI}?with_user_takharoubts=1&with_association=1`)
       .then((response) => {
         dispatch(receiveUserKhatma(response.data.data));
       })
@@ -130,8 +130,9 @@ export const ayncReceiveKhatma = () => {
   return (dispatch) => {
     dispatch(loadingKhatmaData());
     getAxiosInstance()
-      .get(`${GET_LIST_KHATMA_URI}?with_takharoubts=1`)
+      .get(`${GET_LIST_KHATMA_URI}?with_takharoubts=1&with_association=1`)
       .then((response) => {
+        console.log(response.data.data);
         dispatch(receiveKhatma(response.data.data));
       })
       .catch((error) => {
@@ -228,7 +229,11 @@ export const saveUserPicksReads = (khatmaId, picks, reads) => {
           )
           .then((response) => {
             getAxiosInstance()
-              .get(`${GET_KHATMA_URI + khatmaId}?with_takharoubts=1`)
+              .get(
+                `${
+                  GET_KHATMA_URI + khatmaId
+                }?with_takharoubts=1&with_association=1`,
+              )
               .then((res) => {
                 dispatch(
                   _saveUserPicksReads(response.data.data, res.data.data),
@@ -279,7 +284,11 @@ export const saveUserReads = (khatmaId, reads) => {
       )
       .then((response) => {
         getAxiosInstance()
-          .get(`${GET_KHATMA_URI + khatmaId}?with_takharoubts=1`)
+          .get(
+            `${
+              GET_KHATMA_URI + khatmaId
+            }?with_takharoubts=1&with_association=1`,
+          )
           .then((res) => {
             dispatch(_saveUserPicksReads(response.data.data, res.data.data));
           })
@@ -328,17 +337,21 @@ export const updateKhatma = (khatmaId, status) => {
   return (dispatch) => {
     dispatch(loadingKhatmaData());
     getAxiosInstance()
-      .patch(`${PATCH_KHATMA_URI + khatmaId}?with_takharoubts=1`, {
+      .patch(`${PATCH_KHATMA_URI + khatmaId}`, {
         isOpen: status,
         endAt: status ? MAX_DATE : formatDateAsApiDate(Date.now()),
       })
       .then((response) => {
+        console.log(response);
         getAxiosInstance()
-          .get(`${GET_USER_KHATMA_URI}/${khatmaId}?with_user_takharoubts=1`)
+          .get(
+            `${GET_USER_KHATMA_URI}/${khatmaId}?with_user_takharoubts=1&with_association=1`,
+          )
           .then((res) => {
             dispatch(_upadateKhatma(response.data.data, res.data.data));
           })
           .catch((err) => {
+            //console.log(err);
             dispatch(
               batchActions(
                 [dispatchError(err), updatingKhatmaError()],
@@ -348,6 +361,7 @@ export const updateKhatma = (khatmaId, status) => {
           });
       })
       .catch((error) => {
+        console.log(error);
         dispatch(
           batchActions(
             [dispatchError(error), updatingKhatmaError()],
