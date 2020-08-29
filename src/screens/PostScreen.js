@@ -92,16 +92,16 @@ class PostScreen extends Component {
       );
       return;
     }
-    const association =
+    const associationId =
       isSuperAdmin(this.props.user) || isAdmin(this.props.user)
-        ? {association_id: this.state.associationId}
-        : {};
+        ? this.state.associationId
+        : null;
     this.props.savePost({
       status,
       description: description.trim(),
       title: title.trim(),
       expiredAt: expiredAt && moment(expiredAt).format('YYYY-MM-DD'),
-      ...association,
+      associationId,
     });
   };
 
