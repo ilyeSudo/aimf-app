@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {API_BASE_URL} from 'react-native-dotenv';
 import {black, orange2} from '../../Utils/colors';
 
 const {width} = Dimensions.get('window');
@@ -16,14 +17,16 @@ const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
-    paddingTop: 50,
+    //paddingTop: 50,
     paddingHorizontal: 14,
     marginBottom: 10,
     justifyContent: 'center',
+    height: 50,
   },
   logoContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 15,
   },
   logo: {
     width: 40,
@@ -60,7 +63,16 @@ const styles = StyleSheet.create({
 // eslint-disable-next-line react/prefer-stateless-function
 class CostumHeader extends Component {
   render() {
-    const {title, associationName, validate, navigation} = this.props;
+    const {
+      title,
+      subtitle,
+      associationName,
+      associationLogo,
+      validate,
+      navigation,
+      rightIcon,
+      renderLogo,
+    } = this.props;
 
     return (
       <View>
@@ -69,7 +81,7 @@ class CostumHeader extends Component {
             style={{
               position: 'absolute',
               justifyContent: 'center',
-              top: 65,
+              top: 15,
               left: 20,
               marginRight: 20,
             }}>
@@ -86,29 +98,38 @@ class CostumHeader extends Component {
             style={{
               flexDirection: 'row',
             }}>
-            <View style={styles.logoContainer}>
-              <Image
-                style={styles.logo}
-                source={require('../../../assets/images/AIMF.png')}
-              />
-              <Text style={styles.textLogo}>{associationName}</Text>
-            </View>
-            <View style={{marginLeft: 10, justifyContent: 'center'}}>
-              <Text style={styles.title}>Khatmat</Text>
-              <Text style={styles.textInfo}>{title}</Text>
+            {renderLogo && (
+              <View style={styles.logoContainer}>
+                <Image
+                  style={styles.logo}
+                  source={{
+                    uri: `${API_BASE_URL}/${associationLogo}`,
+                  }}
+                />
+                <Text style={styles.textLogo}>{associationName}</Text>
+              </View>
+            )}
+
+            <View
+              style={{
+                marginLeft: 10,
+                justifyContent: 'center',
+              }}>
+              <Text style={styles.title}>{title}</Text>
+              {subtitle && <Text style={styles.textInfo}>{subtitle}</Text>}
             </View>
           </View>
           <View
             style={{
               position: 'absolute',
               justifyContent: 'center',
-              top: 65,
+              top: 15,
               right: 20,
               marginLeft: 20,
             }}>
             <TouchableOpacity onPress={(event) => validate(event)}>
               <Icon
-                name="send"
+                name={rightIcon}
                 color={black}
                 size={26}
                 style={{alignSelf: 'center'}}

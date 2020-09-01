@@ -132,7 +132,6 @@ export const ayncReceiveKhatma = () => {
     getAxiosInstance()
       .get(`${GET_LIST_KHATMA_URI}?with_takharoubts=1&with_association=1`)
       .then((response) => {
-        console.log(response.data.data);
         dispatch(receiveKhatma(response.data.data));
       })
       .catch((error) => {
@@ -156,12 +155,13 @@ const saveKhatma = (khatma) => {
   };
 };
 
-export const ayncSaveKhatma = (date) => {
+export const ayncSaveKhatma = (date, associationId) => {
   return (dispatch) => {
     dispatch(loadingKhatmaData());
     getAxiosInstance()
-      .post(POST_ADD_KHATMA_URI, {
+      .post(`${POST_ADD_KHATMA_URI}?with_association=1`, {
         beginAt: formatDateAsApiDate(date),
+        associationId,
         isOpen: true,
       })
       .then((response) => {
@@ -171,6 +171,7 @@ export const ayncSaveKhatma = (date) => {
               response.data.data.id,
               response.data.data.beginAt,
               response.data.data.isOpen,
+              response.data.data.association,
             ),
           ),
         );
@@ -212,7 +213,9 @@ export const saveUserPicksReads = (khatmaId, picks, reads) => {
     dispatch(loadingKhatmaData());
     getAxiosInstance()
       .patch(
-        `${PATCH_USER_TAKHAROUBT_URI + khatmaId}?with_user_takharoubts=1`,
+        `${
+          PATCH_USER_TAKHAROUBT_URI + khatmaId
+        }?with_user_takharoubts=1&with_association=1`,
         {
           actionType: 'pick',
           takharoubts: picks,
@@ -221,7 +224,9 @@ export const saveUserPicksReads = (khatmaId, picks, reads) => {
       .then(() => {
         getAxiosInstance()
           .patch(
-            `${PATCH_USER_TAKHAROUBT_URI + khatmaId}?with_user_takharoubts=1`,
+            `${
+              PATCH_USER_TAKHAROUBT_URI + khatmaId
+            }?with_user_takharoubts=1&with_association=1`,
             {
               actionType: 'read',
               takharoubts: reads,
@@ -276,7 +281,9 @@ export const saveUserReads = (khatmaId, reads) => {
     dispatch(loadingKhatmaData());
     getAxiosInstance()
       .patch(
-        `${PATCH_USER_TAKHAROUBT_URI + khatmaId}?with_user_takharoubts=1`,
+        `${
+          PATCH_USER_TAKHAROUBT_URI + khatmaId
+        }?with_user_takharoubts=1&with_association=1`,
         {
           actionType: 'read',
           takharoubts: reads,
@@ -287,7 +294,7 @@ export const saveUserReads = (khatmaId, reads) => {
           .get(
             `${
               GET_KHATMA_URI + khatmaId
-            }?with_takharoubts=1&with_association=1`,
+            }?with_takharoubts=1&with_association=1&with_association=1`,
           )
           .then((res) => {
             dispatch(_saveUserPicksReads(response.data.data, res.data.data));
@@ -342,7 +349,6 @@ export const updateKhatma = (khatmaId, status) => {
         endAt: status ? MAX_DATE : formatDateAsApiDate(Date.now()),
       })
       .then((response) => {
-        console.log(response);
         getAxiosInstance()
           .get(
             `${GET_USER_KHATMA_URI}/${khatmaId}?with_user_takharoubts=1&with_association=1`,
@@ -351,7 +357,6 @@ export const updateKhatma = (khatmaId, status) => {
             dispatch(_upadateKhatma(response.data.data, res.data.data));
           })
           .catch((err) => {
-            //console.log(err);
             dispatch(
               batchActions(
                 [dispatchError(err), updatingKhatmaError()],
@@ -361,7 +366,6 @@ export const updateKhatma = (khatmaId, status) => {
           });
       })
       .catch((error) => {
-        console.log(error);
         dispatch(
           batchActions(
             [dispatchError(error), updatingKhatmaError()],

@@ -177,3 +177,5 @@ export const THAKHAROUBTS = [
     pickedTimes: 0,
   },
 ];
+
+export const AIMF_ASSOCIATION_ID = 1;

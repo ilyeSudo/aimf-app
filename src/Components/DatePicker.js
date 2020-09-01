@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {Platform, Text} from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import {View, Text} from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Item, Label} from 'native-base';
 import moment from 'moment';
 
@@ -13,31 +13,30 @@ const DatePicker = ({
   maximumDate,
   labelStyle,
 }) => {
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [date, setDate] = useState(defaultDate || null);
 
   if (date !== defaultDate) {
     setDate(defaultDate);
   }
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
 
-  const onChange = (event, selectedDate) => {
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (selectedDate) => {
+    hideDatePicker();
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
     setDate(currentDate);
     onCustomChange && onCustomChange(currentDate);
   };
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
   return (
-    <>
+    <View>
       <Label
         style={{
           fontWeight: 'bold',
@@ -50,7 +49,7 @@ const DatePicker = ({
       </Label>
 
       <Item
-        onPress={showDatepicker}
+        onPress={showDatePicker}
         style={{
           marginBottom: 15,
           marginLeft: 30,
@@ -64,19 +63,18 @@ const DatePicker = ({
           ...style,
         }}>
         <Text>{date && moment(date).format('DD/MM/YYYY')}</Text>
-        {show && (
-          <DateTimePicker
-            minimumDate={minimumDate}
-            maximumDate={maximumDate}
-            value={date || new Date()}
-            mode={mode}
-            is24Hour={true}
-            display="spinner"
-            onChange={onChange}
-          />
-        )}
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+          display="spinner"
+          date={date || new Date()}
+          minimumDate={minimumDate}
+          maximumDate={maximumDate}
+        />
       </Item>
-    </>
+    </View>
   );
 };
 export default DatePicker;

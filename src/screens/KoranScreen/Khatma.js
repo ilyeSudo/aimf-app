@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator,
   Dimensions,
+  SafeAreaView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -231,12 +232,16 @@ class Khatma extends Component {
     }
 
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <CostumHeader
-          title={formatDateWithDayAndMonthName(khatma.beginAt)}
+          title="Khatmat"
+          subtitle={formatDateWithDayAndMonthName(khatma.beginAt)}
           associationName={khatma.association.name}
+          associationLogo={khatma.association.logo}
           navigation={this.props.navigation}
           validate={this.validateUserChoise}
+          rightIcon="send"
+          renderLogo={true}
         />
         <ScrollView scrollEventThrottle={16}>
           {isAdmin(account.user) &&
@@ -244,13 +249,13 @@ class Khatma extends Component {
               <TextButton
                 style={{marginTop: 10}}
                 onPress={this.onChangeOpenKhetma}>
-                Fermer Khetma
+                Fermer cette Khetma
               </TextButton>
             ) : (
               <TextButton
                 style={{marginTop: 10}}
                 onPress={this.onChangeOpenKhetma}>
-                Ouvrir Khetma
+                Ouvrir cette Khetma
               </TextButton>
             ))}
 
@@ -294,7 +299,7 @@ class Khatma extends Component {
             <View>
               <View style={{marginTop: 40, paddingHorizontal: 20}}>
                 <Text style={styles.textHeader}>
-                  Choisir une ou plusieurs Tekheroubine
+                  Choisir une ou plusieurs Tekheroubines
                 </Text>
                 {!numberOfToRead && (
                   <View>
@@ -303,9 +308,7 @@ class Khatma extends Component {
                       Khatma.
                     </Text>
                     <Text style={styles.textDetails}>
-                      Privilégier une Takheroubte qui a un compteur à Zéro.
-                      Celles qui ont un compteur différent de Zéro ont déjà été
-                      choisies par d'autres personnes.
+                      Privilégier une Takheroubte qui n'a pas encore été prise.
                     </Text>
                   </View>
                 )}
@@ -335,7 +338,7 @@ class Khatma extends Component {
             </View>
           )}
         </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   }
 }

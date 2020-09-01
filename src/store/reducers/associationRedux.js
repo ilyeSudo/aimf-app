@@ -104,9 +104,7 @@ const _updateUserAssociation = (userAssociationList) => {
 };
 
 export const updateUserAssociation = (associationIdList) => {
-  console.log(associationIdList);
-  return (dispatch, getState) => {
-    const {khatmaStor} = getState();
+  return (dispatch) => {
     dispatch(loadingAssociationData());
     getAxiosInstance()
       .patch(`${PATCH_USER_ASSOCIAITION_URI}`, {
@@ -119,13 +117,8 @@ export const updateUserAssociation = (associationIdList) => {
           },
         );
         dispatch(_updateUserAssociation(userAssociationList));
-        // TODO
-        // dispatch Article
-        // dispatch Khatma
-        // dispatch User Khatma History
       })
       .catch((error) => {
-        console.log(error);
         dispatch(
           batchActions(
             [dispatchError(error), updateUserAssociationError()],
@@ -160,7 +153,6 @@ export const receiveUserAssociationData = () => {
         dispatch(getUserAssociationData(userAssociationList));
       })
       .catch((error) => {
-        console.log(error);
         dispatch(
           batchActions(
             [dispatchError(error), getUserAssociationError()],
@@ -182,7 +174,6 @@ const initState = {
 };
 
 export const associationReducer = (state = initState, action) => {
-  console.log(action);
   switch (action.type) {
     case LOADING_ASSOCIATION_DATA:
     case LOADING_ASSOCIATION_DATA_ERROR:

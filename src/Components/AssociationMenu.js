@@ -11,6 +11,7 @@ import {
   Animated,
   Alert,
 } from 'react-native';
+import {API_BASE_URL} from 'react-native-dotenv';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
@@ -18,14 +19,7 @@ import {
   receiveUserAssociationData,
   receiveAssociationData,
 } from '../store/reducers/associationRedux';
-import {
-  white,
-  gray3,
-  black,
-  gray,
-  orange2,
-  orangeBackgroud,
-} from '../Utils/colors';
+import {white, black} from '../Utils/colors';
 
 const styles = StyleSheet.create({
   activeAssociation: {
@@ -140,8 +134,7 @@ class AssociationMenu extends Component {
     const {hideMenu} = this.state;
     return (
       <View>
-        <View
-          style={{flexDirection: 'row', paddingTop: 50, paddingHorizontal: 14}}>
+        <View style={{flexDirection: 'row', paddingHorizontal: 14}}>
           <View>
             <Text style={{fontSize: 26, fontWeight: '700'}}>Bienvenue, </Text>
             <Text style={{fontSize: 22, fontWeight: '500', opacity: 0.6}}>
@@ -193,7 +186,9 @@ class AssociationMenu extends Component {
                     }>
                     <Image
                       style={styles.selAllIconbg}
-                      source={require('../../assets/images/AIMF.png')}
+                      source={{
+                        uri: `${API_BASE_URL}/${item.logo}`,
+                      }}
                     />
                     <Text
                       style={
@@ -215,7 +210,6 @@ class AssociationMenu extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
   const {
     loading,
     associationList,

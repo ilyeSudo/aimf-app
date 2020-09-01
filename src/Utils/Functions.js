@@ -84,12 +84,13 @@ export const getFullName = ({lastName, firstName}) => {
     : '';
 };
 
-export const formatKhatma = (id, beginAt, isOpen) => {
+export const formatKhatma = (id, beginAt, isOpen, association) => {
   return {
     id,
     beginAt,
     isOpen,
     takharoubts: THAKHAROUBTS,
+    association,
   };
 };
 

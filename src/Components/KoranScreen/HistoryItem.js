@@ -2,6 +2,7 @@
 import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
 import PropTypes from 'prop-types';
+import {API_BASE_URL} from 'react-native-dotenv';
 import {gray, black, white} from '../../Utils/colors';
 
 const styles = StyleSheet.create({
@@ -59,6 +60,7 @@ export default function HistoryItem(props) {
     numberOfPicks,
     numberOfRead,
     associationName,
+    associationLogo,
     navigate,
     loading,
   } = props;
@@ -72,7 +74,9 @@ export default function HistoryItem(props) {
           <View style={styles.panelItemContainer}>
             <View style={styles.logoContainer}>
               <Image
-                source={require('../../../assets/images/AIMF.png')}
+                source={{
+                  uri: `${API_BASE_URL}/${associationLogo}`,
+                }}
                 style={styles.logo}
               />
               <Text style={styles.textLogo}> {associationName} </Text>

@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
+import {API_BASE_URL} from 'react-native-dotenv';
 import PropTypes from 'prop-types';
 import {gray, black, white} from '../../Utils/colors';
 
@@ -73,6 +74,7 @@ class KoranItem extends Component {
       title,
       numberofPartDispo,
       associationName,
+      associationLogo,
       navigate,
       loading,
     } = this.props;
@@ -90,7 +92,9 @@ class KoranItem extends Component {
             <View style={styles.logoContainer}>
               <Image
                 style={styles.logo}
-                source={require('../../../assets/images/AIMF.png')}
+                source={{
+                  uri: `${API_BASE_URL}/${associationLogo}`,
+                }}
               />
               <Text style={styles.textLogo}>{associationName}</Text>
             </View>

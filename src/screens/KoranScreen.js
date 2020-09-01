@@ -10,12 +10,10 @@ import {
   Text,
   RefreshControl,
   YellowBox,
-  TouchableOpacity,
-  Image,
+  SafeAreaView,
   Dimensions,
   Animated,
 } from 'react-native';
-import SlidingUpPanel from 'rn-sliding-up-panel';
 import {Button} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
@@ -27,14 +25,7 @@ import {
   asyncReceiveUserKhatma,
 } from '../store/reducers/khatmaRedux';
 import {receiveKoran} from '../store/reducers/koranRedux';
-import {
-  white,
-  gray3,
-  black,
-  gray,
-  orange2,
-  orangeBackgroud,
-} from '../Utils/colors';
+import {white, black, orange2, orangeBackgroud} from '../Utils/colors';
 import HistoryItem from '../Components/KoranScreen/HistoryItem';
 import {isAdmin} from '../Utils/Account';
 
@@ -63,8 +54,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const {width, height} = Dimensions.get('window');
-
 class KoranScreen extends Component {
   static navigationOptions = {
     header: null,
@@ -74,11 +63,6 @@ class KoranScreen extends Component {
     super(props);
     this.state = {
       active: false,
-      _draggedValue: new Animated.Value(-20),
-      dragRange: {
-        top: height - 20,
-        bottom: 0,
-      },
     };
   }
 
@@ -114,6 +98,7 @@ class KoranScreen extends Component {
         numberofPartDispo={numberofPartDispo}
         loading={loading}
         associationName={item.association.name}
+        associationLogo={item.association.logo}
         navigate={() => navigation.navigate('Khatma', {khatmaIdParam: item.id})}
       />
     );
@@ -139,6 +124,7 @@ class KoranScreen extends Component {
         numberOfRead={numberOfRead}
         loading={loading}
         associationName={item.association.name}
+        associationLogo={item.association.logo}
         navigate={() => navigation.navigate('Khatma', {khatmaIdParam: item.id})}
       />
     );
@@ -149,7 +135,7 @@ class KoranScreen extends Component {
     const {dragRange, _draggedValue} = this.state;
 
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <AssociationMenu screenerTitle="Khatma" />
         <ScrollView scrollEventThrottle={16}>
           <View style={{marginTop: 15, paddingHorizontal: 15}}>
@@ -166,9 +152,7 @@ class KoranScreen extends Component {
           </View>
           <FlatList
             data={Object.values(openKhatma).sort((a, b) => {
-              const dateA = new Date(a.beginAt);
-              const dateB = new Date(b.beginAt);
-              return dateB - dateA;
+              return b.id - a.id;
             })}
             keyExtractor={(item) => item.id.toString()}
             renderItem={this.renderKoranItem}
@@ -182,45 +166,34 @@ class KoranScreen extends Component {
             }
           />
           <View style={{flex: 1}}>
-            <SlidingUpPanel
-              ref={(c) => (this._panel = c)}
-              draggableRange={dragRange}
-              animatedValue={_draggedValue}
-              backdropOpacity={0}
-              snappingPoints={[360]}
-              height={height - 20}
-              friction={0.9}>
-              <View
-                style={{
-                  flex: 1,
-                  backgroundColor: white,
-                  borderRadius: 24,
-                  padding: 14,
-                }}>
-                <View style={styles.panelHandle} />
-                <View>
-                  <Text style={styles.textHeader}>Mon Historique</Text>
-                </View>
-                <View style={{marginBottom: 10, marginTop: 15}}>
-                  {khatmaHistory.length === 0 && (
-                    <View style={{marginBottom: 10, paddingHorizontal: 15}}>
-                      <Text style={styles.textDetails}>
-                        Vous n'avez à ce jour partcipé à aucune Khatma
-                      </Text>
-                    </View>
-                  )}
-                  <FlatList
-                    data={Object.values(khatmaHistory).sort((a, b) => {
-                      const dateA = new Date(a.beginAt);
-                      const dateB = new Date(b.beginAt);
-                      return dateB - dateA;
-                    })}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={this.renderHistoryItem}
-                  />
-                </View>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: white,
+                borderRadius: 24,
+                padding: 14,
+              }}>
+              <View style={styles.panelHandle} />
+              <View>
+                <Text style={styles.textHeader}>Mon Historique</Text>
               </View>
-            </SlidingUpPanel>
+              <View style={{marginBottom: 10, marginTop: 15}}>
+                {khatmaHistory.length === 0 && (
+                  <View style={{marginBottom: 10, paddingHorizontal: 15}}>
+                    <Text style={styles.textDetails}>
+                      Vous n'avez à ce jour partcipé à aucune Khatma
+                    </Text>
+                  </View>
+                )}
+                <FlatList
+                  data={Object.values(khatmaHistory).sort((a, b) => {
+                    return b.id - a.id;
+                  })}
+                  keyExtractor={(item) => item.id.toString()}
+                  renderItem={this.renderHistoryItem}
+                />
+              </View>
+            </View>
           </View>
         </ScrollView>
         {isAdmin(account.user) && (
@@ -248,7 +221,7 @@ class KoranScreen extends Component {
             </Button>
           </View>
         )}
-      </View>
+      </SafeAreaView>
     );
   }
 }
