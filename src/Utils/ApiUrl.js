@@ -20,3 +20,4 @@ export const GET_LIVE_VIDEO_URI = `${API_URL}youtube/live-video`;
 export const GET_LIST_ASSOCIAITION_URI = `${API_URL}association`;
 export const GET_USER_ASSOCIAITION_URI = `${API_URL}user-association`;
 export const PATCH_USER_ASSOCIAITION_URI = `${API_URL}user-association`;
+export const TERMS_OF_USE_URI = `${API_URL}terms-of-use/latest`;

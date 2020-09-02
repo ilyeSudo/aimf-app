@@ -20,6 +20,8 @@ export const POST_REGISTER_USER_SUCCESS = 'POST_REGISTER_USER_SUCCESS';
 export const POST_REGISTER_USER_ERROR = 'POST_REGISTER_USER_ERROR';
 export const POST_BATCH_REGISTER_USER_ERROR = 'POST_BATCH_REGISTER_USER_ERROR';
 
+const POST_BATCH_REGISTER_SUCCESS = 'POST_BATCH_REGISTER_SUCCESS';
+
 const patchUpdateRequest = () => {
   return {
     type: PATCH_UPDATE_USER_REQUEST,
@@ -133,19 +135,20 @@ export const register = (data) => {
     getAxiosInstance()
       .post(POST_REGISTER_USER_URI, data)
       .then(function (response) {
-        setTimeout(() => {
-          dispatch(postRegisterSuccess(response.data));
-        }, 500);
+        dispatch(
+          batchActions(
+            [storeAccount(response.data), postRegisterSuccess()],
+            POST_BATCH_REGISTER_SUCCESS,
+          ),
+        );
       })
       .catch(function (error) {
-        setTimeout(() => {
-          dispatch(
-            batchActions(
-              [dispatchError(error), postRegisterError()],
-              POST_BATCH_REGISTER_USER_ERROR,
-            ),
-          );
-        }, 500);
+        dispatch(
+          batchActions(
+            [dispatchError(error), postRegisterError()],
+            POST_BATCH_REGISTER_USER_ERROR,
+          ),
+        );
       });
   };
 };

@@ -17,6 +17,13 @@ export const isAdmin = (user) => {
   return false;
 };
 
+export const isAssociationAdmin = (user) => {
+  if (user && user.roles) {
+    return !!user.roles.find((role) => role.name.substring(0, 6) === 'admin_');
+  }
+  return false;
+};
+
 export const isMember = (user) => {
   if (user && user.roles) {
     return !!user.roles.find((role) => role.name === MEMBER_ROLE);
@@ -25,7 +32,12 @@ export const isMember = (user) => {
 };
 
 export const isAuthorized = (user) => {
-  return isSuperAdmin(user) || isAdmin(user) || isMember(user);
+  return (
+    isSuperAdmin(user) ||
+    isAdmin(user) ||
+    isMember(user) ||
+    isAssociationAdmin(user)
+  );
 };
 
 export const navigate = (
@@ -42,6 +54,12 @@ export const navigate = (
         youtube
           ? 'adminUserWithYoutubeLiveTabNavigator'
           : 'adminUserTabNavigator',
+      );
+    } else if (isAssociationAdmin(account.user)) {
+      navigation.navigate(
+        youtube
+          ? 'adminAssociationTabNavigator'
+          : 'adminAssociationWithYoutubeLiveTabNavigator',
       );
     } else if (isMember(account.user)) {
       navigation.navigate(

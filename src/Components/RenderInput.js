@@ -11,16 +11,17 @@ const RenderInput = ({
   keyboardType,
   maxLength = 128,
   disabled,
-  secureTextEntry,
   itemStyle,
-  error,
+  placeholder,
 }) => {
   return (
     <>
-      <Label style={styles.label}>
-        {label}
-        {required ? '*' : ''}
-      </Label>
+      {label && (
+        <Label style={styles.label}>
+          {label}
+          {required ? '*' : ''}
+        </Label>
+      )}
       <Item
         rounded
         style={itemStyle || styles.inputItem}
@@ -31,21 +32,19 @@ const RenderInput = ({
           checkFunction(value)
         }
         error={
-          error !== undefined
-            ? error
-            : value !== null &&
-              checkFunction &&
-              value.length > 0 &&
-              !checkFunction(value)
+          value !== null &&
+          checkFunction &&
+          value.length > 0 &&
+          !checkFunction(value)
         }>
         <Input
           style={styles.input}
-          secureTextEntry={secureTextEntry}
           keyboardType={keyboardType || 'default'}
           maxLength={maxLength}
           onChangeText={onChange}
           value={value}
           disabled={disabled}
+          placeholder={placeholder}
         />
         {value && checkFunction && value.length > 0 ? (
           <Icon

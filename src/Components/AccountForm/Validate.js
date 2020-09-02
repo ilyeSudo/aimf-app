@@ -51,7 +51,7 @@ const checkFormValues = (values) => {
     values.maritalStatus === MARRIED &&
     !(parseInt(values.childrenNumber, 10) >= 0)
   ) {
-    return 'Veuillez renseigner le nombre de vos enfants';
+    return 'Veuillez renseigner le nombre de vos enfants scolarisés';
   }
   const errorsPAssword =
     values.action === CREATE_ACTION &&
@@ -75,13 +75,24 @@ const checkFormValues = (values) => {
     return 'Les deux mots de passe doivent êtres identiques';
   }
 
-  if (
-    values.action === UPDATE_ACTION &&
-    values.oldPassword &&
-    (!values.password || !values.confirmPassword)
-  ) {
-    return 'Veuillez remplir le nouveau mot de passe et la confirmation de celui-ci';
+  if (values.action === UPDATE_ACTION) {
+    if (values.oldPassword && (!values.password || !values.confirmPassword)) {
+      return 'Veuillez saisir le nouveau mot de passe et la confirmation de celui-ci';
+    }
+    if (!values.oldPassword && (values.password || values.confirmPassword)) {
+      return 'Veuillez saisir le mot de passe actuel';
+    }
   }
+
+  if (values.action === CREATE_ACTION) {
+    if (!values.readTermsOfUse) {
+      return 'Veuillez lire et accépter les conditions générales';
+    }
+    if (!values.acceptTermsOfUse) {
+      return 'Veuillez accépter les conditions générales';
+    }
+  }
+
   return null;
 };
 

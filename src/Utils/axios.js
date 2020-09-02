@@ -6,7 +6,6 @@ import {
   API_REQUEST_TYPE,
   API_REQUEST_DEFAULT_ENCODING,
 } from 'react-native-dotenv';
-
 const getAxiosInstance = () => {
   return axios.create({
     baseURL: API_BASE_URL,

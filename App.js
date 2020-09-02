@@ -1,21 +1,23 @@
-import React, { Component } from "react";
-import { Root } from "native-base";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { createSwitchNavigator, createAppContainer } from "react-navigation";
+import React, {Component} from 'react';
+import {Root} from 'native-base';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
+import {createSwitchNavigator, createAppContainer} from 'react-navigation';
 
 // import the different screens
-import Loading from "./src/Loading";
-import SignUp from "./src/SignUp";
-import Login from "./src/Login";
+import Loading from './src/screens/Loading';
+import SignUp from './src/screens/SignUp';
+import Login from './src/screens/Login';
 import {
   activeUserWithYoutubeLiveTabNavigator,
   unActiveUserTabNavigator,
   adminUserTabNavigator,
   adminUserWithYoutubeLiveTabNavigator,
   activeUserTabNavigator,
-} from "./src/MainTabNavigator";
-import { store, persistor } from "./src/store/configureStore";
+  adminAssociationTabNavigator,
+  adminAssociationWithYoutubeLiveTabNavigator,
+} from './src/MainTabNavigator';
+import {store, persistor} from './src/store/configureStore';
 // create our app's navigation stack
 const switchNavigator = createSwitchNavigator(
   {
@@ -27,10 +29,12 @@ const switchNavigator = createSwitchNavigator(
     adminUserTabNavigator,
     adminUserWithYoutubeLiveTabNavigator,
     activeUserTabNavigator,
+    adminAssociationTabNavigator,
+    adminAssociationWithYoutubeLiveTabNavigator,
   },
   {
-    initialRouteName: "Loading",
-  }
+    initialRouteName: 'Loading',
+  },
 );
 
 const AppContainer = createAppContainer(switchNavigator);

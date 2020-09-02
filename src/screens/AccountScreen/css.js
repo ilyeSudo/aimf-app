@@ -29,6 +29,13 @@ const styles = StyleSheet.create({
     color: '#595959',
     marginBottom: 20,
   },
+  accountValidationText: {
+    textAlign: 'center',
+    fontSize: 15,
+    color: '#cb8347',
+    marginBottom: 20,
+  },
+
   logoutButton: {
     alignSelf: 'center',
     borderRadius: 10,

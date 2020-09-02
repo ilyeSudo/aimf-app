@@ -248,7 +248,10 @@ class ShowUser extends Component {
     ];
 
     if (this.props.data.maritalStatus === MARRIED) {
-      fields.push({field: 'childrenNumber', label: "Nombre d'enfants"});
+      fields.push({
+        field: 'childrenNumber',
+        label: "Nombre d'enfants scolarisés",
+      });
     }
 
     fields.forEach((row) => {

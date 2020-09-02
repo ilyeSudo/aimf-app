@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Item, Icon, Input, Label, Button} from 'native-base';
 import SpinnerButton from 'react-native-spinner-button';
 import * as PropTypes from 'prop-types';
@@ -20,6 +20,7 @@ import {
   SINGLE,
   UPDATE_ACTION,
   FEMALE_GENDER,
+  SHOW_CONDITION_ACTION,
 } from '../Utils/Constants';
 import getRandomQuestionIndex from './AccountForm/Functions';
 import ActionsButton from './AccountForm/ActionsButton';
@@ -28,6 +29,9 @@ import RenderInput from './RenderInput';
 import ImageRadioButton from './ImageRadioButton';
 import TextRadioButton from './TextRadioButton';
 import DatePicker from './DatePicker';
+import {CheckBox} from 'react-native-elements';
+import moment from 'moment';
+import RenderPassword from "./RenderPassoword";
 
 export default class AccountForm extends Component {
   constructor(props) {
@@ -108,7 +112,6 @@ export default class AccountForm extends Component {
             onPress={this.setQuestionIndex1}
             indicatorCount={10}
             spinnerType="SkypeIndicator">
-            spinnerType="SkypeIndicator">
             <Icon style={{color: '#d3d3d3', fontSize: 14}} name="sync" />
           </SpinnerButton>
         </View>
@@ -176,6 +179,7 @@ export default class AccountForm extends Component {
       functionName,
       birthday,
       gender,
+      acceptTermsOfUse,
     } = this.props.data;
 
     const genderOptions = [
@@ -276,10 +280,10 @@ export default class AccountForm extends Component {
           />
 
           <DatePicker
-            minimumDate={Date(1900, 1, 1)}
-            maximumDate={Date()}
+            minimumDate={moment('1900-01-01').toDate()}
+            maximumDate={new Date()}
             label="Date de naissance*"
-            defaultDate={new Date(birthday)}
+            defaultDate={birthday && moment(birthday).toDate()}
             onCustomChange={(date) => this.setDate(date)}
           />
 
@@ -340,43 +344,68 @@ export default class AccountForm extends Component {
             : null}
 
           {this.props.action === UPDATE_ACTION ? (
-            <RenderInput
-              checkFunction={isCorrectPassword}
+            <RenderPassword
               label="Ancien mot de passe"
-              secureTextEntry
               onChange={(value) => this.props.updateState({oldPassword: value})}
               required={this.props.action === CREATE_ACTION}
               value={oldPassword}
             />
           ) : null}
 
-          <RenderInput
-            checkFunction={isCorrectPassword}
+          <RenderPassword
             label={
               this.props.action === UPDATE_ACTION
                 ? 'Nouveau mot de passe'
                 : 'Mot de passe'
             }
-            secureTextEntry
             onChange={(value) => this.props.updateState({password: value})}
             required={this.props.action === CREATE_ACTION}
             value={password}
           />
-          <RenderInput
-            checkFunction={isCorrectPassword}
+          <RenderPassword
             label="Confirmer mot de passe"
             error={
               confirmPassword.length > 0 &&
               (!isCorrectPassword(confirmPassword) ||
                 password !== confirmPassword)
             }
-            secureTextEntry
             onChange={(value) =>
               this.props.updateState({confirmPassword: value})
             }
             required={this.props.action === CREATE_ACTION}
             value={confirmPassword}
           />
+
+          {this.props.action === CREATE_ACTION ? (
+            <View
+              style={{marginLeft: 10, marginRight: 30, flexDirection: 'row'}}>
+              <CheckBox
+                containerStyle={{marginTop: -10}}
+                checked={acceptTermsOfUse}
+                checkedColor="#cb8347"
+                uncheckedColor="#cb8347"
+                onPress={() =>
+                  this.props.updateState({acceptTermsOfUse: !acceptTermsOfUse})
+                }
+              />
+              <Text style={{marginRight: 40}}>
+                En s'inscrivant, vous acceptez les{' '}
+                <Text
+                  style={{
+                    color: '#cb8347',
+                    fontWeight: 'bold',
+                    textDecorationLine: 'underline',
+                  }}
+                  onPress={() => {
+                    this.props.updateState({readTermsOfUse: true});
+                    this.props.updateAction(SHOW_CONDITION_ACTION);
+                  }}>
+                  Conditions générale et la politique de confidentialité
+                </Text>
+              </Text>
+            </View>
+          ) : null}
+
           <ActionsButton
             action={this.props.action}
             onValidate={() => this.props.onSubmit()}

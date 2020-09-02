@@ -1,14 +1,22 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+} from 'react-native';
 import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
 import {Item, Input} from 'native-base';
 import SpinnerButton from 'react-native-spinner-button';
-import ErrorModal from './Components/ErrorModal';
-import {CREDENTIALS_EMPTY_ERROR} from './Utils/Constants';
-import {dispatchErrorMessage} from './store/reducers/errorMessageRedux';
-import {login} from './store/reducers/authenticationRedux';
-import {navigate} from './Utils/Account';
+import ErrorModal from '../Components/ErrorModal';
+import {CREDENTIALS_EMPTY_ERROR} from '../Utils/Constants';
+import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
+import {login} from '../store/reducers/authenticationRedux';
+import {navigate} from '../Utils/Account';
+import RenderInput from '../Components/RenderInput';
+import RenderPassword from '../Components/RenderPassoword';
 
 const styles = StyleSheet.create({
   bodyWrapper: {
@@ -23,6 +31,7 @@ const styles = StyleSheet.create({
   inputItem: {
     marginLeft: 'auto',
     marginRight: 'auto',
+    marginBottom:0,
     paddingHorizontal: 10,
     width: 300,
     borderRadius: 10,
@@ -59,7 +68,7 @@ class Login extends React.Component {
         this.props.account,
         this.props.navigation,
         'Login',
-        !!this.props.video,
+        !!this.props.video && this.props.video.youtube_id,
       );
     }
   }
@@ -76,29 +85,24 @@ class Login extends React.Component {
 
   render() {
     const {email, password} = this.state;
-    const logo = require('../assets/images/logo_transparent.png');
+    const logo = require('../../assets/images/logo_transparent.png');
     return (
       <>
         <View style={styles.bodyWrapper}>
           <Image style={{width: 120, height: 120}} source={logo} />
-          <Item rounded style={styles.inputItem}>
-            <Input
-              style={styles.input}
-              keyboardType="email-address"
-              onChangeText={(value) => this.setState({email: value})}
-              placeholder="Adresse email"
-              value={email}
-            />
-          </Item>
-          <Item rounded style={styles.inputItem}>
-            <Input
-              secureTextEntry
-              style={styles.input}
-              onChangeText={(value) => this.setState({password: value})}
-              placeholder="Mot de passe"
-              value={password}
-            />
-          </Item>
+          <RenderInput
+            keyboardType="email-address"
+            onChange={(value) => this.setState({email: value})}
+            value={email}
+            placeholder="Adresse email"
+            itemStyle={styles.inputItem}
+          />
+          <RenderPassword
+            onChange={(value) => this.setState({password: value})}
+            value={password}
+            placeholder="Mot de passe"
+            itemStyle={styles.inputItem}
+          />
           <SpinnerButton
             buttonStyle={styles.loginButton}
             isLoading={this.props.loading}
@@ -111,7 +115,7 @@ class Login extends React.Component {
             style={styles.touchable}
             activeOpacity={0.6}>
             <Text style={styles.createAccount}>
-              Vous n&apos;`avez pas encore un compte?
+              Vous n&apos;avez pas encore un compte?
             </Text>
           </TouchableOpacity>
         </View>

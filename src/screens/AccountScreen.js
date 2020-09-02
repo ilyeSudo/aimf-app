@@ -146,6 +146,7 @@ class AccountScreen extends Component {
         <>
           {this.props.action === SHOW_ACTION ? (
             <ShowAccount
+              user={this.props.account && this.props.account.user}
               gender={this.state.gender}
               fullName={getFullName(this.state)}
               updateAction={(value) => this.props.updateAction(value)}
