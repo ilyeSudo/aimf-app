@@ -6,6 +6,7 @@ import * as PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import {receiveAssociationData} from '../store/reducers/associationRedux';
+import {API_BASE_URL} from 'react-native-dotenv';
 
 class SelectAssociation extends Component {
   constructor(props) {
@@ -37,9 +38,9 @@ class SelectAssociation extends Component {
               zIndex={10}
               icon={(item) => (
                 <Image
-                  style={{width: 30, height: 30}}
+                  style={styles.logo}
                   source={{
-                    uri: item.logo,
+                    uri: `${API_BASE_URL}/${item.logo}`,
                   }}
                 />
               )}
@@ -98,6 +99,11 @@ const styles = StyleSheet.create({
   },
   activeLabelStyle: {
     backgroundColor: '#e1e1e1',
+  },
+  logo: {
+    width: 44,
+    height: 44,
+    borderRadius: 35,
   },
   dropDownPicker: {backgroundColor: '#fafafa'},
   itemStyle: {justifyContent: 'flex-start'},

@@ -1,72 +1,117 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
+import {API_BASE_URL} from 'react-native-dotenv';
 import PropTypes from 'prop-types';
 import {gray, black, white} from '../../Utils/colors';
 
 const styles = StyleSheet.create({
-  cardConatiner: {
-    marginTop: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+  khatmaCard: {
+    elevation: 1,
+    backgroundColor: white,
+    width: 315,
+    height: 280,
+    borderRadius: 14,
+    marginLeft: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: {width: 5, height: 5},
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
   },
-  card: {
+  coverCard: {
+    width: 315,
     height: 200,
-    borderWidth: 0.5,
-    borderColor: '#dddddd',
-    borderRadius: 10,
+    overflow: 'hidden',
+    borderTopLeftRadius: 14,
+    borderTopRightRadius: 14,
   },
-  textHeader: {
-    fontSize: 15,
-    fontWeight: '600',
+  image: {
+    width: 315,
+    height: 200,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  content: {
+    paddingLeft: 20,
+    height: 80,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 44,
+    height: 44,
+    borderRadius: 35,
+  },
+  textLogo: {
     color: black,
+    fontSize: 14,
+    fontWeight: '500',
+    opacity: 0.8,
+  },
+  title: {
+    color: black,
+    fontSize: 16,
+    fontWeight: '600',
   },
   textInfo: {
-    flex: 3,
-    justifyContent: 'center',
-    fontSize: 14,
-    fontWeight: '400',
     color: gray,
-    paddingLeft: 10,
+    fontWeight: '600',
+    fontSize: 14,
+    marginTop: 2,
   },
 });
 
-// eslint-disable-next-line react/prefer-stateless-function
 class KoranItem extends Component {
   render() {
-    const {title, numberofPartDispo, navigate, loading} = this.props;
+    const {
+      title,
+      numberofPartDispo,
+      associationName,
+      associationLogo,
+      navigate,
+      loading,
+    } = this.props;
 
     return (
-      <View style={styles.cardConatiner}>
-        <TouchableOpacity onPress={navigate} disabled={loading}>
-          <View style={styles.card}>
-            <View style={{flex: 2}}>
+      <TouchableOpacity onPress={navigate} disabled={loading}>
+        <View style={styles.khatmaCard}>
+          <View style={styles.coverCard}>
+            <Image
+              style={styles.image}
+              source={require('../../../assets/images/Khatma.png')}
+            />
+          </View>
+          <View style={styles.content}>
+            <View style={styles.logoContainer}>
               <Image
-                source={require('../../../assets/images/Khatma.png')}
-                style={{
-                  flex: 1,
-                  width: null,
-                  height: null,
-                  resizeMode: 'cover',
+                style={styles.logo}
+                source={{
+                  uri: `${API_BASE_URL}/${associationLogo}`,
                 }}
               />
+              <Text style={styles.textLogo}>{associationName}</Text>
             </View>
-            <View
-              style={{
-                flex: 1,
-                paddingLeft: 10,
-                paddingTop: 10,
-                paddingBottom: 10,
-                backgroundColor: loading ? '#f7f7f7' : white,
-              }}>
-              <Text style={styles.textHeader}>{title}</Text>
+            <View style={{marginLeft: 10}}>
+              <Text style={styles.title}>{title}</Text>
               <Text style={styles.textInfo}>Votre Khatma est ouverte</Text>
               <Text style={styles.textInfo}>
-                {numberofPartDispo} Thikheroubine sont disponibles
+                {numberofPartDispo === 0
+                  ? 'Cette Khatma est complète'
+                  : numberofPartDispo === 1
+                  ? 'Dernière Takharoubt disponible'
+                  : numberofPartDispo + 'Tikheroubines sont diponibles'}
               </Text>
             </View>
           </View>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
     );
   }
 }

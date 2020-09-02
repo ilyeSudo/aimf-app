@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unescaped-entities */
 import React, {Component} from 'react';
 import {
@@ -7,11 +8,11 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  Dimensions,
+  SafeAreaView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {Container} from 'native-base';
-import CostumHeader from '../../Components/KoranScreen/CostumHeader';
 import CostumItemList from '../../Components/KoranScreen/CostumItemList';
 import TextButton from '../../Components/KoranScreen/TextButton';
 import {
@@ -20,10 +21,25 @@ import {
   updateKhatma,
 } from '../../store/reducers/khatmaRedux';
 import {formatDateWithDayAndMonthName} from '../../Utils/Functions';
-import {gray3, black} from '../../Utils/colors';
+import {black, orangeBackgroud, orange2} from '../../Utils/colors';
 import {isAdmin} from '../../Utils/Account';
+import CostumHeader from '../../Components/KoranScreen/CostumHeader';
+
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: orangeBackgroud,
+    paddingTop: 0,
+  },
+  header: {
+    flexDirection: 'row',
+    paddingTop: 50,
+    paddingHorizontal: 14,
+    marginBottom: 10,
+    justifyContent: 'center',
+  },
   textHeader: {
     fontSize: 24,
     fontWeight: '700',
@@ -35,6 +51,40 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     marginTop: 10,
     marginBottom: 10,
+  },
+  logoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    borderRadius: 35,
+  },
+  textLogo: {
+    color: black,
+    fontSize: 12,
+    fontWeight: '500',
+    opacity: 0.8,
+  },
+  title: {
+    color: black,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  textInfo: {
+    color: black,
+    fontWeight: '600',
+    fontSize: 14,
+    marginTop: 2,
+  },
+  panelHandle: {
+    height: 2,
+    width: width,
+    backgroundColor: orange2,
+    borderRadius: 6,
+    alignSelf: 'center',
+    marginTop: 6,
   },
 });
 
@@ -138,7 +188,6 @@ class Khatma extends Component {
 
   validateUserChoise = (event) => {
     event.preventDefault();
-
     const {toggleUserToReadList, toggleUserReadList} = this.state;
 
     if (toggleUserToReadList.length || toggleUserReadList.length) {
@@ -183,115 +232,113 @@ class Khatma extends Component {
     }
 
     return (
-      <View style={{flex: 1, backgroundColor: gray3}}>
-        <Container>
-          <CostumHeader
-            title="Khatmat"
-            subtile={formatDateWithDayAndMonthName(khatma.beginAt)}
-            isHome={false}
-            navigation={this.props.navigation}
-            validate={this.validateUserChoise}
-          />
-          <ScrollView scrollEventThrottle={16}>
-            {isAdmin(account.user) &&
-              (isOpen ? (
-                <TextButton
-                  style={{marginTop: 10}}
-                  onPress={this.onChangeOpenKhetma}>
-                  Fermer Khetma
-                </TextButton>
-              ) : (
-                <TextButton
-                  style={{marginTop: 10}}
-                  onPress={this.onChangeOpenKhetma}>
-                  Ouvrir Khetma
-                </TextButton>
-              ))}
+      <SafeAreaView style={styles.container}>
+        <CostumHeader
+          title="Khatmat"
+          subtitle={formatDateWithDayAndMonthName(khatma.beginAt)}
+          associationName={khatma.association.name}
+          associationLogo={khatma.association.logo}
+          navigation={this.props.navigation}
+          validate={this.validateUserChoise}
+          rightIcon="send"
+          renderLogo={true}
+        />
+        <ScrollView scrollEventThrottle={16}>
+          {isAdmin(account.user) &&
+            (isOpen ? (
+              <TextButton
+                style={{marginTop: 10}}
+                onPress={this.onChangeOpenKhetma}>
+                Fermer cette Khetma
+              </TextButton>
+            ) : (
+              <TextButton
+                style={{marginTop: 10}}
+                onPress={this.onChangeOpenKhetma}>
+                Ouvrir cette Khetma
+              </TextButton>
+            ))}
 
-            {numberOfToRead > 0 && (
-              <View>
-                <View style={{marginTop: 40, paddingHorizontal: 20}}>
-                  <Text style={styles.textHeader}>
-                    Valider la lecture de vos Tekheroubines
-                  </Text>
-                  <Text style={styles.textDetails}>
-                    Vous avez choisi dans cette Khatma {numberOfToRead}{' '}
-                    {numberOfToRead === 1 ? 'Takheroubt' : ' Tikheroubine'}.
-                    Merci de confirmer vos lectures.
-                  </Text>
-                </View>
-
-                <View>
-                  {userToReadList.map((id) => {
-                    const alreadyReadByAuthedUser = Object.values(
-                      toggleUserReadList,
-                    ).includes(id);
-                    const numberOfReader = 0;
-                    return (
-                      <CostumItemList
-                        key={koranListe[id - 1].id}
-                        text={koranListe[id - 1].name}
-                        colorText={!!alreadyReadByAuthedUser}
-                        value={alreadyReadByAuthedUser}
-                        id={koranListe[id - 1].id}
-                        numberOfReader={numberOfReader}
-                        onChangeToggle={this.onChangeToggleRead}
-                        badge={false}
-                      />
-                    );
-                  })}
-                </View>
+          {numberOfToRead > 0 && (
+            <View>
+              <View style={{marginTop: 40, paddingHorizontal: 20}}>
+                <Text style={styles.textHeader}>
+                  Valider la lecture de vos Tekheroubines
+                </Text>
+                <Text style={styles.textDetails}>
+                  Vous avez choisi dans cette Khatma {numberOfToRead}{' '}
+                  {numberOfToRead === 1 ? 'Takheroubt' : ' Tikheroubine'}. Merci
+                  de confirmer vos lectures.
+                </Text>
               </View>
-            )}
 
-            {isOpen && (
               <View>
-                <View style={{marginTop: 40, paddingHorizontal: 20}}>
-                  <Text style={styles.textHeader}>
-                    Choisir une ou plusieurs Tekheroubine
-                  </Text>
-                  {!numberOfToRead && (
-                    <View>
-                      <Text style={styles.textDetails}>
-                        Vous n'avez encore choisi aucune Takheroubt dans cette
-                        Khatma.
-                      </Text>
-                      <Text style={styles.textDetails}>
-                        Privilégier une Takheroubte qui a un compteur à Zéro.
-                        Celles qui ont un compteur différent de Zéro ont déjà
-                        été choisies par d'autres personnes.
-                      </Text>
-                    </View>
-                  )}
-                </View>
-                <View>
-                  {Object.keys(koranListe).map((index) => {
-                    const alreadyPickedByAuthedUser = Object.values(
-                      toggleUserToReadList,
-                    ).includes(koranListe[index].id);
-                    const numberOfReader =
-                      khatma.takharoubts[index].pickedTimes;
-                    return (
-                      <CostumItemList
-                        key={koranListe[index].id}
-                        text={koranListe[index].name}
-                        colorText={
-                          !!(numberOfReader || alreadyPickedByAuthedUser)
-                        }
-                        value={alreadyPickedByAuthedUser}
-                        numberOfReader={numberOfReader}
-                        id={koranListe[index].id}
-                        onChangeToggle={this.onChangeToggleToRead}
-                        badge
-                      />
-                    );
-                  })}
-                </View>
+                {userToReadList.map((id) => {
+                  const alreadyReadByAuthedUser = Object.values(
+                    toggleUserReadList,
+                  ).includes(id);
+                  const numberOfReader = 0;
+                  return (
+                    <CostumItemList
+                      key={koranListe[id - 1].id}
+                      text={koranListe[id - 1].name}
+                      colorText={!!alreadyReadByAuthedUser}
+                      value={alreadyReadByAuthedUser}
+                      id={koranListe[id - 1].id}
+                      numberOfReader={numberOfReader}
+                      onChangeToggle={this.onChangeToggleRead}
+                      badge={false}
+                    />
+                  );
+                })}
               </View>
-            )}
-          </ScrollView>
-        </Container>
-      </View>
+            </View>
+          )}
+
+          {isOpen && (
+            <View>
+              <View style={{marginTop: 40, paddingHorizontal: 20}}>
+                <Text style={styles.textHeader}>
+                  Choisir une ou plusieurs Tekheroubines
+                </Text>
+                {!numberOfToRead && (
+                  <View>
+                    <Text style={styles.textDetails}>
+                      Vous n'avez encore choisi aucune Takheroubt dans cette
+                      Khatma.
+                    </Text>
+                    <Text style={styles.textDetails}>
+                      Privilégier une Takheroubte qui n'a pas encore été prise.
+                    </Text>
+                  </View>
+                )}
+              </View>
+              <View>
+                {Object.keys(koranListe).map((index) => {
+                  const alreadyPickedByAuthedUser = Object.values(
+                    toggleUserToReadList,
+                  ).includes(koranListe[index].id);
+                  const numberOfReader = khatma.takharoubts[index].pickedTimes;
+                  return (
+                    <CostumItemList
+                      key={koranListe[index].id}
+                      text={koranListe[index].name}
+                      colorText={
+                        !!(numberOfReader || alreadyPickedByAuthedUser)
+                      }
+                      value={alreadyPickedByAuthedUser}
+                      numberOfReader={numberOfReader}
+                      id={koranListe[index].id}
+                      onChangeToggle={this.onChangeToggleToRead}
+                      badge={numberOfReader > 0}
+                    />
+                  );
+                })}
+              </View>
+            </View>
+          )}
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }

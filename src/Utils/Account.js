@@ -10,7 +10,9 @@ export const isSuperAdmin = (user) => {
 
 export const isAdmin = (user) => {
   if (user && user.roles) {
-    return !!user.roles.find((role) => role.name === ADMIN_ROLE);
+    return !!user.roles.find(
+      (role) => role.name.substring(0, 5) === ADMIN_ROLE,
+    );
   }
   return false;
 };

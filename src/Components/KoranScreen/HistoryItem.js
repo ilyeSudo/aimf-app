@@ -1,85 +1,107 @@
-import React, {Component} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+/* eslint-disable react-native/no-inline-styles */
+import React from 'react';
+import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
 import PropTypes from 'prop-types';
+import {API_BASE_URL} from 'react-native-dotenv';
 import {gray, black, white} from '../../Utils/colors';
-import icoMoonConfig from '../../../config/icons/selection.json';
 
 const styles = StyleSheet.create({
-  cardConatiner: {
-    marginTop: 0.5,
-    paddingHorizontal: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginHorizontal: 10,
-    marginBottom: 10,
-    alignItems: 'center',
-  },
-  iconContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
   textHeader: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '600',
     marginTop: 5,
     color: black,
   },
   textDetails: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '400',
     marginTop: 5,
     marginBottom: 5,
     color: black,
   },
   textInfo: {
-    flex: 3,
+    flex: 1,
     justifyContent: 'center',
-    fontSize: 9,
-    fontWeight: '400',
+    fontSize: 11,
+    fontWeight: '600',
     color: gray,
+  },
+  panelItemContainer: {
+    borderWidth: 0.6,
+    borderColor: black,
+    padding: 14,
+    borderRadius: 6,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  logo: {
+    height: 30,
+    width: 30,
+    backgroundColor: '#000',
+    borderRadius: 40,
+  },
+  logoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textLogo: {
+    color: black,
+    fontSize: 14,
+    fontWeight: '500',
+    opacity: 0.8,
   },
 });
 
-const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig);
-
 export default function HistoryItem(props) {
-  const {title, numberOfPicks, numberOfRead, navigate, loading} = props;
+  const {
+    title,
+    numberOfPicks,
+    numberOfRead,
+    associationName,
+    associationLogo,
+    navigate,
+    loading,
+  } = props;
   return (
     <View style={styles.cardConatiner}>
       <TouchableOpacity onPress={navigate} disabled={loading}>
         <View
           style={{
-            height: 60,
-            borderWidth: 0.5,
-            borderColor: '#dddddd',
-            borderRadius: 0.5,
             backgroundColor: loading ? '#f7f7f7' : white,
           }}>
-          <View style={styles.row}>
-            <CustomIcon
-              style={styles.iconContainer}
-              name="coranOpen"
-              size={45}
-              color={black}
-            />
-            <View style={{flex: 3}}>
+          <View style={styles.panelItemContainer}>
+            <View style={styles.logoContainer}>
+              <Image
+                source={{
+                  uri: `${API_BASE_URL}/${associationLogo}`,
+                }}
+                style={styles.logo}
+              />
+              <Text style={styles.textLogo}> {associationName} </Text>
+            </View>
+
+            <View
+              style={{
+                flex: 1,
+                marginLeft: 20,
+              }}>
               <Text style={styles.textHeader}>{title}</Text>
               <Text style={styles.textDetails}>
                 Vous avez dans cette Khatma
               </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <Text style={styles.textInfo}>
-                  Sélectionné: {numberOfPicks}
-                </Text>
-                <Text style={styles.textInfo}>Lu: {numberOfRead}</Text>
-              </View>
+            </View>
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'stretch',
+                marginRight: 10,
+                marginTop: 5,
+              }}>
+              <Text style={styles.textInfo}>Pris: {numberOfPicks}</Text>
+              <Text style={styles.textInfo}>Lu: {numberOfRead}</Text>
             </View>
           </View>
         </View>

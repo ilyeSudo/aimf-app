@@ -5,8 +5,17 @@ import * as PropTypes from 'prop-types';
 import {isoDateToFr} from '../Utils/Functions';
 import FeedCard from './HomeScreen/FeedCard';
 import {getArticles} from '../store/reducers/articlesRedux';
+import {
+  receiveAssociationData,
+  receiveUserAssociationData,
+} from '../store/reducers/associationRedux';
 import Loader from '../Components/Loader';
 import ErrorModal from '../Components/ErrorModal';
+import AssociationMenu from '../Components/AssociationMenu';
+import {
+  ayncReceiveKhatma,
+  asyncReceiveUserKhatma,
+} from '../store/reducers/khatmaRedux';
 
 class HomeScreen extends Component {
   static navigationOptions = {
@@ -15,6 +24,10 @@ class HomeScreen extends Component {
 
   componentDidMount() {
     this.props.getArticles([], 1, true);
+    this.props.receiveAssociationData();
+    this.props.receiveUserAssociationData();
+    this.props.ayncReceiveKhatma();
+    this.props.asyncReceiveUserKhatma();
   }
 
   handleRefresh = () => {
@@ -24,6 +37,8 @@ class HomeScreen extends Component {
       !this.props.loading
     ) {
       this.props.getArticles([], 1, true);
+      this.props.receiveAssociationData();
+      this.props.receiveUserAssociationData();
     }
   };
 
@@ -73,9 +88,11 @@ class HomeScreen extends Component {
       <>
         <SafeAreaView
           style={{
+            paddingTop: 0,
             backgroundColor: '#fce3ba',
             opacity: this.props.loading || this.props.errorMessage ? 0.6 : 1,
           }}>
+          <AssociationMenu screenerTitle="Actualités" />
           <FlatList
             data={this.props.articles}
             renderItem={({item}) => this.renderItem(item)}
@@ -121,6 +138,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getArticles: (articles, page, refreshing = false, handleMore = false) =>
       dispatch(getArticles(articles, page, refreshing, handleMore)),
+    receiveAssociationData: () => dispatch(receiveAssociationData()),
+    receiveUserAssociationData: () => dispatch(receiveUserAssociationData()),
+    ayncReceiveKhatma: () => dispatch(ayncReceiveKhatma()),
+    asyncReceiveUserKhatma: () => dispatch(asyncReceiveUserKhatma()),
   };
 };
 
