@@ -7,8 +7,10 @@ import {black, orangeBackgroud} from '../../Utils/colors';
 import {ayncSaveKhatma} from '../../store/reducers/khatmaRedux';
 import {formatDateWithDayAndMonthName} from '../../Utils/Functions';
 import DatePicker from '../../Components/DatePicker';
+import ErrorModal from '../../Components/ErrorModal';
+import Loader from '../../Components/Loader';
 import SelectAssociation from '../../Components/SelectAssociation';
-import {isAdmin, isSuperAdmin} from '../../Utils/Account';
+import {isSuperAdmin} from '../../Utils/Account';
 import {AIMF_ASSOCIATION_ID} from '../../Utils/Constants';
 
 const styles = StyleSheet.compose({
@@ -95,7 +97,7 @@ class AddKhatma extends Component {
             onCustomChange={(date) => this.setState({chosenDate: date})}
           />
           {isSuperAdmin(this.props.user) && associationId && (
-            <View style={{marginLeft: 0, width: 320, marginBottom: 50}}>
+            <View style={{marginLeft: 0, marginBottom: 50}}>
               <Text style={styles.title}>Sélectionner l'association</Text>
               <SelectAssociation
                 selectedAssociationId={associationId}
@@ -108,6 +110,10 @@ class AddKhatma extends Component {
             </View>
           )}
         </View>
+        {this.props.errorMessage && (
+          <ErrorModal visible message={this.props.errorMessage} />
+        )}
+        <Loader visible={!!this.props.loading} />
       </SafeAreaView>
     );
   }
@@ -119,6 +125,7 @@ const mapStateToProps = (state) => {
   return {
     errorMessage,
     user,
+    loading: state.associationStore.loading,
   };
 };
 

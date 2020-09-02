@@ -24,7 +24,9 @@ import {
 import {receiveKoran} from '../store/reducers/koranRedux';
 import {white, black, orange2, orangeBackgroud} from '../Utils/colors';
 import HistoryItem from '../Components/KoranScreen/HistoryItem';
-import {isAdmin} from '../Utils/Account';
+import {isAdmin, isSuperAdmin} from '../Utils/Account';
+import ErrorModal from '../Components/ErrorModal';
+import Loader from '../Components/Loader';
 
 YellowBox.ignoreWarnings([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
@@ -211,7 +213,7 @@ class KoranScreen extends Component {
             </View>
           </View>
         </ScrollView>
-        {isAdmin(account.user) && (
+        {(isAdmin(account.user) || isSuperAdmin(account.user)) && (
           <View
             style={{
               flexDirection: 'row-reverse',
@@ -236,6 +238,10 @@ class KoranScreen extends Component {
             </Button>
           </View>
         )}
+        {this.props.errorMessage && (
+          <ErrorModal visible message={this.props.errorMessage} />
+        )}
+        <Loader visible={!!this.props.loading} />
       </SafeAreaView>
     );
   }
@@ -263,11 +269,14 @@ function mapStateToProps(state) {
     },
   );
 
+  const {errorMessage} = state.errorMessageStore;
+
   return {
     khatmaHistory,
     openKhatma,
     loading: state.khatmaStore.loading || state.associationStore.loading,
     account: state.accountStore,
+    errorMessage,
   };
 }
 

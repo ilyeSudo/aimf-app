@@ -11,7 +11,7 @@ export const isSuperAdmin = (user) => {
 export const isAdmin = (user) => {
   if (user && user.roles) {
     return !!user.roles.find(
-      (role) => role.name.substring(0, 5) === ADMIN_ROLE,
+      (role) => role.name.substring(0, 6) === ADMIN_ROLE,
     );
   }
   return false;

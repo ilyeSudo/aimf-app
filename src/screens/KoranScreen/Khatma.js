@@ -15,6 +15,8 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import CostumItemList from '../../Components/KoranScreen/CostumItemList';
 import TextButton from '../../Components/KoranScreen/TextButton';
+import ErrorModal from '../../Components/ErrorModal';
+import Loader from '../../Components/Loader';
 import {
   saveUserPicksReads,
   saveUserReads,
@@ -338,6 +340,10 @@ class Khatma extends Component {
             </View>
           )}
         </ScrollView>
+        {this.props.errorMessage && (
+          <ErrorModal visible message={this.props.errorMessage} />
+        )}
+        <Loader visible={!!this.props.loading} />
       </SafeAreaView>
     );
   }
@@ -376,6 +382,8 @@ const mapStateToProps = (state, {navigation}) => {
       })
     : [];
 
+  const {errorMessage} = state.errorMessageStore;
+
   return {
     koranStore: state.koranStore,
     khatma: currentKhatma[0],
@@ -383,6 +391,7 @@ const mapStateToProps = (state, {navigation}) => {
     userReadList,
     userToReadList,
     account: state.accountStore,
+    errorMessage,
   };
 };
 
