@@ -46,8 +46,8 @@ export const UPDATE_USER_STATUS_CONFIRM_MESSAGE =
 export const UPDATE_ADMIN_ROLE_CONFIRM_MESSAGE =
   "Etes vous sûr de vouloir changer les droits d'administration pour cet utilisateur ?";
 
-export const SUPER_ADMIN_ROLE = 'superadmin';
-export const ADMIN_ROLE = 'admin';
+export const SUPER_ADMIN_ROLE = 'admin';
+export const ADMIN_ROLE = 'admin_';
 export const MEMBER_ROLE = 'member';
 export const NEW_MEMBER_ROLE = 'new_member';
 
