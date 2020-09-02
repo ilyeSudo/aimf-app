@@ -1,5 +1,4 @@
 /* eslint-disable react-native/no-inline-styles */
-/* eslint-disable array-callback-return */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
@@ -11,8 +10,6 @@ import {
   RefreshControl,
   YellowBox,
   SafeAreaView,
-  Dimensions,
-  Animated,
 } from 'react-native';
 import {Button} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -132,40 +129,42 @@ class KoranScreen extends Component {
 
   render() {
     const {khatmaHistory, openKhatma, loading, account} = this.props;
-    const {dragRange, _draggedValue} = this.state;
 
     return (
       <SafeAreaView style={styles.container}>
         <AssociationMenu screenerTitle="Khatma" />
         <ScrollView scrollEventThrottle={16}>
-          <View style={{marginTop: 15, paddingHorizontal: 15}}>
-            <Text style={styles.textHeader}>Mes Prochaines Khatma</Text>
-          </View>
           <View style={{flex: 1}}>
-            {openKhatma.length === 0 && (
-              <View style={{marginTop: 10, paddingHorizontal: 15}}>
-                <Text style={styles.textDetails}>
-                  Aucune Khatma n'est ouverte à ce jour.
-                </Text>
+            <View style={{flex: 1}}>
+              <View style={{marginTop: 15, paddingHorizontal: 15}}>
+                <Text style={styles.textHeader}>Mes Prochaines Khatma</Text>
               </View>
-            )}
-          </View>
-          <FlatList
-            data={Object.values(openKhatma).sort((a, b) => {
-              return b.id - a.id;
-            })}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={this.renderKoranItem}
-            horizontal
-            refreshControl={
-              <RefreshControl
-                refreshing={loading}
-                onRefresh={this.onRefresh}
-                title="Chargement..."
-              />
-            }
-          />
-          <View style={{flex: 1}}>
+
+              {openKhatma.length === 0 ? (
+                <View
+                  style={{marginTop: 10, paddingHorizontal: 30, height: 200}}>
+                  <Text style={styles.textDetails}>
+                    Aucune Khatma n'est ouverte à ce jour.
+                  </Text>
+                </View>
+              ) : (
+                <FlatList
+                  data={Object.values(openKhatma).sort((a, b) => {
+                    return b.id - a.id;
+                  })}
+                  keyExtractor={(item) => item.id.toString()}
+                  renderItem={this.renderKoranItem}
+                  horizontal
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={loading}
+                      onRefresh={this.onRefresh}
+                      title="Chargement..."
+                    />
+                  }
+                />
+              )}
+            </View>
             <View
               style={{
                 flex: 1,
@@ -177,22 +176,38 @@ class KoranScreen extends Component {
               <View>
                 <Text style={styles.textHeader}>Mon Historique</Text>
               </View>
-              <View style={{marginBottom: 10, marginTop: 15}}>
-                {khatmaHistory.length === 0 && (
-                  <View style={{marginBottom: 10, paddingHorizontal: 15}}>
-                    <Text style={styles.textDetails}>
-                      Vous n'avez à ce jour partcipé à aucune Khatma
-                    </Text>
-                  </View>
-                )}
-                <FlatList
-                  data={Object.values(khatmaHistory).sort((a, b) => {
-                    return b.id - a.id;
-                  })}
-                  keyExtractor={(item) => item.id.toString()}
-                  renderItem={this.renderHistoryItem}
-                />
-              </View>
+              {khatmaHistory.length === 0 ? (
+                <View
+                  style={{
+                    marginTop: 10,
+                    paddingHorizontal: 30,
+                  }}>
+                  <Text style={styles.textDetails}>
+                    Vous n'avez à ce jour partcipé à aucune Khatma
+                  </Text>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    marginBottom: 10,
+                    marginTop: 15,
+                  }}>
+                  <FlatList
+                    data={Object.values(khatmaHistory).sort((a, b) => {
+                      return b.id - a.id;
+                    })}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={this.renderHistoryItem}
+                    refreshControl={
+                      <RefreshControl
+                        refreshing={loading}
+                        onRefresh={this.onRefresh}
+                        title="Chargement..."
+                      />
+                    }
+                  />
+                </View>
+              )}
             </View>
           </View>
         </ScrollView>
