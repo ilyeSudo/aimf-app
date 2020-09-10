@@ -38,6 +38,8 @@ target 'AIMF_APP' do
   pod "YoutubePlayer-in-WKWebView", "~> 0.3.0"
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
+  pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
+
   use_native_modules!
 end
 

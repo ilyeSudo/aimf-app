@@ -1,5 +1,5 @@
-const API_URL = "/api/";
-export const GET_BOOK_LIST = "/";
+const API_URL = '/api/';
+export const GET_BOOK_LIST = '/';
 export const POST_LOGIN_URI = `${API_URL}auth/login`;
 export const POST_LOGOUT_URI = `${API_URL}auth/logout`;
 export const PATCH_UPDATE_USER_URI = `${API_URL}user/`;
@@ -17,3 +17,7 @@ export const GET_USERS_URI = `${API_URL}user`;
 export const GET_ARTICLES_URI = `${API_URL}article`;
 export const GET_DRAFT_ARTICLE_URI = `${API_URL}article/draft`;
 export const GET_LIVE_VIDEO_URI = `${API_URL}youtube/live-video`;
+export const GET_LIST_ASSOCIAITION_URI = `${API_URL}association`;
+export const GET_USER_ASSOCIAITION_URI = `${API_URL}user-association`;
+export const PATCH_USER_ASSOCIAITION_URI = `${API_URL}user-association`;
+export const TERMS_OF_USE_URI = `${API_URL}terms-of-use/latest`;

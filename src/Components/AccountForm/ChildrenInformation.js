@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { Input, Item, Label } from "native-base";
-import { Picker } from "react-native-wheel-pick";
-import { View } from "react-native";
-import * as PropTypes from "prop-types";
+import React, {Component} from 'react';
+import {Input, Item, Label} from 'native-base';
+import {Picker} from 'react-native-wheel-pick';
+import {View} from 'react-native';
+import * as PropTypes from 'prop-types';
 import {
   CHILDREN_YEAR_LABEL,
   DEFAULT_SCHOOL_LEVEL,
   MARRIED,
   SCHOOL_LEVELS,
-} from "../../Utils/Constants";
-import styles from "./css";
+} from '../../Utils/Constants';
+import styles from './css';
 
 class ChildrenInformation extends Component {
   renderPicker = (index) => {
@@ -22,13 +22,12 @@ class ChildrenInformation extends Component {
     return (
       <View key={index}>
         <Label
-          style={this.props.itemStyle ? this.props.itemStyle : styles.label}
-        >
+          style={this.props.itemStyle ? this.props.itemStyle : styles.label}>
           Année de naissance {CHILDREN_YEAR_LABEL[index]} enfant
         </Label>
-        <Item rounded style={{ ...styles.inputItem, height: 60, padding: 5 }}>
+        <Item rounded style={{...styles.inputItem, height: 60, padding: 5}}>
           <Picker
-            style={{ backgroundColor: "#FFF", width: 280, height: 55 }}
+            style={{backgroundColor: '#FFF', width: 280, height: 55}}
             selectedValue={
               this.props.childrenInformation[index] &&
               this.props.childrenInformation[index].yearOfBirth
@@ -51,9 +50,9 @@ class ChildrenInformation extends Component {
         <Label style={styles.label}>
           Niveau scolaire du {CHILDREN_YEAR_LABEL[index]} enfant
         </Label>
-        <Item rounded style={{ ...styles.inputItem, height: 60, padding: 5 }}>
+        <Item rounded style={{...styles.inputItem, height: 60, padding: 5}}>
           <Picker
-            style={{ backgroundColor: "#FFF", width: 280, height: 55 }}
+            style={{backgroundColor: '#FFF', width: 280, height: 55}}
             selectedValue={
               this.props.childrenInformation[index] &&
               this.props.childrenInformation[index].schoolLevel

@@ -1,22 +1,19 @@
-import React, { Component } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
-import { connect } from "react-redux";
-import * as PropTypes from "prop-types";
-import ShowProfile from "./ProfileScreen/ShowProfile";
-import ProfileForm from "../Components/ProfileForm";
-import { getFullName, getIsoDate } from "../Utils/Functions";
-import { SHOW_ACTION, UPDATE_ACTION } from "../Utils/Constants";
-import ErrorModal from "../Components/ErrorModal";
-import { logout } from "../store/reducers/authenticationRedux";
-import { dispatchErrorMessage } from "../store/reducers/errorMessageRedux";
-import checkFormValues from "../Components/ProfileForm/Validate";
-import {
-  updateCurrentUser,
-  updateAction,
-} from "../store/reducers/profileRedux";
-import Loader from "../Components/Loader";
+import React, {Component} from 'react';
+import {ActivityIndicator, Text, View} from 'react-native';
+import {connect} from 'react-redux';
+import * as PropTypes from 'prop-types';
+import ShowAccount from './AccountScreen/ShowAccount';
+import AccountForm from '../Components/AccountForm';
+import {getFullName, getIsoDate} from '../Utils/Functions';
+import {SHOW_ACTION, UPDATE_ACTION} from '../Utils/Constants';
+import ErrorModal from '../Components/ErrorModal';
+import {logout} from '../store/reducers/authenticationRedux';
+import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
+import checkFormValues from '../Components/AccountForm/Validate';
+import {updateCurrentUser, updateAction} from '../store/reducers/accountRedux';
+import Loader from '../Components/Loader';
 
-class ProfileScreen extends Component {
+class AccountScreen extends Component {
   static navigationOptions = {
     header: null,
   };
@@ -26,36 +23,36 @@ class ProfileScreen extends Component {
     this.state = {
       gender: null,
       maritalStatus: null,
-      email: "",
-      oldPassword: "",
-      password: "",
-      confirmPassword: "",
-      lastName: "",
-      fatherName: "",
-      middleName: "",
-      firstName: "",
+      email: '',
+      oldPassword: '',
+      password: '',
+      confirmPassword: '',
+      lastName: '',
+      fatherName: '',
+      middleName: '',
+      firstName: '',
       birthday: new Date(),
-      zipCode: "",
-      phoneNumber: "",
+      zipCode: '',
+      phoneNumber: '',
       childrenNumber: 0,
-      functionName: "",
+      functionName: '',
       children: [],
     };
   }
 
   componentDidMount() {
-    const { user } = this.props.account;
+    const {user} = this.props.account;
     if (user) {
-      const { state } = this;
+      const {state} = this;
       user.functionName = user.function;
-      user.childrenNumber = (user.children && `${user.children.length}`) || "0";
-      this.setState({ ...state, ...user, initData: user });
+      user.childrenNumber = (user.children && `${user.children.length}`) || '0';
+      this.setState({...state, ...user, initData: user});
     }
   }
 
   componentDidUpdate() {
     if (!this.props.account.user) {
-      this.props.navigation.navigate("Login");
+      this.props.navigation.navigate('Login');
     }
   }
 
@@ -100,7 +97,7 @@ class ProfileScreen extends Component {
   };
 
   onSubmit = () => {
-    const data = { ...this.getDataFromState(true), action: UPDATE_ACTION };
+    const data = {...this.getDataFromState(true), action: UPDATE_ACTION};
     const error = checkFormValues(data);
     if (error) {
       this.props.dispatchErrorMessage(error);
@@ -148,14 +145,15 @@ class ProfileScreen extends Component {
       return (
         <>
           {this.props.action === SHOW_ACTION ? (
-            <ShowProfile
+            <ShowAccount
+              user={this.props.account && this.props.account.user}
               gender={this.state.gender}
               fullName={getFullName(this.state)}
               updateAction={(value) => this.props.updateAction(value)}
               logout={() => this.props.logout()}
             />
           ) : (
-            <ProfileForm
+            <AccountForm
               scrollViewOpacity={
                 this.props.loading || this.props.errorMessage ? 0.6 : 1
               }
@@ -179,10 +177,9 @@ class ProfileScreen extends Component {
       <View
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <Text>Chargement</Text>
         <ActivityIndicator size="large" />
       </View>
@@ -191,8 +188,8 @@ class ProfileScreen extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { errorMessage } = state.errorMessageStore;
-  const { action } = state.profileStore;
+  const {errorMessage} = state.errorMessageStore;
+  const {action} = state.accountStore;
   return {
     errorMessage,
     action,
@@ -209,7 +206,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-ProfileScreen.propTypes = {
+AccountScreen.propTypes = {
   account: PropTypes.object,
   navigation: PropTypes.object,
   logout: PropTypes.func,
@@ -220,4 +217,4 @@ ProfileScreen.propTypes = {
   loading: PropTypes.bool,
   action: PropTypes.string,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(AccountScreen);

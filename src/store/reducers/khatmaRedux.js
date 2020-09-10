@@ -1,4 +1,4 @@
-import { batchActions } from "redux-batched-actions";
+import {batchActions} from 'redux-batched-actions';
 import {
   POST_ADD_KHATMA_URI,
   PATCH_USER_TAKHAROUBT_URI,
@@ -6,41 +6,41 @@ import {
   PATCH_KHATMA_URI,
   GET_USER_KHATMA_URI,
   GET_KHATMA_URI,
-} from "../../Utils/ApiUrl";
-import getAxiosInstance from "../../Utils/axios";
-import { dispatchError } from "./errorMessageRedux";
+} from '../../Utils/ApiUrl';
+import getAxiosInstance from '../../Utils/axios';
+import {dispatchError} from './errorMessageRedux';
 
 import {
   formatKhatma,
   formatDateAsApiDate,
   replaceElement,
-} from "../../Utils/Functions";
+} from '../../Utils/Functions';
 
-const MAX_DATE = "2035-12-31 00:00:00";
+const MAX_DATE = '2035-12-31 00:00:00';
 //
 // Action types
 //
 
-const CLEAN_KHATMA_STORE = "CLEAN_KHATMA_STORE";
-const LOADING_KHATMA_DATA = "LOADING_KHATMA_DATA";
-const LOADING_KHATMA_ERROR = "LOADING_KHATMA_ERROR";
-const LOADING_KHATMA_SUCCESS = "LOADING_KHATMA_SUCCESS";
-const RECEIVE_KHATMA = "RECEIVE_KHATMA";
-const LOADING_USER_KHATMA_DATA = "LOADING_USER_KHATMA_DATA";
-const LOADING_USER_KHATMA_ERROR = "LOADING_USER_KHATMA_ERROR";
-const RECEIVE_USER_KHATMA = "RECEIVE_USER_KHATMA";
-const SAVE_KHATMA = "SAVE_KHATMA";
-const UPDATE_KHATMA = "UPDATE_KHATMA";
-const UPDATING_KHATMA_ERROR = "UPDATING_KHATMA_ERROR";
-const SAVE_USER_PICKS_READS = "SAVE_USER_PICKS_READS";
-const SAVING_USER_PICKS_READS_ERROR = "SAVING_USER_PICKS_READS_ERROR";
-const POST_BATCH_SAVE_KHATAMA = "POST_BATCH_SAVE_KHATAMA";
+const CLEAN_KHATMA_STORE = 'CLEAN_KHATMA_STORE';
+const LOADING_KHATMA_DATA = 'LOADING_KHATMA_DATA';
+const LOADING_KHATMA_ERROR = 'LOADING_KHATMA_ERROR';
+const LOADING_KHATMA_SUCCESS = 'LOADING_KHATMA_SUCCESS';
+const RECEIVE_KHATMA = 'RECEIVE_KHATMA';
+const LOADING_USER_KHATMA_DATA = 'LOADING_USER_KHATMA_DATA';
+const LOADING_USER_KHATMA_ERROR = 'LOADING_USER_KHATMA_ERROR';
+const RECEIVE_USER_KHATMA = 'RECEIVE_USER_KHATMA';
+const SAVE_KHATMA = 'SAVE_KHATMA';
+const UPDATE_KHATMA = 'UPDATE_KHATMA';
+const UPDATING_KHATMA_ERROR = 'UPDATING_KHATMA_ERROR';
+const SAVE_USER_PICKS_READS = 'SAVE_USER_PICKS_READS';
+const SAVING_USER_PICKS_READS_ERROR = 'SAVING_USER_PICKS_READS_ERROR';
+const POST_BATCH_SAVE_KHATAMA = 'POST_BATCH_SAVE_KHATAMA';
 const GET_BATCH_RECEIVE_USER_KHATMA_ERROR =
-  "GET_BATCH_RECEIVE_USER_KHATMA_ERROR";
-const GET_BATCH_RECEIVE_KHATMA_ERROR = "GET_BATCH_RECEIVE_KHATMA_ERROR";
-const PATCH_BATCH_UPDATE_KHATMA_ERROR = "PATCH_BATCH_UPDATE_KHATMA_ERROR";
+  'GET_BATCH_RECEIVE_USER_KHATMA_ERROR';
+const GET_BATCH_RECEIVE_KHATMA_ERROR = 'GET_BATCH_RECEIVE_KHATMA_ERROR';
+const PATCH_BATCH_UPDATE_KHATMA_ERROR = 'PATCH_BATCH_UPDATE_KHATMA_ERROR';
 const PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR =
-  "PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR";
+  'PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR';
 
 //
 // Action creators
@@ -83,7 +83,7 @@ export const asyncReceiveUserKhatma = () => {
   return (dispatch) => {
     dispatch(loadingUserKhatmaData());
     getAxiosInstance()
-      .get(`${GET_USER_KHATMA_URI}?with_user_takharoubts=1`)
+      .get(`${GET_USER_KHATMA_URI}?with_user_takharoubts=1&with_association=1`)
       .then((response) => {
         dispatch(receiveUserKhatma(response.data.data));
       })
@@ -91,8 +91,8 @@ export const asyncReceiveUserKhatma = () => {
         dispatch(
           batchActions(
             [dispatchError(error), loadingUserKhatmaError()],
-            GET_BATCH_RECEIVE_USER_KHATMA_ERROR
-          )
+            GET_BATCH_RECEIVE_USER_KHATMA_ERROR,
+          ),
         );
       });
   };
@@ -130,7 +130,7 @@ export const ayncReceiveKhatma = () => {
   return (dispatch) => {
     dispatch(loadingKhatmaData());
     getAxiosInstance()
-      .get(`${GET_LIST_KHATMA_URI}?with_takharoubts=1`)
+      .get(`${GET_LIST_KHATMA_URI}?with_takharoubts=1&with_association=1`)
       .then((response) => {
         dispatch(receiveKhatma(response.data.data));
       })
@@ -138,8 +138,8 @@ export const ayncReceiveKhatma = () => {
         dispatch(
           batchActions(
             [dispatchError(error), loadingKhatmaError()],
-            GET_BATCH_RECEIVE_KHATMA_ERROR
-          )
+            GET_BATCH_RECEIVE_KHATMA_ERROR,
+          ),
         );
       });
   };
@@ -155,12 +155,13 @@ const saveKhatma = (khatma) => {
   };
 };
 
-export const ayncSaveKhatma = (date) => {
+export const ayncSaveKhatma = (date, associationId) => {
   return (dispatch) => {
     dispatch(loadingKhatmaData());
     getAxiosInstance()
-      .post(POST_ADD_KHATMA_URI, {
+      .post(`${POST_ADD_KHATMA_URI}?with_association=1`, {
         beginAt: formatDateAsApiDate(date),
+        associationId,
         isOpen: true,
       })
       .then((response) => {
@@ -169,17 +170,18 @@ export const ayncSaveKhatma = (date) => {
             formatKhatma(
               response.data.data.id,
               response.data.data.beginAt,
-              response.data.data.isOpen
-            )
-          )
+              response.data.data.isOpen,
+              response.data.data.association,
+            ),
+          ),
         );
       })
       .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), loadingKhatmaError()],
-            POST_BATCH_SAVE_KHATAMA
-          )
+            POST_BATCH_SAVE_KHATAMA,
+          ),
         );
       });
   };
@@ -211,27 +213,35 @@ export const saveUserPicksReads = (khatmaId, picks, reads) => {
     dispatch(loadingKhatmaData());
     getAxiosInstance()
       .patch(
-        `${PATCH_USER_TAKHAROUBT_URI + khatmaId}?with_user_takharoubts=1`,
+        `${
+          PATCH_USER_TAKHAROUBT_URI + khatmaId
+        }?with_user_takharoubts=1&with_association=1`,
         {
-          actionType: "pick",
+          actionType: 'pick',
           takharoubts: picks,
-        }
+        },
       )
       .then(() => {
         getAxiosInstance()
           .patch(
-            `${PATCH_USER_TAKHAROUBT_URI + khatmaId}?with_user_takharoubts=1`,
+            `${
+              PATCH_USER_TAKHAROUBT_URI + khatmaId
+            }?with_user_takharoubts=1&with_association=1`,
             {
-              actionType: "read",
+              actionType: 'read',
               takharoubts: reads,
-            }
+            },
           )
           .then((response) => {
             getAxiosInstance()
-              .get(`${GET_KHATMA_URI + khatmaId}?with_takharoubts=1`)
+              .get(
+                `${
+                  GET_KHATMA_URI + khatmaId
+                }?with_takharoubts=1&with_association=1`,
+              )
               .then((res) => {
                 dispatch(
-                  _saveUserPicksReads(response.data.data, res.data.data)
+                  _saveUserPicksReads(response.data.data, res.data.data),
                 );
               })
               .catch((errorGetKhatma) => {
@@ -241,8 +251,8 @@ export const saveUserPicksReads = (khatmaId, picks, reads) => {
                       dispatchError(errorGetKhatma),
                       savingUserPicksReadsError(),
                     ],
-                    PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR
-                  )
+                    PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR,
+                  ),
                 );
               });
           })
@@ -250,8 +260,8 @@ export const saveUserPicksReads = (khatmaId, picks, reads) => {
             dispatch(
               batchActions(
                 [dispatchError(errorRead), savingUserPicksReadsError()],
-                PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR
-              )
+                PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR,
+              ),
             );
           });
       })
@@ -259,8 +269,8 @@ export const saveUserPicksReads = (khatmaId, picks, reads) => {
         dispatch(
           batchActions(
             [dispatchError(errorPick), savingUserPicksReadsError()],
-            PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR
-          )
+            PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR,
+          ),
         );
       });
   };
@@ -271,15 +281,21 @@ export const saveUserReads = (khatmaId, reads) => {
     dispatch(loadingKhatmaData());
     getAxiosInstance()
       .patch(
-        `${PATCH_USER_TAKHAROUBT_URI + khatmaId}?with_user_takharoubts=1`,
+        `${
+          PATCH_USER_TAKHAROUBT_URI + khatmaId
+        }?with_user_takharoubts=1&with_association=1`,
         {
-          actionType: "read",
+          actionType: 'read',
           takharoubts: reads,
-        }
+        },
       )
       .then((response) => {
         getAxiosInstance()
-          .get(`${GET_KHATMA_URI + khatmaId}?with_takharoubts=1`)
+          .get(
+            `${
+              GET_KHATMA_URI + khatmaId
+            }?with_takharoubts=1&with_association=1&with_association=1`,
+          )
           .then((res) => {
             dispatch(_saveUserPicksReads(response.data.data, res.data.data));
           })
@@ -287,8 +303,8 @@ export const saveUserReads = (khatmaId, reads) => {
             dispatch(
               batchActions(
                 [dispatchError(errorGetKhatma), savingUserPicksReadsError()],
-                PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR
-              )
+                PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR,
+              ),
             );
           });
       })
@@ -296,8 +312,8 @@ export const saveUserReads = (khatmaId, reads) => {
         dispatch(
           batchActions(
             [dispatchError(errorRead), savingUserPicksReadsError()],
-            PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR
-          )
+            PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR,
+          ),
         );
       });
   };
@@ -328,13 +344,15 @@ export const updateKhatma = (khatmaId, status) => {
   return (dispatch) => {
     dispatch(loadingKhatmaData());
     getAxiosInstance()
-      .patch(`${PATCH_KHATMA_URI + khatmaId}?with_takharoubts=1`, {
+      .patch(`${PATCH_KHATMA_URI + khatmaId}`, {
         isOpen: status,
         endAt: status ? MAX_DATE : formatDateAsApiDate(Date.now()),
       })
       .then((response) => {
         getAxiosInstance()
-          .get(`${GET_USER_KHATMA_URI}/${khatmaId}?with_user_takharoubts=1`)
+          .get(
+            `${GET_USER_KHATMA_URI}/${khatmaId}?with_user_takharoubts=1&with_association=1`,
+          )
           .then((res) => {
             dispatch(_upadateKhatma(response.data.data, res.data.data));
           })
@@ -342,8 +360,8 @@ export const updateKhatma = (khatmaId, status) => {
             dispatch(
               batchActions(
                 [dispatchError(err), updatingKhatmaError()],
-                PATCH_BATCH_UPDATE_KHATMA_ERROR
-              )
+                PATCH_BATCH_UPDATE_KHATMA_ERROR,
+              ),
             );
           });
       })
@@ -351,8 +369,8 @@ export const updateKhatma = (khatmaId, status) => {
         dispatch(
           batchActions(
             [dispatchError(error), updatingKhatmaError()],
-            PATCH_BATCH_UPDATE_KHATMA_ERROR
-          )
+            PATCH_BATCH_UPDATE_KHATMA_ERROR,
+          ),
         );
       });
   };
@@ -377,7 +395,7 @@ export const khatmaReducer = (state = initState, action) => {
     case LOADING_KHATMA_SUCCESS:
     case LOADING_USER_KHATMA_DATA:
     case LOADING_USER_KHATMA_ERROR:
-      return { ...state, loading: action.payload.loading };
+      return {...state, loading: action.payload.loading};
     case SAVE_KHATMA:
       return {
         ...state,
@@ -407,7 +425,7 @@ export const khatmaReducer = (state = initState, action) => {
         khatma: replaceElement(state.khatma, action.payload.khatma),
         userKhatma: replaceElement(
           state.userKhatma,
-          action.payload.userTakharoubts
+          action.payload.userTakharoubts,
         ),
       };
     default:

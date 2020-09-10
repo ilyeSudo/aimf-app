@@ -1,12 +1,21 @@
-import React, { Component } from "react";
-import { View, FlatList, SafeAreaView } from "react-native";
-import { connect } from "react-redux";
-import * as PropTypes from "prop-types";
-import { getDateFromIso, isoDateToFr } from "../Utils/Functions";
-import FeedCard from "./HomeScreen/FeedCard";
-import { getArticles } from "../store/reducers/articlesRedux";
-import Loader from "../Components/Loader";
-import ErrorModal from "../Components/ErrorModal";
+import React, {Component} from 'react';
+import {View, FlatList, SafeAreaView} from 'react-native';
+import {connect} from 'react-redux';
+import * as PropTypes from 'prop-types';
+import {isoDateToFr} from '../Utils/Functions';
+import FeedCard from './HomeScreen/FeedCard';
+import {getArticles} from '../store/reducers/articlesRedux';
+import {
+  receiveAssociationData,
+  receiveUserAssociationData,
+} from '../store/reducers/associationRedux';
+import Loader from '../Components/Loader';
+import ErrorModal from '../Components/ErrorModal';
+import AssociationMenu from '../Components/AssociationMenu';
+import {
+  ayncReceiveKhatma,
+  asyncReceiveUserKhatma,
+} from '../store/reducers/khatmaRedux';
 
 class HomeScreen extends Component {
   static navigationOptions = {
@@ -15,6 +24,10 @@ class HomeScreen extends Component {
 
   componentDidMount() {
     this.props.getArticles([], 1, true);
+    this.props.receiveAssociationData();
+    this.props.receiveUserAssociationData();
+    this.props.ayncReceiveKhatma();
+    this.props.asyncReceiveUserKhatma();
   }
 
   handleRefresh = () => {
@@ -24,6 +37,8 @@ class HomeScreen extends Component {
       !this.props.loading
     ) {
       this.props.getArticles([], 1, true);
+      this.props.receiveAssociationData();
+      this.props.receiveUserAssociationData();
     }
   };
 
@@ -38,7 +53,7 @@ class HomeScreen extends Component {
         this.props.articles,
         this.props.page + 1,
         false,
-        true
+        true,
       );
     }
   };
@@ -48,19 +63,12 @@ class HomeScreen extends Component {
       <View
         style={{
           height: 1,
-          width: "86%",
-          backgroundColor: "#CED0CE",
-          marginLeft: "14%",
+          width: '86%',
+          backgroundColor: '#CED0CE',
+          marginLeft: '14%',
         }}
       />
     );
-  };
-
-  isNewArticle = (article) => {
-    const articleDate = getDateFromIso(article.publishedAt);
-    let now = new Date();
-    now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    return articleDate >= now;
   };
 
   renderItem = (item) => {
@@ -69,7 +77,8 @@ class HomeScreen extends Component {
         title={item.title}
         date={isoDateToFr(item.publishedAt)}
         description={item.description}
-        backgroundColor={this.isNewArticle(item) ? "#ffffff" : "#dadada"}
+        backgroundColor={!item.isExpired ? '#ffffff' : '#dadada'}
+        associationName={item.association.name}
       />
     );
   };
@@ -79,13 +88,14 @@ class HomeScreen extends Component {
       <>
         <SafeAreaView
           style={{
-            backgroundColor: "#fce3ba",
+            paddingTop: 0,
+            backgroundColor: '#fce3ba',
             opacity: this.props.loading || this.props.errorMessage ? 0.6 : 1,
-          }}
-        >
+          }}>
+          <AssociationMenu screenerTitle="Actualités" />
           <FlatList
             data={this.props.articles}
-            renderItem={({ item }) => this.renderItem(item)}
+            renderItem={({item}) => this.renderItem(item)}
             keyExtractor={(item) => `${item.id}`}
             ItemSeparatorComponent={this.renderSeparator}
             onRefresh={this.handleRefresh}
@@ -104,7 +114,7 @@ class HomeScreen extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { errorMessage } = state.errorMessageStore;
+  const {errorMessage} = state.errorMessageStore;
   const {
     articles,
     loading,
@@ -128,6 +138,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getArticles: (articles, page, refreshing = false, handleMore = false) =>
       dispatch(getArticles(articles, page, refreshing, handleMore)),
+    receiveAssociationData: () => dispatch(receiveAssociationData()),
+    receiveUserAssociationData: () => dispatch(receiveUserAssociationData()),
+    ayncReceiveKhatma: () => dispatch(ayncReceiveKhatma()),
+    asyncReceiveUserKhatma: () => dispatch(asyncReceiveUserKhatma()),
   };
 };
 

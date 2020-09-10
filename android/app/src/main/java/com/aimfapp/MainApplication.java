@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.microsoft.appcenter.reactnative.crashes.AppCenterReactNativeCrashesPackage;
@@ -33,9 +34,22 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-    @SuppressWarnings("UnnecessaryLocalVariable")
-    List<ReactPackage> packages = new PackageList(this).getPackages();
-      return packages;
+      return Arrays.<ReactPackage>asList(
+          new MainReactPackage(),
+            new RNDateTimePickerPackage(),
+            new AsyncStoragePackage(),
+            new ReactNativeYouTube(),
+            new AppCenterReactNativeCrashesPackage(MainApplication.this, getResources().getString(R.string.appCenterCrashes_whenToSendCrashes)),
+            new AppCenterReactNativeAnalyticsPackage(MainApplication.this, getResources().getString(R.string.appCenterAnalytics_whenToEnableAnalytics)),
+            new AppCenterReactNativePackage(MainApplication.this),
+            new ReactNativeWheelPickerPackage(),
+             // Firebase
+          new RNFirebasePackage(),
+          new RNFirebaseAuthPackage(),
+          new RNFirebaseFirestorePackage(),
+            // GestureHandler
+          new RNGestureHandlerPackage()
+      );
     }
 
     @Override

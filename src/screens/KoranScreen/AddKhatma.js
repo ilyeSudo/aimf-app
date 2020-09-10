@@ -1,116 +1,137 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { View, StyleSheet, Text, Alert } from "react-native";
-import { DatePicker } from "native-base";
-import PropTypes from "prop-types";
-import CostumHeader from "../../Components/KoranScreen/CostumHeader";
-import { gray3, black, white } from "../../Utils/colors";
-import { ayncSaveKhatma } from "../../store/reducers/khatmaRedux";
-import { formatDateWithDayAndMonthName } from "../../Utils/Functions";
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {View, StyleSheet, Alert, Text, SafeAreaView} from 'react-native';
+import PropTypes from 'prop-types';
+import CostumHeader from '../../Components/KoranScreen/CostumHeader';
+import {black, orangeBackgroud} from '../../Utils/colors';
+import {ayncSaveKhatma} from '../../store/reducers/khatmaRedux';
+import {formatDateWithDayAndMonthName} from '../../Utils/Functions';
+import DatePicker from '../../Components/DatePicker';
+import ErrorModal from '../../Components/ErrorModal';
+import Loader from '../../Components/Loader';
+import SelectAssociation from '../../Components/SelectAssociation';
+import {isSuperAdmin} from '../../Utils/Account';
+import {AIMF_ASSOCIATION_ID} from '../../Utils/Constants';
 
 const styles = StyleSheet.compose({
   container: {
     flex: 1,
-    backgroundColor: white,
-    borderRadius: 10,
-    margin: 5,
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: orangeBackgroud,
+    paddingTop: 0,
   },
   title: {
     color: black,
     fontSize: 16,
-    fontWeight: "700",
-    textAlign: "center",
-    margin: 10,
+    fontWeight: '700',
+    textAlign: 'left',
+    marginLeft: 30,
+    marginTop: 30,
+    marginBottom: 10,
+    width: 320,
   },
 });
 
 class AddKhatma extends Component {
   constructor(props) {
     super(props);
-    this.state = { chosenDate: 0 };
-    this.setDate = this.setDate.bind(this);
+    this.state = {chosenDate: new Date(), associationId: AIMF_ASSOCIATION_ID};
   }
 
   setDate(newDate) {
-    this.setState({ chosenDate: newDate });
+    this.setState({chosenDate: newDate});
   }
 
   addKhatma = () => {
-    const { dispatch, navigation } = this.props;
-    const { chosenDate } = this.state;
-    dispatch(ayncSaveKhatma(chosenDate));
-    navigation.navigate("KoranTimeLine");
+    const {dispatch, navigation} = this.props;
+    const {chosenDate, associationId} = this.state;
+    dispatch(ayncSaveKhatma(chosenDate, associationId));
+    navigation.navigate('KoranTimeLine');
   };
 
   alertAddKhetma = (event) => {
     event.preventDefault();
-    const { chosenDate } = this.state;
+    const {chosenDate} = this.state;
     const date = chosenDate ? formatDateWithDayAndMonthName(chosenDate) : null;
 
     // eslint-disable-next-line no-unused-expressions
     chosenDate
       ? Alert.alert(
-          "Confirmation",
+          'Confirmation',
           // body
           `Vous êtes sur le point de créer une Khatma en date du ${date}`,
           [
             {
-              text: "Confirmer",
+              text: 'Confirmer',
               onPress: () => this.addKhatma(),
             },
             {
-              text: "Annuler",
+              text: 'Annuler',
               onPress: () => {},
-              style: "cancel",
+              style: 'cancel',
             },
           ],
-          { cancelable: false }
+          {cancelable: false},
           // clicking out side of alert will not cancel
         )
       : // eslint-disable-next-line no-alert
-        Alert.alert("Merci de bien vouloir sélection une date");
+        Alert.alert('Merci de bien vouloir sélection une date');
   };
 
   render() {
-    const today = new Date();
+    const {associationId} = this.state;
 
     return (
-      <View style={{ flex: 1, backgroundColor: gray3 }}>
+      <SafeAreaView style={styles.container}>
         <CostumHeader
           title="Ajouter une Khatma"
-          isHome={false}
           navigation={this.props.navigation}
           validate={this.alertAddKhetma}
+          rightIcon="plus"
         />
-        <View style={styles.container}>
-          <Text style={styles.title}>
-            Sélectionner la data de la prochiane Khatma
-          </Text>
+        <View style={{flex: 1}}>
           <DatePicker
-            defaultDate={today}
-            minimumDate={today}
-            locale="fr"
-            timeZoneOffsetInMinutes={undefined}
-            modalTransparent={false}
-            animationType="fade"
-            androidMode="spinner"
-            placeHolderText="Sélectionner une date"
-            textStyle={{ color: "green" }}
-            placeHolderTextStyle={{ color: "#d3d3d3" }}
-            onDateChange={this.setDate}
-            disabled={false}
+            labelStyle={styles.title}
+            label="Sélectionner la data de la Khatma"
+            defaultDate={this.state.chosenDate}
+            minimumDate={new Date()}
+            onCustomChange={(date) => this.setState({chosenDate: date})}
           />
+          {isSuperAdmin(this.props.user) && associationId && (
+            <View style={{marginLeft: 0, marginBottom: 50}}>
+              <Text style={styles.title}>Sélectionner l'association</Text>
+              <SelectAssociation
+                selectedAssociationId={associationId}
+                onChangeItem={(item) => {
+                  this.setState({
+                    associationId: item.id,
+                  });
+                }}
+              />
+            </View>
+          )}
         </View>
-      </View>
+        {this.props.errorMessage && (
+          <ErrorModal visible message={this.props.errorMessage} />
+        )}
+        <Loader visible={!!this.props.loading} />
+      </SafeAreaView>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  const {errorMessage} = state.errorMessageStore;
+  const {user} = state.accountStore;
+  return {
+    errorMessage,
+    user,
+    loading: state.associationStore.loading,
+  };
+};
 
 AddKhatma.propTypes = {
   navigation: PropTypes.object,
   dispatch: PropTypes.func,
 };
 
-export default connect()(AddKhatma);
+export default connect(mapStateToProps)(AddKhatma);

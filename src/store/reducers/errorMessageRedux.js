@@ -1,7 +1,7 @@
-import { SERVER_ERROR_MESSAGE } from "../../Utils/Constants";
+import {SERVER_ERROR_MESSAGE} from '../../Utils/Constants';
 
-const DISPATCH_ERROR_MESSAGE = "DISPATCH_ERROR_MESSAGE";
-export const DISPATCH_UNAUTHORIZED_ERROR = "DISPATCH_UNAUTHORIZED_ERROR";
+const DISPATCH_ERROR_MESSAGE = 'DISPATCH_ERROR_MESSAGE';
+export const DISPATCH_UNAUTHORIZED_ERROR = 'DISPATCH_UNAUTHORIZED_ERROR';
 
 export const dispatchErrorMessage = (errorMessage) => {
   return {
@@ -14,10 +14,10 @@ const getErrorMessageFromResponse = (response) => {
   if (response.data.errors) {
     const errors = [];
     Object.entries(response.data.errors).forEach((error) =>
-      errors.push(` - ${error[1].join("\n - ")}`)
+      errors.push(` - ${error[1].join('\n - ')}`),
     );
 
-    return errors.join("\n");
+    return errors.join('\n');
   }
   return response.data.message ? response.data.message : SERVER_ERROR_MESSAGE;
 };
@@ -48,7 +48,7 @@ const initialState = [];
 export const errorMessageReducer = (state = initialState, action) => {
   switch (action.type) {
     case DISPATCH_ERROR_MESSAGE: {
-      return { errorMessage: action.errorMessage };
+      return {errorMessage: action.errorMessage};
     }
     case DISPATCH_UNAUTHORIZED_ERROR: {
       return {};

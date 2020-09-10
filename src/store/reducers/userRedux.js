@@ -1,21 +1,21 @@
-import { batchActions } from "redux-batched-actions";
-import getAxiosInstance from "../../Utils/axios";
-import { GET_USERS_URI, PATCH_UPDATE_USER_URI } from "../../Utils/ApiUrl";
-import { dispatchError } from "./errorMessageRedux";
-import { SHOW_ACTION } from "../../Utils/Constants";
+import {batchActions} from 'redux-batched-actions';
+import getAxiosInstance from '../../Utils/axios';
+import {GET_USERS_URI, PATCH_UPDATE_USER_URI} from '../../Utils/ApiUrl';
+import {dispatchError} from './errorMessageRedux';
+import {SHOW_ACTION} from '../../Utils/Constants';
 
-const GET_USERS_REQUEST = "GET_USERS_REQUEST";
-const GET_USERS_SUCCESS = "GET_USERS_SUCCESS";
-const GET_USERS_ERROR = "GET_USERS_ERROR";
-const BATCH_GET_USERS_ERROR = "BATCH_GET_USERS_ERROR";
-export const CHANGE_ACTION = "CHANGE_ACTION";
-export const SHOW_USER = "SHOW_USER";
+const GET_USERS_REQUEST = 'GET_USERS_REQUEST';
+const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS';
+const GET_USERS_ERROR = 'GET_USERS_ERROR';
+const BATCH_GET_USERS_ERROR = 'BATCH_GET_USERS_ERROR';
+export const CHANGE_ACTION = 'CHANGE_ACTION';
+export const SHOW_USER = 'SHOW_USER';
 
-export const PATCH_UPDATE_USER_ROLE_REQUEST = "PATCH_UPDATE_USER_ROLE_REQUEST";
-export const PATCH_UPDATE_USER_ROLE_SUCCESS = "PATCH_UPDATE_USER_ROLE_SUCCESS";
-export const PATCH_UPDATE_USER_ROLE_ERROR = "PATCH_UPDATE_USER_ROLE_ERROR";
+export const PATCH_UPDATE_USER_ROLE_REQUEST = 'PATCH_UPDATE_USER_ROLE_REQUEST';
+export const PATCH_UPDATE_USER_ROLE_SUCCESS = 'PATCH_UPDATE_USER_ROLE_SUCCESS';
+export const PATCH_UPDATE_USER_ROLE_ERROR = 'PATCH_UPDATE_USER_ROLE_ERROR';
 export const PATCH_BATCH_UPDATE_USER_ROLE_ERROR =
-  "PATCH_BATCH_UPDATE_USER_ROLE_ERROR";
+  'PATCH_BATCH_UPDATE_USER_ROLE_ERROR';
 
 const getUserRequest = (refreshing, handleMore) => {
   return {
@@ -53,7 +53,7 @@ const patchUpdateRoleUserRequest = () => {
 const patchUpdateRoleUserError = () => {
   return {
     type: PATCH_UPDATE_USER_ROLE_ERROR,
-    payload: { loading: false },
+    payload: {loading: false},
   };
 };
 
@@ -68,7 +68,7 @@ export const getUsers = (
   currentUsers,
   page,
   refreshing = false,
-  handleMore = false
+  handleMore = false,
 ) => {
   return (dispatch) => {
     dispatch(getUserRequest(refreshing, handleMore));
@@ -91,15 +91,15 @@ export const getUsers = (
             page,
             lastPage:
               response.data.meta.last_page === response.data.meta.current_page,
-          })
+          }),
         );
       })
       .catch(function (error) {
         dispatch(
           batchActions(
             [dispatchError(error), getUserError()],
-            BATCH_GET_USERS_ERROR
-          )
+            BATCH_GET_USERS_ERROR,
+          ),
         );
       });
   };
@@ -109,7 +109,7 @@ export const updateUserRole = (id, roles) => {
   return (dispatch) => {
     dispatch(patchUpdateRoleUserRequest());
     getAxiosInstance()
-      .patch(`${PATCH_UPDATE_USER_URI + id}?with_roles=1`, { roles })
+      .patch(`${PATCH_UPDATE_USER_URI + id}?with_roles=1`, {roles})
       .then(function (response) {
         dispatch(patchUpdateRoleUserSuccess(response.data.data));
       })
@@ -117,8 +117,8 @@ export const updateUserRole = (id, roles) => {
         dispatch(
           batchActions(
             [dispatchError(error), patchUpdateRoleUserError()],
-            PATCH_BATCH_UPDATE_USER_ROLE_ERROR
-          )
+            PATCH_BATCH_UPDATE_USER_ROLE_ERROR,
+          ),
         );
       });
   };
@@ -147,7 +147,7 @@ export const showUser = (data, currentUserIndex) => {
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_USERS_REQUEST:
-      return { ...state, ...action.data };
+      return {...state, ...action.data};
     case GET_USERS_SUCCESS: {
       return {
         ...state,
@@ -166,18 +166,18 @@ export const userReducer = (state = initialState, action) => {
       };
     }
     case CHANGE_ACTION: {
-      return { ...state, action: action.payload };
+      return {...state, action: action.payload};
     }
     case SHOW_USER: {
-      return { ...state, ...action.payload };
+      return {...state, ...action.payload};
     }
     case PATCH_UPDATE_USER_ROLE_REQUEST:
     case PATCH_UPDATE_USER_ROLE_ERROR:
-      return { ...state, loading: false };
+      return {...state, loading: false};
     case PATCH_UPDATE_USER_ROLE_SUCCESS: {
-      const { users } = state;
+      const {users} = state;
       users[state.currentUserIndex].roles = action.payload.roles;
-      return { ...state, users, loading: false };
+      return {...state, users, loading: false};
     }
 
     default: {
