@@ -2,23 +2,28 @@ import React from 'react';
 import { CardItem, Text, Left, Right, Body, Icon, Thumbnail, Row } from 'native-base';
 import { TouchableOpacity } from "react-native";
 import PropTypes from "prop-types";
+import { API_BASE_URL } from "react-native-dotenv";
 
 const BookCard = ({ data, showBook }) => {
-    const { title, author, genre, thumbnail, pages, isFavorited, isAvailable, availabilityDate } = data;
+    const { title, author, genre, images, pages, isFavorited, isAvailable, availabilityDate } = data;
+    const getUrlThumbnail = () => {
+        const image = images.filter(image => image.type == 'thumbnail');
+        return `http://192.168.0.29:8080/${image[0].media.path}`;
+    }
     return (
 
         <CardItem>
             <Left>
 
                 <TouchableOpacity onPress={() => showBook(data)} >
-                    <Thumbnail source={{ uri: thumbnail }} />
+                    <Thumbnail source={{ uri: getUrlThumbnail() }} />
                 </TouchableOpacity>
 
                 <Body >
                     <TouchableOpacity onPress={() => showBook(data)} >
                         <Text>{title}</Text>
                         <Text note>Auteur:{author} </Text>
-                        <Text note>Genre:{genre} </Text>
+                        <Text note>Genre:{genre.name} </Text>
                     </TouchableOpacity>
                 </Body>
             </Left>

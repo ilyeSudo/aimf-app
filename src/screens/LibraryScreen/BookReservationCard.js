@@ -3,16 +3,20 @@ import { CardItem, Text, Left, Right, Body, Icon, Thumbnail, Row } from 'native-
 import PropTypes from "prop-types";
 
 const BookReservationCard = ({ data, }) => {
-    const { title, thumbnail, returnDate } = data;
+    const { book, thumbnail, returnDate } = data;
+    const getUrlThumbnail = () => {
+        const image = book.images.filter(image => image.type == 'thumbnail');
+        return `http://192.168.0.29:8080/${image[0].media.path}`;
+    }
     return (
 
         <CardItem>
             <Left>
 
-                <Thumbnail source={{ uri: thumbnail }} />
+                <Thumbnail source={{ uri: getUrlThumbnail() }} />
 
                 <Body >
-                    <Text>{title}</Text>
+                    <Text>{book.title}</Text>
                 </Body>
             </Left>
             <Right>

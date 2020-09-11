@@ -87,16 +87,19 @@ const addToFavorites = (book) => {
     payload: book,
   };
 }
-export const removeFromFavoritesRequest = (book) => (dispatch) => {
+export const removeFromFavoritesRequest = (book, bookIds) => (dispatch) => {
 
   getAxiosInstance()
-    .post(`${POST_BOOK_FAVORITE_LIST_URI}`, book)
+    .post(`${POST_BOOK_FAVORITE_LIST_URI}`,
+      {
+        bookIds: bookIds.filter(id => id !== book.id),
+      })
     .then(function () {
       setTimeout(() => {
-
         dispatch(
           removeFromFavorites(book)
         );
+
       }, 500);
     })
     .catch(function (error) {
@@ -107,16 +110,19 @@ export const removeFromFavoritesRequest = (book) => (dispatch) => {
     });
 }
 
-export const addToFavoritesRequest = (book) => (dispatch) => {
+export const addToFavoritesRequest = (book, bookIds) => (dispatch) => {
 
   getAxiosInstance()
-    .post(`${POST_BOOK_FAVORITE_LIST_URI}`, book)
+    .post(`${POST_BOOK_FAVORITE_LIST_URI}`,
+      {
+        bookIds: [...bookIds, book.id],
+      })
     .then(function () {
       setTimeout(() => {
-
         dispatch(
           addToFavorites(book)
         );
+
       }, 500);
     })
     .catch(function (error) {
@@ -184,7 +190,7 @@ export const getFavoriteList = () => {
         setTimeout(() => {
           dispatch(
             getFavoriteListSuccess({
-              favoriteList: response.data.data
+              favoriteList: response.data.data.map(item => item.book)
             })
           );
         }, 500);
@@ -275,7 +281,7 @@ export const showBook = (idBook) => (dispatch) => {
 
   dispatch(showBookRequest(idBook));
   getAxiosInstance()
-    .get(`${GET_BOOK_URI}${idBook}`)
+    .get(`${GET_BOOK_URI}${idBook}?with_image=1`)
     .then(function (response) {
       setTimeout(() => {
         dispatch(
@@ -322,7 +328,8 @@ export const requestBooking = (objRequestBooking) => (dispatch) => {
   //si non afficher l'erreur
   dispatch(requestBookingRequest(objRequestBooking));
   getAxiosInstance()
-    .get(`${GET_BOOK_RESERVATION_REQUEST_URI}?id_book=${objRequestBooking.idBook}&id_member=${objRequestBooking.idMember}&hash=${objRequestBooking.hash}`)
+    //   .get(`${GET_BOOK_RESERVATION_REQUEST_URI}/${objRequestBooking.userId}/${objRequestBooking.bookId}/${objRequestBooking.hash}`)
+    .get(`${GET_BOOK_RESERVATION_REQUEST_URI}/${objRequestBooking.userId}/${objRequestBooking.bookId}`)
     .then(function (response) {
       setTimeout(() => {
         dispatch(

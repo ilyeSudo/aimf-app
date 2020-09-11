@@ -4,12 +4,15 @@ import { connect } from "react-redux";
 import { View, FlatList, SafeAreaView, ActivityIndicator } from "react-native";
 import { showBook, getFavoriteList } from "../../store/reducers/bookRedux";
 import BookCard from "../LibraryScreen/BookCard";
+import { getFavoriteListIds } from "../../store/selectors/bookingSelector";
+
 
 
 
 
 const mapStateToProps = (state) => ({
     favoriteList: state.bookStore.favoriteList,
+    getFavoriteListIds: getFavoriteListIds(state),
 });
 const mapDispatchToProps = dispatch => ({
     showBook: (...args) => dispatch(showBook(...args)),
@@ -29,7 +32,7 @@ const renderSeparator = () => {
     );
 };
 
-const BookFavoriteList = ({ favoriteList, getFavoriteList, navigation }) => {
+const BookFavoriteList = ({ favoriteList, getFavoriteList, navigation, getFavoriteListIds }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -47,12 +50,15 @@ const BookFavoriteList = ({ favoriteList, getFavoriteList, navigation }) => {
     };
 
     const renderItem = ({ item }) => {
+        const isFavorited = () => {
+            return getFavoriteListIds.includes(item.id);
 
+        }
         return (
             <BookCard
-                data={item}
+                data={{ ...item, isFavorited: isFavorited() }}
                 showBook={handleShowBook}
-                backgroundColor="#ffffff"
+
             />
         );
     };

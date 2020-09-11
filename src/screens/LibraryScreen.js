@@ -33,7 +33,7 @@ const mapDispatchToProps = dispatch => ({
 
 });
 
-const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore, getBooks, showBook, errorMessage, navigation, dispatchErrorMessage, getFavoriteListIds }) => {
+const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore, getBooks, showBook, errorMessage, navigation, dispatchErrorMessage, getFavoriteListIds, getFavoriteList }) => {
 
   const [action, setAction] = useState(LIST_ACTION);
   const [searchValue, setSearchValue] = useState("");

@@ -2,19 +2,19 @@ import { createSelector } from 'reselect';
 import CryptoJS from "crypto-js";
 
 
-const getMemberId = state => state.accountStore.user.id;
+const getUserId = state => state.accountStore.user.id;
 const getUserAccessToken = state => state.accountStore.access_token;
-const getSelectedBookId = state => state.bookStore.selectedBook;
+const getSelectedBook = state => state.bookStore.selectedBook;
 const getfavoriteList = state => state.bookStore.favoriteList;
 
 
 
-export const getQrCodeString = createSelector([getMemberId, getSelectedBookId, getUserAccessToken], (memberId, selectedBookId, accessToken) => {
-    if (memberId && selectedBookId && accessToken) {
-        const hash = CryptoJS.SHA256(`${memberId}_${selectedBookId}_${accessToken}`);
+export const getQrCodeString = createSelector([getUserId, getSelectedBook, getUserAccessToken], (getUserId, getSelectedBook, accessToken) => {
+    if (getUserId && getSelectedBook && accessToken) {
+        const hash = CryptoJS.SHA256(`${getUserId}_${getSelectedBook.id}_${accessToken.slice(0, 9)}`);
         return JSON.stringify({
-            idMember: memberId,
-            idBook: selectedBookId,
+            userId: getUserId,
+            bookId: getSelectedBook.id,
             hash: hash.toString(CryptoJS.enc.Base64),
         });
     }

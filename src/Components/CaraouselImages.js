@@ -31,9 +31,12 @@ const CarouselImages = ({ images }) => {
 
 
     const _renderItem = ({ item }) => {
+        const getUrlImage = () => {
+            return `http://192.168.0.29:8080/${item.media.path}`;
+        }
         return (
             <View style={{ width: 100, height: 200 }}>
-                <ImageBackground source={{ uri: item.url }} style={styles.image} imageStyle={{ borderRadius: 10 }} resizeMode="cover">
+                <ImageBackground source={{ uri: getUrlImage() }} style={styles.image} imageStyle={{ borderRadius: 10 }} resizeMode="cover">
 
                 </ImageBackground>
             </View>

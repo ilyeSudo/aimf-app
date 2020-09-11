@@ -7,7 +7,7 @@
 // send reservation to backend
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { getFrDate } from "../../Utils/Functions";
+import { getIsoDate } from "../../Utils/Functions";
 import { requestBooking, validateBooking } from "../../store/reducers/bookRedux";
 import { dispatchErrorMessage } from "../../store/reducers/errorMessageRedux";
 import { Button, Container, Icon, Item, View, Label, Content } from "native-base";
@@ -36,10 +36,10 @@ const getQrCodeBooking = (qrCodeBooking) => {
     if (qrCodeBooking) {
         try {
             const objRequestBooking = JSON.parse(qrCodeBooking);
-            const idBook = objRequestBooking.idBook;
-            const idMember = objRequestBooking.idMember;
+            const bookId = objRequestBooking.bookId;
+            const userId = objRequestBooking.userId;
             const hash = objRequestBooking.hash;
-            if (idBook && idMember && hash)
+            if (bookId && userId && hash)
                 return objRequestBooking;
         } catch (e) {
             alert(e); // error in the above string (in this case, yes)!
@@ -52,20 +52,30 @@ const BookReservation = ({ booking, requestBooking, validateBooking, navigation 
 
     const [phoneNumber, setPhoneNumber] = useState('');
     const [returnDate, setReturnDate] = useState(new Date());
-    const [address, setAddress] = useState('');
+    const [address1, setAddress1] = useState('');
+    const [address2, setAddress2] = useState('');
+    const [zip_code, setZipCode] = useState('');
+    const [city, setCity] = useState('');
+    const [copyNumber, setCopyNumber] = useState(null);
+
+
 
     useEffect(() => {
         if (booking && booking.isLoading == false) {
-            setPhoneNumber(booking.phoneNumber);
-            setReturnDate(booking.returnDate);
-            setAddress(booking.address);
+            setPhoneNumber(booking.user.phoneNumber);
+            setReturnDate(booking.user.returnDate);
+            setAddress1(booking.user.address1);
+            setAddress2(booking.user.address2);
+            setZipCode(booking.user.zip_code);
+            setCity(booking.user.city);
+
         }
     }, [booking]);
     const getDateStr = (date) => {
-        return getFrDate(date, false);
+        return getIsoDate(date, false);
     }
     const onSuccess = e => {
-        //{"idMember":58,"idBook":596,"hash":"DEFR569871548IJHU"}
+        //{"userId":58,"bookId":596,"hash":"DEFR569871548IJHU"}
         const qrCodeBooking = getQrCodeBooking(e.data);
         if (qrCodeBooking) {
             requestBooking(qrCodeBooking);
@@ -79,7 +89,7 @@ const BookReservation = ({ booking, requestBooking, validateBooking, navigation 
         if (!phoneNumber) {
             return "Veuillez renseigner le numéro de téléphone.";
         }
-        if (!address) {
+        if ((!address1 && !address2) || (!zip_code) || (!city)) {
             return "Veuillez renseigner l'addresse personnelle de celui qui va reserver le livre.";
         }
         if (
@@ -113,27 +123,21 @@ const BookReservation = ({ booking, requestBooking, validateBooking, navigation 
                     <Content>
 
                         <Item regular>
-                            <Label >Titre:{booking.title}</Label>
+                            <Label >Titre:{booking.book.title}</Label>
                         </Item>
                         <Item regular>
-                            <Label >Pour : {booking.memberName}</Label>
+                            <Label >Pour : {booking.user.firstName} {booking.user.lastName}</Label>
                         </Item>
 
                         <Item regular>
-                            <Label >Genre: {booking.genre}</Label>
+                            <Label >Genre: {booking.book.genre.name}</Label>
                         </Item>
                         <Item regular>
-                            <Label >Rayon: {booking.rayon}</Label>
+                            <Label >Rayon: {booking.book.rayon}</Label>
                         </Item>
 
 
-                        <RenderInput
-                            label="Adresse"
-                            keyboardType="default"
-                            onChange={setAddress}
-                            required
-                            value={address}
-                        />
+
                         <RenderInput
                             checkFunction={isCorrectPhoneNumber}
                             label="Téléphone"
@@ -142,6 +146,39 @@ const BookReservation = ({ booking, requestBooking, validateBooking, navigation 
                             onChange={setPhoneNumber}
                             required
                             value={phoneNumber}
+                        />
+                        <RenderInput
+                            label="Adresse 1"
+                            keyboardType="default"
+                            onChange={setAddress1}
+                            required
+                            value={address1}
+                        />
+                        <RenderInput
+                            label="Adresse 2"
+                            keyboardType="default"
+                            onChange={setAddress1}
+                            value={address2}
+                        />
+                        <RenderInput
+                            label="Code postal"
+                            keyboardType="numeric"
+                            onChange={setZipCode}
+                            required
+                            value={zip_code}
+                        />
+                        <RenderInput
+                            label="Ville"
+                            keyboardType="default"
+                            onChange={setCity}
+                            required
+                            value={city}
+                        />
+                        <RenderInput
+                            label="Copie"
+                            keyboardType="numeric"
+                            onChange={setCopyNumber}
+                            value={copyNumber}
                         />
                         <Label >Sélectionner la date de retour de livre</Label>
                         <DatePicker
@@ -173,10 +210,14 @@ const BookReservation = ({ booking, requestBooking, validateBooking, navigation 
                                     return;
                                 }
                                 validateBooking({
-                                    idBook: booking.idBook,
-                                    idMember: booking.idMember,
-                                    address,
+                                    bookId: booking.book.id,
+                                    userId: booking.user.id,
+                                    address1,
+                                    address2,
+                                    zipCode: zip_code,
+                                    city,
                                     phoneNumber,
+                                    copyNumber,
                                     returnDate,
                                 });
 

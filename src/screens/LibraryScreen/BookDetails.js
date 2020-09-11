@@ -58,11 +58,11 @@ const BookDetails = ({ selectedBook, getQrCodeString, removeFromFavoritesRequest
 
     const handleFavorites = () => {
         if (isFavorited()) {
-            return removeFromFavoritesRequest(selectedBook);
+            return removeFromFavoritesRequest(selectedBook, getFavoriteListIds);
 
         }
 
-        return addToFavoritesRequest(selectedBook);
+        return addToFavoritesRequest(selectedBook, getFavoriteListIds);
 
     }
 
@@ -80,18 +80,15 @@ const BookDetails = ({ selectedBook, getQrCodeString, removeFromFavoritesRequest
 
                 <Container>
                     <CarouselImages images={selectedBook.images} />
-
                     <Content>
-
-
                         <Card>
                             <CardItem header bordered>
                                 <Col>
-                                    <Row><Text>Auteur : {selectedBook.author}</Text></Row><Row><Text>genre : {selectedBook.genre}</Text></Row>
+                                    <Row><Text>Auteur : {selectedBook.author}</Text></Row><Row><Text>genre : {selectedBook.genre.name}</Text></Row>
                                     <Row><Text>Nombre de pages : {selectedBook.pages}</Text></Row>
                                 </Col>
                                 <Col>
-                                    <Row><Text>Biblio : {selectedBook.location.nom}</Text></Row>
+                                    <Row><Text>Biblio : {selectedBook.location.name}</Text></Row>
                                     <Row><Text>language : {selectedBook.language}</Text></Row>
                                 </Col>
 
