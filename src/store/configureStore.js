@@ -43,7 +43,9 @@ const appReducer = (state, action) => {
     action.type === DISPATCH_UNAUTHORIZED_ERROR ||
     action.type === POST_LOGOUT_SUCCESS
   ) {
-    newState = undefined;
+    newState = {
+      accountStore: { tokenDevice: newState.accountStore.tokenDevice },
+    };
   }
 
   return rootReducer(newState, action);

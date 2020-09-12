@@ -94,7 +94,7 @@ class PostScreen extends Component {
     }
     const association =
       isSuperAdmin(this.props.user) || isAdmin(this.props.user)
-        ? {association_id: this.state.associationId}
+        ? {associationId: this.state.associationId}
         : {};
     this.props.savePost({
       status,

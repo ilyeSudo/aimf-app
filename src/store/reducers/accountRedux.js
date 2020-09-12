@@ -22,6 +22,8 @@ export const POST_BATCH_REGISTER_USER_ERROR = 'POST_BATCH_REGISTER_USER_ERROR';
 
 const POST_BATCH_REGISTER_SUCCESS = 'POST_BATCH_REGISTER_SUCCESS';
 
+export const STORE_TOKEN_DEVICE = 'STORE_TOKEN_DEVICE';
+
 const patchUpdateRequest = () => {
   return {
     type: PATCH_UPDATE_USER_REQUEST,
@@ -160,6 +162,13 @@ export const storeAccount = (data) => {
   };
 };
 
+export const storeTokenDevice = (tokenDevice) => {
+  return {
+    type: STORE_TOKEN_DEVICE,
+    payload: {tokenDevice},
+  };
+};
+
 const initialState = {action: SHOW_ACTION};
 
 export const accountReducer = (state = initialState, action) => {
@@ -170,6 +179,7 @@ export const accountReducer = (state = initialState, action) => {
     case POST_REGISTER_USER_REQUEST:
     case POST_REGISTER_USER_SUCCESS:
     case POST_REGISTER_USER_ERROR:
+    case STORE_TOKEN_DEVICE:
     case STORE_ACCOUNT:
       return {...state, ...action.payload};
     case CHANGE_ACTION: {

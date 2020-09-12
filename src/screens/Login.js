@@ -1,14 +1,7 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
-import {Item, Input} from 'native-base';
 import SpinnerButton from 'react-native-spinner-button';
 import ErrorModal from '../Components/ErrorModal';
 import {CREDENTIALS_EMPTY_ERROR} from '../Utils/Constants';
@@ -31,7 +24,7 @@ const styles = StyleSheet.create({
   inputItem: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginBottom:0,
+    marginBottom: 0,
     paddingHorizontal: 10,
     width: 300,
     borderRadius: 10,
@@ -80,7 +73,7 @@ class Login extends React.Component {
       return;
     }
 
-    this.props.login(email, password);
+    this.props.login(email, password, this.props.tokenDevice);
   };
 
   render() {
@@ -131,18 +124,21 @@ const mapStateToProps = (state) => {
   const {errorMessage} = state.errorMessageStore;
   const {loading} = state.authenticationStore;
   const {loading: loadingLiveVideo, video} = state.liveVideoStore;
+  const {tokenDevice} = state.accountStore;
   return {
     errorMessage,
     loading,
     loadingLiveVideo,
     video,
     account: state.accountStore,
+    tokenDevice,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (email, password) => dispatch(login(email, password)),
+    login: (email, password, deviceToken) =>
+      dispatch(login(email, password, deviceToken)),
     dispatchErrorMessage: (errorMessage) =>
       dispatch(dispatchErrorMessage(errorMessage)),
   };
@@ -157,6 +153,7 @@ Login.propTypes = {
   account: PropTypes.object,
   loadingLiveVideo: PropTypes.bool,
   video: PropTypes.object,
+  tokenDevice: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

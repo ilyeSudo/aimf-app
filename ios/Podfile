@@ -1,7 +1,7 @@
 # Uncomment the next line to define a global platform for your project
 platform :ios, '9.0'
-
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
 target 'AIMF_APP' do
   # Pods for AIMF_APP
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
@@ -35,15 +35,10 @@ target 'AIMF_APP' do
   pod 'AppCenter/Crashes', '~> 3.0.0'
   pod 'AppCenter/Analytics', '~> 3.0.0'
   pod 'AppCenterReactNativeShared', '~> 3.0.0'
-  pod 'Firebase/Analytics'
-  pod 'Firebase/Auth'
-  pod 'Firebase/Database'
-  pod 'Firebase/Firestore'
   pod "YoutubePlayer-in-WKWebView", "~> 0.3.0"
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
-  pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
-
+  use_native_modules!
 end
 
 target 'AIMF_APP-tvOS' do
