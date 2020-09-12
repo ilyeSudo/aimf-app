@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, Image, ScrollView, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, View} from 'react-native';
 import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
 import SpinnerButton from 'react-native-spinner-button';
@@ -39,7 +39,7 @@ class Login extends React.Component {
       return;
     }
 
-    this.props.login(email, password);
+    this.props.login(email, password, this.props.tokenDevice);
   };
 
   render() {
@@ -100,23 +100,23 @@ const mapStateToProps = (state) => {
   const {errorMessage} = state.errorMessageStore;
   const {loading} = state.authenticationStore;
   const {loading: loadingLiveVideo, video} = state.liveVideoStore;
+  const {tokenDevice} = state.accountStore;
   return {
     errorMessage,
     loading,
     loadingLiveVideo,
     video,
     account: state.accountStore,
+    tokenDevice,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (email, password) => {
-      dispatch(login(email, password));
-    },
-    dispatchErrorMessage: (errorMessage) => {
-      dispatch(dispatchErrorMessage(errorMessage));
-    },
+    login: (email, password, deviceToken) =>
+      dispatch(login(email, password, deviceToken)),
+    dispatchErrorMessage: (errorMessage) =>
+      dispatch(dispatchErrorMessage(errorMessage)),
   };
 };
 
@@ -129,6 +129,7 @@ Login.propTypes = {
   account: PropTypes.object,
   loadingLiveVideo: PropTypes.bool,
   video: PropTypes.object,
+  tokenDevice: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:621874050263:ios:daf9a48ebf4ae7a6d56c92</string>
+	<string>1:621874050263:ios:3170bb860bfbbf52d56c92</string>
 	<key>DATABASE_URL</key>
 	<string>https://aimfapp.firebaseio.com</string>
 </dict>
