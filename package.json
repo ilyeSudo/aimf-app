@@ -18,6 +18,7 @@
   "dependencies": {
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/datetimepicker": "^3.0.1",
+    "@react-native-community/toolbar-android": "react-native-community/toolbar-android",
     "appcenter": "3.0.0",
     "appcenter-analytics": "3.0.0",
     "appcenter-crashes": "3.0.0",
@@ -36,6 +37,7 @@
     "react-native-linear-gradient": "^2.5.6",
     "react-native-material-menu": "^1.1.0",
     "react-native-modal-datetime-picker": "^8.9.3",
+    "react-native-push-notification": "^5.1.0",
     "react-native-reanimated": "^1.8.0",
     "react-native-safe-area-view": "^1.1.1",
     "react-native-screens": "^2.7.0",
