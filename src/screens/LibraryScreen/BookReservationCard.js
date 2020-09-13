@@ -1,12 +1,17 @@
 import React from 'react';
-import { CardItem, Text, Left, Right, Body, Icon, Thumbnail, Row } from 'native-base';
+import { CardItem, Text, Left, Right, Body, Thumbnail, Row } from 'native-base';
 import PropTypes from "prop-types";
+import { getIsoDate } from "../../Utils/Functions";
 
-const BookReservationCard = ({ data, }) => {
-    const { book, thumbnail, returnDate } = data;
+
+const BookReservationCard = ({ data }) => {
+    const { book, returnDate } = data;
     const getUrlThumbnail = () => {
         const image = book.images.filter(image => image.type == 'thumbnail');
         return `http://192.168.0.29:8080/${image[0].media.path}`;
+    }
+    const getDateStr = (date) => {
+        return getIsoDate(date, false);
     }
     return (
 
@@ -24,7 +29,7 @@ const BookReservationCard = ({ data, }) => {
 
                     <Row >
 
-                        <Text note>{returnDate} </Text>
+                        <Text note>{getDateStr(returnDate)} </Text>
                     </Row>
 
                 </Body>

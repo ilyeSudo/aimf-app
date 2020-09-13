@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { getIsoDate } from "../../Utils/Functions";
 import { requestBooking, validateBooking } from "../../store/reducers/bookRedux";
 import { dispatchErrorMessage } from "../../store/reducers/errorMessageRedux";
-import { Button, Container, Icon, Item, View, Label, Content } from "native-base";
+import { Button, Container, Icon, Item, View, Label, Content, DatePicker } from "native-base";
 import {
     Text,
     ActivityIndicator
@@ -20,7 +20,6 @@ import { RenderInput } from "../../Components/ProfileForm/RenderFunctions";
 import { isCorrectPhoneNumber } from "../../Utils/Functions";
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
-import DatePicker from 'react-native-datepicker'
 
 
 const mapStateToProps = (state) => ({
@@ -48,10 +47,15 @@ const getQrCodeBooking = (qrCodeBooking) => {
     }
 
 }
+const addDays = (date, days) => {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
 const BookReservation = ({ booking, requestBooking, validateBooking, navigation }) => {
 
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [returnDate, setReturnDate] = useState(new Date());
+    const [returnDate, setReturnDate] = useState(addDays(new Date(), 15));
     const [address1, setAddress1] = useState('');
     const [address2, setAddress2] = useState('');
     const [zip_code, setZipCode] = useState('');
@@ -182,25 +186,20 @@ const BookReservation = ({ booking, requestBooking, validateBooking, navigation 
                         />
                         <Label >Sélectionner la date de retour de livre</Label>
                         <DatePicker
-                            style={{ width: 200 }}
-                            date={returnDate}
-                            mode="date"
-                            placeholder="select date"
-                            format="DD-MM-YYYY"
-                            customStyles={{
-                                dateIcon: {
-                                    position: 'absolute',
-                                    left: 0,
-                                    top: 4,
-                                    marginLeft: 0
-                                },
-                                dateInput: {
-                                    marginLeft: 36
-                                }
-                                // ... You can check the source to find the other keys.
+                            defaultDate={returnDate}
+                            formatChosenDate={(date) => {
+                                return getDateStr(date);
                             }}
+                            locale="fr"
+                            timeZoneOffsetInMinutes={undefined}
+                            modalTransparent={false}
+                            animationType="fade"
+                            androidMode="spinner"
+                            placeHolderText="Sélectionner une date"
+                            textStyle={{ color: "green" }}
+                            placeHolderTextStyle={{ color: "#d3d3d3" }}
                             onDateChange={setReturnDate}
-                            getDateStr={getDateStr}
+                            disabled={false}
                         />
                         <Button rounded success
                             onPress={() => {

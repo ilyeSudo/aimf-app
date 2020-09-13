@@ -237,7 +237,7 @@ export const unActiveUserTabNavigator = createBottomTabNavigator(
   {
     disableHomeStack,
     disableKoranStack,
-    disableLibraryStack,
+    libraryStack,
     disableYouTubeStack,
     ProfileStack,
   },

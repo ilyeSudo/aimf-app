@@ -12,6 +12,8 @@ import { getFavoriteListIds } from "../store/selectors/bookingSelector";
 import FilterList from "./LibraryScreen/FilterList";
 import ErrorModal from "../Components/ErrorModal";
 import Loader from "../Components/Loader";
+import { isAdmin } from "../Utils/Account";
+
 
 const mapStateToProps = state => ({
   books: state.bookStore.books,
@@ -22,6 +24,7 @@ const mapStateToProps = state => ({
   lastPage: state.bookStore.lastPage,
   errorMessage: state.errorMessageStore.errorMessage,
   getFavoriteListIds: getFavoriteListIds(state),
+  account: state.accountStore,
 
 });
 
@@ -33,10 +36,8 @@ const mapDispatchToProps = dispatch => ({
 
 });
 
-const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore, getBooks, showBook, errorMessage, navigation, dispatchErrorMessage, getFavoriteListIds, getFavoriteList }) => {
-
-  const [action, setAction] = useState(LIST_ACTION);
-  const [searchValue, setSearchValue] = useState("");
+const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore, getBooks, showBook, errorMessage, navigation, dispatchErrorMessage, getFavoriteListIds, getFavoriteList, account }) => {
+  const [searchValue, setSearchValue] = useState(null);
   const [filterValue, setFilterValue] = useState(null);
   const [lanceSearch, setLanceSearch] = useState(false);
 
@@ -55,10 +56,11 @@ const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore,
 
   const handleRefresh = () => {
     if (!refreshing && !handleMore && !loading) {
+      var search = searchValue == "" ? null : searchValue;
       getBooks(
         [],
         1,
-        searchValue,
+        search,
         filterValue,
         true
       );
@@ -92,18 +94,6 @@ const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore,
     );
   };
 
-
-
-  const updateCard = (data) => {
-    books = books.map((book) => {
-      if (book.id === data.id) {
-        return data;
-      }
-      return book;
-    });
-
-    setBooks(books);
-  };
   const handleShowBook = (item) => {
     showBook(item.id);
     navigation.navigate("BookDetails", { bookId: item.id, bookTitle: item.title });
@@ -152,62 +142,56 @@ const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore,
 
   return (
     <>
-      {action === SHOW_ACTION ? (
-        <ShowBook
+
+      <SafeAreaView style={{ marginTop: 0, opacity: 1 }}>
+        <Item
+          rounded
+          style={{
+            margin: 10,
+            marginLeft: 15,
+            paddingHorizontal: 10,
+            paddingLeft: 5,
+            borderRadius: 5,
+            height: 40,
+            backgroundColor: "#FFF",
+            fontSize: 12,
+          }}
+        >
+          <Icon type="AntDesign" name="search1" />
+          <Input
+            onChangeText={setSearchValue}
+            onBlur={search}
+            style={{
+              fontSize: 15,
+              paddingLeft: 10,
+            }}
+            keyboardType="default"
+            placeholder="Rechercher un livre"
+            value={searchValue}
+          />
+        </Item>
+        <View style={{ flexDirection: "row-reverse" }}>
+          <FilterList
+            selectedValue={getFilterLabel()}
+            updateValue={updaterFilterValue}
+          />
+        </View>
+        <FlatList
           data={books}
-          updateCard={(data) => updateCard(data)}
-          updateState={(state) => this.setState(state)}
+          renderItem={renderItem}
+          keyExtractor={(item) => `${item.id}`}
+          ItemSeparatorComponent={renderSeparator}
+          onRefresh={handleRefresh}
+          refreshing={
+            refreshing !== undefined
+              ? refreshing
+              : false
+          }
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
         />
-      ) : (
-          <SafeAreaView style={{ marginTop: 0, opacity: 1 }}>
-            <Item
-              rounded
-              style={{
-                margin: 10,
-                marginLeft: 15,
-                paddingHorizontal: 10,
-                paddingLeft: 5,
-                borderRadius: 5,
-                height: 40,
-                backgroundColor: "#FFF",
-                fontSize: 12,
-              }}
-            >
-              <Icon type="AntDesign" name="search1" />
-              <Input
-                onChangeText={setSearchValue}
-                onBlur={search}
-                style={{
-                  fontSize: 15,
-                  paddingLeft: 10,
-                }}
-                keyboardType="default"
-                placeholder="Rechercher un livre"
-                value={searchValue}
-              />
-            </Item>
-            <View style={{ flexDirection: "row-reverse" }}>
-              <FilterList
-                selectedValue={getFilterLabel()}
-                updateValue={updaterFilterValue}
-              />
-            </View>
-            <FlatList
-              data={books}
-              renderItem={renderItem}
-              keyExtractor={(item) => `${item.id}`}
-              ItemSeparatorComponent={renderSeparator}
-              onRefresh={handleRefresh}
-              refreshing={
-                refreshing !== undefined
-                  ? refreshing
-                  : false
-              }
-              onEndReached={handleLoadMore}
-              onEndReachedThreshold={0.5}
-            />
-          </SafeAreaView>
-        )}
+      </SafeAreaView>
+
       <Loader visible={!!loading} />
       {errorMessage && (
         <ErrorModal visible message={errorMessage} />
@@ -228,6 +212,8 @@ LibraryScreen.propTypes = {
   lastPage: PropTypes.bool,
   getBooks: PropTypes.func,
   showBook: PropTypes.func,
+  account: PropTypes.object,
+
 
 };
 
@@ -244,6 +230,7 @@ LibraryScreen.navigationOptions = ({ navigation }) => {
               name="book" />
             <Text>Réserver</Text>
           </Button>
+
           <Button transparent onPress={() => {
             navigation.navigate("MyReservations");
 

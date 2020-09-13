@@ -88,7 +88,9 @@ const addToFavorites = (book) => {
   };
 }
 export const removeFromFavoritesRequest = (book, bookIds) => (dispatch) => {
-
+  dispatch(
+    removeFromFavorites(book)
+  );
   getAxiosInstance()
     .post(`${POST_BOOK_FAVORITE_LIST_URI}`,
       {
@@ -96,9 +98,7 @@ export const removeFromFavoritesRequest = (book, bookIds) => (dispatch) => {
       })
     .then(function () {
       setTimeout(() => {
-        dispatch(
-          removeFromFavorites(book)
-        );
+
 
       }, 500);
     })
@@ -111,7 +111,9 @@ export const removeFromFavoritesRequest = (book, bookIds) => (dispatch) => {
 }
 
 export const addToFavoritesRequest = (book, bookIds) => (dispatch) => {
-
+  dispatch(
+    addToFavorites(book)
+  );
   getAxiosInstance()
     .post(`${POST_BOOK_FAVORITE_LIST_URI}`,
       {
@@ -119,9 +121,7 @@ export const addToFavoritesRequest = (book, bookIds) => (dispatch) => {
       })
     .then(function () {
       setTimeout(() => {
-        dispatch(
-          addToFavorites(book)
-        );
+
 
       }, 500);
     })
@@ -209,19 +209,20 @@ export const getFavoriteList = () => {
 export const getBooks = (
   currentBooks,
   page,
-  searchValue = "",
-  genre = null,
+  search = null,
+  bookGenreId = null,
   refreshing = false,
   handleMore = false
 ) => {
+
   return (dispatch) => {
     dispatch(getBookRequest(refreshing, handleMore));
     getAxiosInstance()
       .get(GET_BOOK_LIST_URI, {
         params: {
           page,
-          searchValue,
-          genre,
+          search,
+          bookGenreId,
         },
       })
       .then(function (response) {
@@ -400,16 +401,27 @@ export const bookReducer = (state = initialState, action) => {
       };
     }
     case SHOW_BOOK_REQUEST:
-      return { ...state, ...action.payload };
+      return {
+        ...state,
+        selectedBook: {
+          isLoading: true,
+        },
+      };
     case SHOW_BOOK_SUCCESS: {
       return {
         ...state,
-        ...action.payload,
+        selectedBook: {
+          ...action.payload.selectedBook,
+          isLoading: false,
+        },
       };
     }
     case SHOW_BOOK_ERROR: {
       return {
         ...state,
+        selectedBook: {
+          isLoading: false,
+        },
         ...action.messageError,
       };
     }
@@ -472,7 +484,6 @@ export const bookReducer = (state = initialState, action) => {
       return {
         ...state,
         favoriteList: state.favoriteList.filter(item => item.id !== action.payload.id),
-
       };
     }
     case ADD_TO_FAVORITES: {

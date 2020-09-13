@@ -31,42 +31,38 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const BookDetails = ({ selectedBook, getQrCodeString, removeFromFavoritesRequest, addToFavoritesRequest, getFavoriteListIds }) => {
-    const [isLoading, setIsLoading] = useState(true);
+    const [isFavorited, setIsFavorited] = useState(false);
+
     const [showQrCodeForBooking, setShowQrCodeForBooking] = useState(false);
 
 
     useEffect(() => {
         if (selectedBook) {
-            setIsLoading(false);
+            if (!selectedBook.isLoading) {
+                setIsFavorited(getFavoriteListIds.includes(selectedBook.id));
+
+            }
+
         }
     }, [selectedBook]);
 
     useEffect(() => {
-
+        setIsFavorited(getFavoriteListIds.includes(selectedBook.id));
     }, [getFavoriteListIds]);
-
-
-    const isFavorited = () => {
-        return getFavoriteListIds.includes(selectedBook.id);
-
-    }
-
 
     const handleShowQrCode = () => {
         setShowQrCodeForBooking(true);
     }
 
     const handleFavorites = () => {
-        if (isFavorited()) {
+        if (isFavorited) {
             return removeFromFavoritesRequest(selectedBook, getFavoriteListIds);
-
         }
-
         return addToFavoritesRequest(selectedBook, getFavoriteListIds);
 
     }
 
-    if (isLoading) {
+    if (selectedBook.isLoading) {
         return (
             <View style={{ flex: 1, justifyContent: "center" }}>
                 <ActivityIndicator animating size="large" />
