@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { View, FlatList, ActivityIndicator, SafeAreaView } from "react-native";
-import { connect } from "react-redux";
-import * as PropTypes from "prop-types";
-import UserCard from "./UserScreen/UserCard";
-import { SHOW_ACTION } from "../Utils/Constants";
-import ShowUser from "./UserScreen/ShowUser";
+import React, {Component} from 'react';
+import {View, FlatList, SafeAreaView} from 'react-native';
+import {connect} from 'react-redux';
+import * as PropTypes from 'prop-types';
+import UserCard from './UserScreen/UserCard';
+import {SHOW_ACTION} from '../Utils/Constants';
+import ShowUser from './UserScreen/ShowUser';
 import {
   getUsers,
   showUser,
   updateAction,
   updateUserRole,
-} from "../store/reducers/userRedux";
-import ErrorModal from "../Components/ErrorModal";
-import { isSuperAdmin } from "../Utils/Account";
-import Loader from "../Components/Loader";
+} from '../store/reducers/userRedux';
+import ErrorModal from '../Components/ErrorModal';
+import {isSuperAdmin} from '../Utils/Account';
+import Loader from '../Components/Loader';
 
 class UserScreen extends Component {
   static navigationOptions = {
@@ -58,41 +58,12 @@ class UserScreen extends Component {
       <View
         style={{
           height: 1,
-          width: "86%",
-          backgroundColor: "#CED0CE",
-          marginLeft: "14%",
+          width: '86%',
+          backgroundColor: '#CED0CE',
+          marginLeft: '14%',
         }}
       />
     );
-  };
-
-  renderFooter = () => {
-    if (!this.props.loading) return null;
-    return (
-      <View
-        style={{
-          marginBottom: 100,
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          borderColor: "#CED0CE",
-        }}
-      >
-        <ActivityIndicator animating size="large" />
-      </View>
-    );
-  };
-
-  updateCard = (data) => {
-    const { users } = this.state;
-
-    this.state.users.map((user) => {
-      if (user.id === data.id) {
-        return data;
-      }
-      return user;
-    });
-
-    this.setState({ users });
   };
 
   renderItem = (item, currentUserIndex) => {
@@ -125,14 +96,12 @@ class UserScreen extends Component {
           <SafeAreaView
             style={{
               opacity: this.props.loading || this.props.errorMessage ? 0.6 : 1,
-            }}
-          >
+            }}>
             <FlatList
               data={this.props.users}
-              renderItem={({ item, index }) => this.renderItem(item, index)}
+              renderItem={({item, index}) => this.renderItem(item, index)}
               keyExtractor={(item) => `${item.id}`}
               ItemSeparatorComponent={this.renderSeparator}
-              ListFooterComponent={this.renderFooter}
               onRefresh={this.handleRefresh}
               refreshing={false}
               onEndReached={this.handleLoadMore}
@@ -150,7 +119,7 @@ class UserScreen extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { errorMessage } = state.errorMessageStore;
+  const {errorMessage} = state.errorMessageStore;
   const {
     users,
     loading,

@@ -1,8 +1,8 @@
-import React from "react";
-import { Text, StyleSheet } from "react-native";
-import PropTypes from "prop-types";
-import { Body, Right, ListItem, Switch, Badge } from "native-base";
-import { black, gray, white } from "../../Utils/colors";
+import React from 'react';
+import {Text, StyleSheet} from 'react-native';
+import PropTypes from 'prop-types';
+import {Body, Right, ListItem, Switch, Badge} from 'native-base';
+import {black, gray, white} from '../../Utils/colors';
 
 const styles = StyleSheet.create({
   blackText: {
@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: white,
-    fontSize: 10,
-    fontWeight: "400",
+    fontSize: 12,
+    fontWeight: '400',
   },
 });
 
@@ -37,7 +37,7 @@ export default function CostumItemList(props) {
 
   return (
     <ListItem>
-      <Body style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <Body style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <Text style={colorText ? styles.blackText : styles.grayText}>
           {text}
         </Text>
@@ -45,17 +45,24 @@ export default function CostumItemList(props) {
           <Badge
             primary
             style={{
-              justifyContent: "center",
-              alignItems: "center",
-              alignSelf: "flex-end",
-            }}
-          >
+              backgroundColor: '#c18b64',
+              justifyContent: 'center',
+              alignItems: 'center',
+              alignSelf: 'flex-end',
+            }}>
             <Text style={styles.badgeText}>{numberOfReader}</Text>
           </Badge>
         )}
       </Body>
       <Right>
-        <Switch value={value} onValueChange={() => onChangeToggle(id)} />
+        <Switch
+          value={value}
+          onValueChange={() => onChangeToggle(id)}
+          trackColor={{
+            true: '#c18b64',
+            false: '#efeff3',
+          }}
+        />
       </Right>
     </ListItem>
   );

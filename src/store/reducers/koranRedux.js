@@ -1,15 +1,15 @@
-import { batchActions } from "redux-batched-actions";
-import { GET_LIST_TIKHEROUBINS_URI } from "../../Utils/ApiUrl";
-import getAxiosInstance from "../../Utils/axios";
-import { dispatchError } from "./errorMessageRedux";
+import {batchActions} from 'redux-batched-actions';
+import {GET_LIST_TIKHEROUBINS_URI} from '../../Utils/ApiUrl';
+import getAxiosInstance from '../../Utils/axios';
+import {dispatchError} from './errorMessageRedux';
 
 //
 // Action types
 //
-const RECEIVE_KORAN_DATA = "RECEIVE_KORAN_DATA";
-const LOADING_KORAN_DATA = "LOADING_KORAN_DATA";
-const LOADING_KORAN_DATA_ERROR = "LOADING_KORAN_DATA_ERROR";
-const GET_BATCH_KORAN_DATA_ERROR = "GET_BATCH_KORAN_PART_ERROR";
+const RECEIVE_KORAN_DATA = 'RECEIVE_KORAN_DATA';
+const LOADING_KORAN_DATA = 'LOADING_KORAN_DATA';
+const LOADING_KORAN_DATA_ERROR = 'LOADING_KORAN_DATA_ERROR';
+const GET_BATCH_KORAN_DATA_ERROR = 'GET_BATCH_KORAN_PART_ERROR';
 
 //
 // Actions creator
@@ -27,7 +27,7 @@ const loadingKoranData = () => {
 const getKoranPartError = () => {
   return {
     type: LOADING_KORAN_DATA_ERROR,
-    payload: { loading: false },
+    payload: {loading: false},
   };
 };
 
@@ -53,8 +53,8 @@ export const receiveKoran = () => {
         dispatch(
           batchActions(
             [dispatchError(error), getKoranPartError()],
-            GET_BATCH_KORAN_DATA_ERROR
-          )
+            GET_BATCH_KORAN_DATA_ERROR,
+          ),
         );
       });
   };
@@ -72,9 +72,9 @@ const initState = {
 export const koranReducer = (state = initState, action) => {
   switch (action.type) {
     case LOADING_KORAN_DATA:
-      return { ...state, loading: action.payload.loading };
+      return {...state, loading: action.payload.loading};
     case LOADING_KORAN_DATA_ERROR:
-      return { ...state, loading: action.payload.loading };
+      return {...state, loading: action.payload.loading};
     case RECEIVE_KORAN_DATA: {
       return {
         ...state,

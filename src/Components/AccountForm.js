@@ -1,23 +1,17 @@
-import React, { Component } from "react";
-import {
-  ScrollView,
-  TouchableWithoutFeedback,
-  View,
-  Image,
-} from "react-native";
-import { Item, Icon, Input, Label, DatePicker, Button } from "native-base";
-import SpinnerButton from "react-native-spinner-button";
-import { RadioButtons, SegmentedControls } from "react-native-radio-buttons";
-import * as PropTypes from "prop-types";
+import React, {Component} from 'react';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Item, Icon, Input, Label, Button} from 'native-base';
+import SpinnerButton from 'react-native-spinner-button';
+import * as PropTypes from 'prop-types';
 import {
   isCorrectPhoneNumber,
   isCorrectName,
   isCorrectEmailAddress,
   isCorrectPassword,
   isCorrectZipCode,
-  getFrDate,
-} from "../Utils/Functions";
-import styles from "./ProfileForm/css";
+} from '../Utils/Functions';
+import styles from './AccountForm/css';
+
 import {
   CREATE_ACTION,
   MARRIED,
@@ -26,13 +20,20 @@ import {
   SINGLE,
   UPDATE_ACTION,
   FEMALE_GENDER,
-} from "../Utils/Constants";
-import getRandomQuestionIndex from "./ProfileForm/Functions";
-import ActionsButton from "./ProfileForm/ActionsButton";
-import ChildrenInformation from "./ProfileForm/ChildrenInformation";
-import { RenderInput } from "./ProfileForm/RenderFunctions";
+  SHOW_CONDITION_ACTION,
+} from '../Utils/Constants';
+import getRandomQuestionIndex from './AccountForm/Functions';
+import ActionsButton from './AccountForm/ActionsButton';
+import ChildrenInformation from './AccountForm/ChildrenInformation';
+import RenderInput from './RenderInput';
+import ImageRadioButton from './ImageRadioButton';
+import TextRadioButton from './TextRadioButton';
+import DatePicker from './DatePicker';
+import {CheckBox} from 'react-native-elements';
+import moment from 'moment';
+import RenderPassword from "./RenderPassoword";
 
-export default class ProfileForm extends Component {
+export default class AccountForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,83 +43,49 @@ export default class ProfileForm extends Component {
   }
 
   componentDidMount() {
-    const { questions1, questions2, question1, question2 } = this.props.data;
+    const {questions1, questions2, question1, question2} = this.props.data;
     if (question1) {
-      this.props.updateState({ question1 });
+      this.props.updateState({question1});
       this.setState({
         questionIndex1: questions1.findIndex(
-          (question) => question.id === question1.id
+          (question) => question.id === question1.id,
         ),
       });
     }
 
     if (question2) {
-      this.props.updateState({ question2 });
+      this.props.updateState({question2});
       this.setState({
         questionIndex2: questions2.findIndex(
-          (question) => question.id === question2.id
+          (question) => question.id === question2.id,
         ),
       });
     }
   }
 
   setDate(newDate) {
-    this.props.updateState({ birthday: newDate });
+    this.props.updateState({birthday: newDate});
   }
 
-  setConjugalSituation = (option) => {
-    this.props.updateState({
-      maritalStatus: option,
-    });
-  };
-
   setQuestionIndex1 = () => {
-    const { questionIndex1 } = this.state;
+    const {questionIndex1} = this.state;
 
     const newQuestionIndex1 = getRandomQuestionIndex(questionIndex1);
     const question1 = this.props.data.questions1[newQuestionIndex1];
-    this.props.updateState({ question1 });
+    this.props.updateState({question1});
     this.setState({
       questionIndex1: newQuestionIndex1,
     });
   };
 
   setQuestionIndex2 = () => {
-    const { questionIndex2 } = this.state;
+    const {questionIndex2} = this.state;
     const newQuestionIndex2 = getRandomQuestionIndex(questionIndex2);
     const question2 = this.props.data.questions2[newQuestionIndex2];
-    this.props.updateState({ question2 });
+    this.props.updateState({question2});
     this.setState({
       questionIndex2: newQuestionIndex2,
     });
-  };
-
-  getKinIcon = (option, selected) => {
-    if (option === MALE_GENDER) {
-      return selected
-        ? require("../../assets/images/men_selected.png")
-        : require("../../assets/images/men.png");
-    }
-    return selected
-      ? require("../../assets/images/women_selected.png")
-      : require("../../assets/images/women.png");
-  };
-
-  renderGenderOption = (option, selected, onSelect, index) => {
-    const icon = this.getKinIcon(option, selected);
-    return (
-      <TouchableWithoutFeedback onPress={onSelect} key={index}>
-        <Image style={{ width: 60, height: 60 }} source={icon} />
-      </TouchableWithoutFeedback>
-    );
-  };
-
-  renderGenderContainer = (optionNodes) => {
-    return (
-      <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-        {optionNodes}
-      </View>
-    );
   };
 
   renderQuestionsBloc() {
@@ -126,29 +93,26 @@ export default class ProfileForm extends Component {
       <>
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "center",
+            flexDirection: 'row',
+            justifyContent: 'center',
             width: 300,
             marginLeft: 30,
-          }}
-        >
+          }}>
           <Label
             style={{
-              fontWeight: "bold",
+              fontWeight: 'bold',
               fontSize: 14,
               marginLeft: 30,
               width: 300,
-            }}
-          >
+            }}>
             {this.props.data.question1 && this.props.data.question1.question}*
           </Label>
           <SpinnerButton
             buttonStyle={styles.refreshButton}
             onPress={this.setQuestionIndex1}
             indicatorCount={10}
-            spinnerType="SkypeIndicator"
-          >
-            <Icon style={{ color: "#d3d3d3", fontSize: 14 }} name="sync" />
+            spinnerType="SkypeIndicator">
+            <Icon style={{color: '#d3d3d3', fontSize: 14}} name="sync" />
           </SpinnerButton>
         </View>
         <Item rounded style={styles.inputItem}>
@@ -156,35 +120,32 @@ export default class ProfileForm extends Component {
             style={styles.input}
             autoCapitalize="sentences"
             keyboardType="default"
-            onChangeText={(response1) => this.props.updateState({ response1 })}
+            onChangeText={(response1) => this.props.updateState({response1})}
             value={this.props.data.response1}
           />
         </Item>
 
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             width: 300,
             marginLeft: 30,
-          }}
-        >
+          }}>
           <Label
             style={{
-              fontWeight: "bold",
+              fontWeight: 'bold',
               fontSize: 14,
               width: 300,
-            }}
-          >
+            }}>
             {this.props.data.question2 && this.props.data.question2.question}*
           </Label>
           <SpinnerButton
             buttonStyle={styles.refreshButton}
             onPress={this.setQuestionIndex2}
             indicatorCount={10}
-            spinnerType="SkypeIndicator"
-          >
-            <Icon style={{ color: "#d3d3d3", fontSize: 14 }} name="sync" />
+            spinnerType="SkypeIndicator">
+            <Icon style={{color: '#d3d3d3', fontSize: 14}} name="sync" />
           </SpinnerButton>
         </View>
         <Item rounded style={styles.inputItem}>
@@ -192,7 +153,7 @@ export default class ProfileForm extends Component {
             style={styles.input}
             autoCapitalize="sentences"
             keyboardType="default"
-            onChangeText={(response2) => this.props.updateState({ response2 })}
+            onChangeText={(response2) => this.props.updateState({response2})}
             value={this.props.data.response2}
           />
         </Item>
@@ -218,8 +179,33 @@ export default class ProfileForm extends Component {
       functionName,
       birthday,
       gender,
+      acceptTermsOfUse,
     } = this.props.data;
-    const maritalStatusOptions = [MARRIED, SINGLE];
+
+    const genderOptions = [
+      {
+        value: MALE_GENDER,
+        selectedImage: require('../../assets/images/male_selected.png'),
+        unselectedImage: require('../../assets/images/male_unselected.png'),
+      },
+      {
+        value: FEMALE_GENDER,
+        selectedImage: require('../../assets/images/female_selected.png'),
+        unselectedImage: require('../../assets/images/female_unselected.png'),
+      },
+    ];
+
+    const maritalStatusOptions = [
+      {
+        value: SINGLE,
+        label: 'Célébataire(e)',
+      },
+      {
+        value: MARRIED,
+        label: 'Marié(e)',
+      },
+    ];
+
     return (
       <>
         <ScrollView
@@ -227,9 +213,8 @@ export default class ProfileForm extends Component {
           style={{
             paddingTop: 20,
             opacity: this.props.scrollViewOpacity,
-            backgroundColor: "#fce3ba",
-          }}
-        >
+            backgroundColor: '#fce3ba',
+          }}>
           <View>
             <Button
               transparent
@@ -240,93 +225,67 @@ export default class ProfileForm extends Component {
                   });
                   this.props.updateAction(SHOW_ACTION);
                 } else {
-                  this.props.navigation.navigate("Login");
+                  this.props.navigation.navigate('Login');
                 }
               }}
-              style={{ borderRadius: 30 }}
-            >
+              style={{borderRadius: 30, width: 50}}>
               <Icon
-                style={{ color: "#000" }}
+                style={{color: '#000'}}
                 name="md-arrow-back"
                 type="Ionicons"
               />
             </Button>
           </View>
           <Label style={styles.label}>Je suis *</Label>
-          <RadioButtons
-            options={[MALE_GENDER, FEMALE_GENDER]}
-            onSelection={(value) => this.props.updateState({ gender: value })}
-            selectedOption={gender}
-            renderOption={this.renderGenderOption}
-            renderContainer={this.renderGenderContainer}
+
+          <ImageRadioButton
+            options={genderOptions}
+            value={gender}
+            onPress={(value) => this.props.updateState({gender: value})}
           />
           <RenderInput
             checkFunction={isCorrectName}
             label="Nom"
-            onChange={(value) => this.props.updateState({ lastName: value })}
+            onChange={(value) => this.props.updateState({lastName: value})}
             required
             value={lastName}
           />
           <RenderInput
             checkFunction={isCorrectName}
             label="Nom jeune fille"
-            onChange={(value) => this.props.updateState({ middleName: value })}
+            onChange={(value) => this.props.updateState({middleName: value})}
             required={false}
             value={middleName}
           />
           <RenderInput
             checkFunction={isCorrectName}
             label="Fils(fille) de"
-            onChange={(value) => this.props.updateState({ fatherName: value })}
+            onChange={(value) => this.props.updateState({fatherName: value})}
             required
             value={fatherName}
           />
           <RenderInput
             checkFunction={isCorrectName}
             label="Prénom"
-            onChange={(value) => this.props.updateState({ firstName: value })}
+            onChange={(value) => this.props.updateState({firstName: value})}
             required
             value={firstName}
           />
           <Label style={styles.label}>Situation conjugale*</Label>
-          <SegmentedControls
-            containerStyle={{
-              marginLeft: 30,
-              marginRight: 30,
-              marginBottom: 15,
-            }}
-            tint="#cb8347"
+
+          <TextRadioButton
             options={maritalStatusOptions}
-            onSelection={(value) => this.setConjugalSituation(value)}
-            selectedOption={maritalStatus}
-            extractText={(option) =>
-              option === MARRIED ? "Marié(e)" : "Célibataire"
-            }
+            value={maritalStatus}
+            onPress={(value) => this.props.updateState({maritalStatus: value})}
           />
-          <Label style={styles.label}>Date de naissance*</Label>
-          <Item rounded style={styles.inputItem}>
-            <DatePicker
-              defaultDate={new Date(birthday)}
-              minimumDate={new Date(1900, 1, 1)}
-              maximumDate={new Date()}
-              modalTransparent={false}
-              locale="fr"
-              formatChosenDate={(date) => {
-                return getFrDate(date);
-              }}
-              androidMode="spinner"
-              animationType="slide"
-              placeHolderText={
-                this.props.action === UPDATE_ACTION
-                  ? undefined
-                  : "Séléctionner une date"
-              }
-              textStyle={{ color: "#000" }}
-              placeHolderTextStyle={{ color: "#d3d3d3" }}
-              onDateChange={(date) => this.setDate(date)}
-              customStyles={styles.datePicker}
-            />
-          </Item>
+
+          <DatePicker
+            minimumDate={moment('1900-01-01').toDate()}
+            maximumDate={new Date()}
+            label="Date de naissance*"
+            defaultDate={birthday && moment(birthday).toDate()}
+            onCustomChange={(date) => this.setDate(date)}
+          />
 
           {this.props.action === UPDATE_ACTION ? (
             <>
@@ -340,7 +299,7 @@ export default class ProfileForm extends Component {
                 checkFunction={isCorrectName}
                 label="Fonction"
                 onChange={(value) =>
-                  this.props.updateState({ functionName: value })
+                  this.props.updateState({functionName: value})
                 }
                 required
                 value={functionName}
@@ -352,7 +311,7 @@ export default class ProfileForm extends Component {
             label="Code postale"
             maxLength={5}
             keyboardType="numeric"
-            onChange={(value) => this.props.updateState({ zipCode: value })}
+            onChange={(value) => this.props.updateState({zipCode: value})}
             required
             value={zipCode}
           />
@@ -362,7 +321,7 @@ export default class ProfileForm extends Component {
             }
             label="Email"
             keyboardType="email-address"
-            onChange={(value) => this.props.updateState({ email: value })}
+            onChange={(value) => this.props.updateState({email: value})}
             required
             disabled={this.props.action === UPDATE_ACTION}
             value={email}
@@ -376,7 +335,7 @@ export default class ProfileForm extends Component {
             label="Téléphone"
             maxLength={10}
             keyboardType="numeric"
-            onChange={(value) => this.props.updateState({ phoneNumber: value })}
+            onChange={(value) => this.props.updateState({phoneNumber: value})}
             required
             value={phoneNumber}
           />
@@ -385,45 +344,68 @@ export default class ProfileForm extends Component {
             : null}
 
           {this.props.action === UPDATE_ACTION ? (
-            <RenderInput
-              checkFunction={isCorrectPassword}
+            <RenderPassword
               label="Ancien mot de passe"
-              secureTextEntry
-              onChange={(value) =>
-                this.props.updateState({ oldPassword: value })
-              }
+              onChange={(value) => this.props.updateState({oldPassword: value})}
               required={this.props.action === CREATE_ACTION}
               value={oldPassword}
             />
           ) : null}
 
-          <RenderInput
-            checkFunction={isCorrectPassword}
+          <RenderPassword
             label={
               this.props.action === UPDATE_ACTION
-                ? "Nouveau mot de passe"
-                : "Mot de passe"
+                ? 'Nouveau mot de passe'
+                : 'Mot de passe'
             }
-            secureTextEntry
-            onChange={(value) => this.props.updateState({ password: value })}
+            onChange={(value) => this.props.updateState({password: value})}
             required={this.props.action === CREATE_ACTION}
             value={password}
           />
-          <RenderInput
-            checkFunction={isCorrectPassword}
+          <RenderPassword
             label="Confirmer mot de passe"
             error={
               confirmPassword.length > 0 &&
               (!isCorrectPassword(confirmPassword) ||
                 password !== confirmPassword)
             }
-            secureTextEntry
             onChange={(value) =>
-              this.props.updateState({ confirmPassword: value })
+              this.props.updateState({confirmPassword: value})
             }
             required={this.props.action === CREATE_ACTION}
             value={confirmPassword}
           />
+
+          {this.props.action === CREATE_ACTION ? (
+            <View
+              style={{marginLeft: 10, marginRight: 30, flexDirection: 'row'}}>
+              <CheckBox
+                containerStyle={{marginTop: -10}}
+                checked={acceptTermsOfUse}
+                checkedColor="#cb8347"
+                uncheckedColor="#cb8347"
+                onPress={() =>
+                  this.props.updateState({acceptTermsOfUse: !acceptTermsOfUse})
+                }
+              />
+              <Text style={{marginRight: 40}}>
+                En s'inscrivant, vous acceptez les{' '}
+                <Text
+                  style={{
+                    color: '#cb8347',
+                    fontWeight: 'bold',
+                    textDecorationLine: 'underline',
+                  }}
+                  onPress={() => {
+                    this.props.updateState({readTermsOfUse: true});
+                    this.props.updateAction(SHOW_CONDITION_ACTION);
+                  }}>
+                  Conditions générale et la politique de confidentialité
+                </Text>
+              </Text>
+            </View>
+          ) : null}
+
           <ActionsButton
             action={this.props.action}
             onValidate={() => this.props.onSubmit()}
@@ -437,7 +419,7 @@ export default class ProfileForm extends Component {
   }
 }
 
-ProfileForm.propTypes = {
+AccountForm.propTypes = {
   navigation: PropTypes.object,
   action: PropTypes.string,
   onSubmit: PropTypes.func,

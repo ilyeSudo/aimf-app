@@ -1,10 +1,10 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   view: {
     paddingTop: 60,
-    textAlign: "center",
-    backgroundColor: "#fce3ba",
+    textAlign: 'center',
+    backgroundColor: '#fce3ba',
   },
   inputItem: {
     marginBottom: 15,
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     borderRadius: 10,
     height: 45,
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
   },
   textInput: {
     width: 300,
@@ -28,10 +28,10 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     borderRadius: 10,
     height: 180,
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
   },
   label: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 14,
     marginLeft: 30,
     width: 300,
@@ -49,17 +49,17 @@ const styles = StyleSheet.create({
 
   buttonText: {
     fontSize: 17,
-    color: "#FFF",
+    color: '#FFF',
   },
   buttonIcon: {
     fontSize: 16,
-    color: "#FFF",
+    color: '#FFF',
   },
   green: {
-    color: "green",
+    color: 'green',
   },
   red: {
-    color: "red",
+    color: 'red',
   },
 });
 

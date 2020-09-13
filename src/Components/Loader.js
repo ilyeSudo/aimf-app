@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Modal, Animated, Easing, ActivityIndicator, View } from "react-native";
-import * as PropTypes from "prop-types";
+import React, {Component} from 'react';
+import {Modal, Animated, Easing, ActivityIndicator, View} from 'react-native';
+import * as PropTypes from 'prop-types';
 
 class Loader extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class Loader extends Component {
         delay: 0,
         easing: Easing.linear,
         useNativeDriver: true,
-      })
+      }),
     ).start();
   };
 
@@ -29,10 +29,9 @@ class Loader extends Component {
         <View
           style={{
             flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <ActivityIndicator size="large" />
         </View>
       </Modal>

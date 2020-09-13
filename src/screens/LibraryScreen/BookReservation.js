@@ -15,7 +15,7 @@ import {
     Text,
     ActivityIndicator
 } from 'react-native';
-import { RenderInput } from "../../Components/ProfileForm/RenderFunctions";
+import { RenderInput } from "../../Components/RenderInput";
 
 import { isCorrectPhoneNumber } from "../../Utils/Functions";
 import QRCodeScanner from 'react-native-qrcode-scanner';

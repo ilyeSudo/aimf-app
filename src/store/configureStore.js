@@ -1,30 +1,29 @@
-
-
 import AsyncStorage from '@react-native-community/async-storage';
-import { createStore, combineReducers, compose, applyMiddleware } from "redux";
-import { enableBatching } from "redux-batched-actions";
-import { persistStore, persistReducer } from "redux-persist";
-import thunk from "redux-thunk";
-import { userReducer } from "./reducers/userRedux";
+import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
+import {enableBatching} from 'redux-batched-actions';
+import {persistStore, persistReducer} from 'redux-persist';
+import thunk from 'redux-thunk';
+import {userReducer} from './reducers/userRedux';
 import {
   DISPATCH_UNAUTHORIZED_ERROR,
   errorMessageReducer,
-} from "./reducers/errorMessageRedux";
+} from './reducers/errorMessageRedux';
 import {
   authenticationReducer,
   POST_LOGOUT_SUCCESS,
-} from "./reducers/authenticationRedux";
-import { accountReducer } from "./reducers/accountRedux";
-import { profileReducer } from "./reducers/profileRedux";
-import {bookReducer} from "./reducers/bookRedux";
-import { koranReducer } from "./reducers/koranRedux";
-import { khatmaReducer } from "./reducers/khatmaRedux";
-import NavigationService from "../Utils/NavigationService";
-import { articleReducer } from "./reducers/articlesRedux";
-import { liveVideoReducer } from "./reducers/liveVideoRedux";
+} from './reducers/authenticationRedux';
+import {accountReducer} from './reducers/accountRedux';
+import {koranReducer} from './reducers/koranRedux';
+import {khatmaReducer} from './reducers/khatmaRedux';
+import NavigationService from '../Utils/NavigationService';
+import {articleReducer} from './reducers/articlesRedux';
+import {liveVideoReducer} from './reducers/liveVideoRedux';
+import {associationReducer} from './reducers/associationRedux';
+import {bookReducer} from './reducers/bookRedux';
+
 
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage: AsyncStorage,
 };
 
@@ -35,10 +34,10 @@ const rootReducer = combineReducers({
   errorMessageStore: errorMessageReducer,
   authenticationStore: authenticationReducer,
   accountStore: accountReducer,
-  profileStore: profileReducer,
   bookStore: bookReducer,
   articleStore: articleReducer,
   liveVideoStore: liveVideoReducer,
+  associationStore: associationReducer,
 });
 
 const appReducer = (state, action) => {
@@ -68,14 +67,14 @@ const logoutUser = (store) => (next) => (action) => {
     action.meta.batch &&
     action.payload[0].type === DISPATCH_UNAUTHORIZED_ERROR
   ) {
-    NavigationService.navigate("Login");
+    NavigationService.navigate('Login');
   }
   return next(action);
 };
 
 export const store = createStore(
   enableBatching(persistedReducer),
-  composeEnhancers(applyMiddleware(thunk, logoutUser))
+  composeEnhancers(applyMiddleware(thunk, logoutUser)),
 );
 
 export const persistor = persistStore(store);
