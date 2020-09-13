@@ -1,17 +1,18 @@
 import React from 'react';
 import { CardItem, Text, Left, Right, Body, Thumbnail, Row } from 'native-base';
 import PropTypes from "prop-types";
-import { getIsoDate } from "../../Utils/Functions";
+import { isoDateToFr } from "../../Utils/Functions";
+import { API_BASE_URL } from "react-native-dotenv";
 
 
 const BookReservationCard = ({ data }) => {
     const { book, returnDate } = data;
     const getUrlThumbnail = () => {
         const image = book.images.filter(image => image.type == 'thumbnail');
-        return `http://192.168.0.29:8080/${image[0].media.path}`;
+        return `${API_BASE_URL}/${image[0].media.path}`;
     }
     const getDateStr = (date) => {
-        return getIsoDate(date, false);
+        return isoDateToFr(date, false);
     }
     return (
 

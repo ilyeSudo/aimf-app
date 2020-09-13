@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, ImageBackground } from "react-native";
 import Caraousel, { Pagination } from 'react-native-snap-carousel'
+import { API_BASE_URL } from "react-native-dotenv";
 
 
 const pagination = () => {
@@ -32,7 +33,7 @@ const CarouselImages = ({ images }) => {
 
     const _renderItem = ({ item }) => {
         const getUrlImage = () => {
-            return `http://192.168.0.29:8080/${item.media.path}`;
+            return `${API_BASE_URL}/${item.media.path}`;
         }
         return (
             <View style={{ width: 100, height: 200 }}>

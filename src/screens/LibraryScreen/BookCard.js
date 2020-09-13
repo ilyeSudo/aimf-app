@@ -8,7 +8,7 @@ const BookCard = ({ data, showBook }) => {
     const { title, author, genre, images, pages, isFavorited, isAvailable, availabilityDate } = data;
     const getUrlThumbnail = () => {
         const image = images.filter(image => image.type == 'thumbnail');
-        return `http://192.168.0.29:8080/${image[0].media.path}`;
+        return `${API_BASE_URL}/${image[0].media.path}`;
     }
     return (
 

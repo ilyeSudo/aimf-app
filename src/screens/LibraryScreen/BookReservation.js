@@ -7,15 +7,16 @@
 // send reservation to backend
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { getIsoDate } from "../../Utils/Functions";
 import { requestBooking, validateBooking } from "../../store/reducers/bookRedux";
 import { dispatchErrorMessage } from "../../store/reducers/errorMessageRedux";
-import { Button, Container, Icon, Item, View, Label, Content, DatePicker } from "native-base";
+import { Button, Container, Icon, Item, View, Label, Content } from "native-base";
+import DatePicker from '../../Components/DatePicker';
+import moment from 'moment';
 import {
     Text,
     ActivityIndicator
 } from 'react-native';
-import { RenderInput } from "../../Components/RenderInput";
+import RenderInput from "../../Components/RenderInput";
 
 import { isCorrectPhoneNumber } from "../../Utils/Functions";
 import QRCodeScanner from 'react-native-qrcode-scanner';
@@ -75,9 +76,7 @@ const BookReservation = ({ booking, requestBooking, validateBooking, navigation 
 
         }
     }, [booking]);
-    const getDateStr = (date) => {
-        return getIsoDate(date, false);
-    }
+
     const onSuccess = e => {
         //{"userId":58,"bookId":596,"hash":"DEFR569871548IJHU"}
         const qrCodeBooking = getQrCodeBooking(e.data);
@@ -121,7 +120,6 @@ const BookReservation = ({ booking, requestBooking, validateBooking, navigation 
                 </View>
             );
         } else {
-            const today = new Date();
             return (
                 <Container>
                     <Content>
@@ -184,22 +182,11 @@ const BookReservation = ({ booking, requestBooking, validateBooking, navigation 
                             onChange={setCopyNumber}
                             value={copyNumber}
                         />
-                        <Label >Sélectionner la date de retour de livre</Label>
                         <DatePicker
-                            defaultDate={returnDate}
-                            formatChosenDate={(date) => {
-                                return getDateStr(date);
-                            }}
-                            locale="fr"
-                            timeZoneOffsetInMinutes={undefined}
-                            modalTransparent={false}
-                            animationType="fade"
-                            androidMode="spinner"
-                            placeHolderText="Sélectionner une date"
-                            textStyle={{ color: "green" }}
-                            placeHolderTextStyle={{ color: "#d3d3d3" }}
-                            onDateChange={setReturnDate}
-                            disabled={false}
+                            minimumDate={new Date()}
+                            label="Date de retour prévu"
+                            defaultDate={returnDate && moment(returnDate).toDate()}
+                            onCustomChange={(date) => setReturnDate(date)}
                         />
                         <Button rounded success
                             onPress={() => {

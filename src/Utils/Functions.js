@@ -1,4 +1,4 @@
-import {DAYS, MONTHS, THAKHAROUBTS} from './Constants';
+import { DAYS, MONTHS, THAKHAROUBTS } from './Constants';
 
 export const isCorrectName = (name) => {
   return !!(
@@ -29,17 +29,17 @@ export const getFrDate = (date, time = false) => {
   if (date instanceof Date) {
     return `${date.getDate().toString().padStart(2, '0')}/${`${
       parseInt(date.getMonth().toString(), 10) + 1
-    }`.padStart(2, '0')}/${date.getFullYear()}${
+      }`.padStart(2, '0')}/${date.getFullYear()}${
       time ? date.toLocaleTimeString('fr') : ''
-    }`;
+      }`;
   }
   return date;
 };
 
-export const isoDateToFr = (isoDate: string) => {
+export const isoDateToFr = (isoDate: string, withTime = true) => {
   const fullDate = isoDate.split(' ');
   const date = fullDate[0].split('-');
-  const time = fullDate.length === 2 ? fullDate[1] : '';
+  const time = withTime ? (fullDate.length === 2 ? fullDate[1] : '') : '';
   return `${date[2]}/${date[1]}/${date[0]} ${time}`;
 };
 
@@ -47,7 +47,7 @@ export const getIsoDate = (date) => {
   if (date instanceof Date) {
     return `${date.getFullYear()}-${`${
       parseInt(date.getMonth().toString(), 10) + 1
-    }`.padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+      }`.padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
   }
   return date;
 };
@@ -73,14 +73,14 @@ export const formatDateWithDayAndMonthName = (apiDate) => {
 
   return `${DAYS[date.getDay()]} ${date.getDate()} ${
     MONTHS[date.getMonth()]
-  } ${date.getFullYear()}`;
+    } ${date.getFullYear()}`;
 };
 
-export const getFullName = ({lastName, firstName}) => {
+export const getFullName = ({ lastName, firstName }) => {
   return lastName && firstName
     ? `${lastName.toUpperCase()} ${firstName
-        .charAt(0)
-        .toUpperCase()}${firstName.slice(1).toLowerCase()}`
+      .charAt(0)
+      .toUpperCase()}${firstName.slice(1).toLowerCase()}`
     : '';
 };
 

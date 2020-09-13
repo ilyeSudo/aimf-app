@@ -309,6 +309,11 @@ const requestBookingRequest = (objRequestBooking) => {
     },
   };
 };
+const requestBookingError = () => {
+  return {
+    type: REQUEST_BOOKING_ERROR,
+  };
+};
 
 const validateBookingSuccess = () => {
   return {
@@ -341,6 +346,7 @@ export const requestBooking = (objRequestBooking) => (dispatch) => {
       }, 500);
     })
     .catch(function (error) {
+      dispatch(requestBookingError());
       dispatch(
         batchActions(
           [dispatchError(error), showBookError()])
@@ -425,13 +431,6 @@ export const bookReducer = (state = initialState, action) => {
         ...action.messageError,
       };
     }
-    case REQUEST_BOOKING_REQUEST:
-      return {
-        ...state,
-        booking: {
-          isLoading: true,
-        },
-      };
     case REQUEST_BOOKING_SUCCESS: {
       return {
         ...state,
@@ -441,12 +440,17 @@ export const bookReducer = (state = initialState, action) => {
         }
       };
     }
-    case REQUEST_BOOKING_ERROR: {
+    case REQUEST_BOOKING_REQUEST:
       return {
         ...state,
         booking: {
-          isLoading: false,
+          isLoading: true,
         },
+      };
+    case REQUEST_BOOKING_ERROR: {
+      return {
+        ...state,
+        booking: null,
         ...action.messageError,
       };
     }
