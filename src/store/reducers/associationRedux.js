@@ -6,6 +6,7 @@ import {
 } from '../../Utils/ApiUrl';
 import getAxiosInstance from '../../Utils/axios';
 import {dispatchError} from './errorMessageRedux';
+import {getArticles} from './articlesRedux';
 
 //
 // Action types
@@ -116,6 +117,7 @@ export const updateUserAssociation = (associationIdList) => {
             return element.id;
           },
         );
+        dispatch(getArticles([], 1, true));
         dispatch(_updateUserAssociation(userAssociationList));
       })
       .catch((error) => {

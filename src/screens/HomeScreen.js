@@ -94,6 +94,7 @@ class HomeScreen extends Component {
           }}>
           <AssociationMenu screenerTitle="Actualités" />
           <FlatList
+            style={{marginBottom: 'auto'}}
             data={this.props.articles}
             renderItem={({item}) => this.renderItem(item)}
             keyExtractor={(item) => `${item.id}`}
