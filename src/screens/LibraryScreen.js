@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { View, FlatList, SafeAreaView, Text } from "react-native";
-import { connect } from "react-redux";
-import { Icon, Input, Item, Button } from "native-base";
-import * as PropTypes from "prop-types";
-import BookCard from "./LibraryScreen/BookCard";
-import { BOOK_GENRES, LIST_ACTION, SHOW_ACTION } from "../Utils/Constants";
-import ShowBook from "./LibraryScreen/ShowBook";
-import { getBooks, getFavoriteList, showBook } from "../store/reducers/bookRedux";
-import { dispatchErrorMessage } from "../store/reducers/errorMessageRedux";
-import { getFavoriteListIds } from "../store/selectors/bookingSelector";
-import FilterList from "./LibraryScreen/FilterList";
-import ErrorModal from "../Components/ErrorModal";
-import Loader from "../Components/Loader";
-import { isAdmin } from "../Utils/Account";
+import React, {useState, useEffect} from 'react';
+import {View, FlatList, SafeAreaView, Text} from 'react-native';
+import {connect} from 'react-redux';
+import {Icon, Input, Item, Button} from 'native-base';
+import * as PropTypes from 'prop-types';
+import BookCard from './LibraryScreen/BookCard';
+import {BOOK_GENRES} from '../Utils/Constants';
+import {getBooks, getFavoriteList, showBook} from '../store/reducers/bookRedux';
+import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
+import {getFavoriteListIds} from '../store/selectors/bookingSelector';
+import FilterList from './LibraryScreen/FilterList';
+import ErrorModal from '../Components/ErrorModal';
+import Loader from '../Components/Loader';
+import {isAdmin, isSuperAdmin} from '../Utils/Account';
 
-
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   books: state.bookStore.books,
   loading: state.bookStore.loading,
   refreshing: state.bookStore.refreshing,
@@ -25,18 +23,31 @@ const mapStateToProps = state => ({
   errorMessage: state.errorMessageStore.errorMessage,
   getFavoriteListIds: getFavoriteListIds(state),
   account: state.accountStore,
-
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   getBooks: (...args) => dispatch(getBooks(...args)),
   getFavoriteList: (...args) => dispatch(getFavoriteList(...args)),
   dispatchErrorMessage: (...args) => dispatch(dispatchErrorMessage(...args)),
   showBook: (...args) => dispatch(showBook(...args)),
-
 });
 
-const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore, getBooks, showBook, errorMessage, navigation, dispatchErrorMessage, getFavoriteListIds, getFavoriteList, account }) => {
+const LibraryScreen = ({
+  books,
+  page,
+  lastPage,
+  loading,
+  refreshing,
+  handleMore,
+  getBooks,
+  showBook,
+  errorMessage,
+  navigation,
+  dispatchErrorMessage,
+  getFavoriteListIds,
+  getFavoriteList,
+  account,
+}) => {
   const [searchValue, setSearchValue] = useState(null);
   const [filterValue, setFilterValue] = useState(null);
   const [lanceSearch, setLanceSearch] = useState(false);
@@ -53,31 +64,16 @@ const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore,
     }
   }, [lanceSearch]);
 
-
   const handleRefresh = () => {
     if (!refreshing && !handleMore && !loading) {
-      var search = searchValue == "" ? null : searchValue;
-      getBooks(
-        [],
-        1,
-        search,
-        filterValue,
-        true
-      );
-
+      var search = searchValue == '' ? null : searchValue;
+      getBooks([], 1, search, filterValue, true);
     }
   };
 
   const handleLoadMore = () => {
     if (!refreshing && !handleMore && !loading && !lastPage) {
-      getBooks(
-        books,
-        page + 1,
-        searchValue,
-        filterValue,
-        false,
-        true
-      );
+      getBooks(books, page + 1, searchValue, filterValue, false, true);
     }
   };
 
@@ -86,9 +82,9 @@ const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore,
       <View
         style={{
           height: 1,
-          width: "86%",
-          backgroundColor: "#CED0CE",
-          marginLeft: "14%",
+          width: '86%',
+          backgroundColor: '#CED0CE',
+          marginLeft: '14%',
         }}
       />
     );
@@ -96,20 +92,21 @@ const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore,
 
   const handleShowBook = (item) => {
     showBook(item.id);
-    navigation.navigate("BookDetails", { bookId: item.id, bookTitle: item.title });
+    navigation.navigate('BookDetails', {
+      bookId: item.id,
+      bookTitle: item.title,
+    });
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     const isFavorited = () => {
       return getFavoriteListIds.includes(item.id);
-
-    }
+    };
 
     return (
       <BookCard
-        data={{ ...item, isFavorited: isFavorited() }}
+        data={{...item, isFavorited: isFavorited()}}
         showBook={handleShowBook}
-
       />
     );
   };
@@ -118,7 +115,9 @@ const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore,
     if (!searchValue || searchValue.length > 2) {
       handleRefresh();
     } else {
-      dispatchErrorMessage("Le mot recherché doit avoir au minimum 3 caractères");
+      dispatchErrorMessage(
+        'Le mot recherché doit avoir au minimum 3 caractères',
+      );
     }
   };
 
@@ -129,21 +128,31 @@ const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore,
 
   const getFilterLabel = () => {
     if (!filterValue) {
-      return "Sélectionner un genre...";
+      return 'Sélectionner un genre...';
     }
-    const bookGenre = BOOK_GENRES.find(
-      (element) => element.id === filterValue
-    );
+    const bookGenre = BOOK_GENRES.find((element) => element.id === filterValue);
     if (bookGenre) {
       return bookGenre.label;
     }
-    return "";
+    return '';
   };
 
   return (
     <>
-
-      <SafeAreaView style={{ marginTop: 0, opacity: 1 }}>
+      {
+        <View
+          style={{
+            flexDirection: 'row-reverse',
+          }}>
+          <Button
+            transparent
+            onPress={() => navigation.navigate('BookReservation')}>
+            <Icon type="FontAwesome" name="book" />
+            <Text>Réserver</Text>
+          </Button>
+        </View>
+      }
+      <SafeAreaView style={{marginTop: 0, opacity: 1}}>
         <Item
           rounded
           style={{
@@ -153,10 +162,9 @@ const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore,
             paddingLeft: 5,
             borderRadius: 5,
             height: 40,
-            backgroundColor: "#FFF",
+            backgroundColor: '#FFF',
             fontSize: 12,
-          }}
-        >
+          }}>
           <Icon type="AntDesign" name="search1" />
           <Input
             onChangeText={setSearchValue}
@@ -170,7 +178,7 @@ const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore,
             value={searchValue}
           />
         </Item>
-        <View style={{ flexDirection: "row-reverse" }}>
+        <View style={{flexDirection: 'row-reverse'}}>
           <FilterList
             selectedValue={getFilterLabel()}
             updateValue={updaterFilterValue}
@@ -182,24 +190,17 @@ const LibraryScreen = ({ books, page, lastPage, loading, refreshing, handleMore,
           keyExtractor={(item) => `${item.id}`}
           ItemSeparatorComponent={renderSeparator}
           onRefresh={handleRefresh}
-          refreshing={
-            refreshing !== undefined
-              ? refreshing
-              : false
-          }
+          refreshing={false}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
         />
       </SafeAreaView>
 
       <Loader visible={!!loading} />
-      {errorMessage && (
-        <ErrorModal visible message={errorMessage} />
-      )}
+      {errorMessage && <ErrorModal visible message={errorMessage} />}
     </>
   );
-
-}
+};
 
 LibraryScreen.propTypes = {
   books: PropTypes.array,
@@ -213,51 +214,39 @@ LibraryScreen.propTypes = {
   getBooks: PropTypes.func,
   showBook: PropTypes.func,
   account: PropTypes.object,
-
-
 };
 
-LibraryScreen.navigationOptions = ({ navigation }) => {
+LibraryScreen.navigationOptions = ({navigation}) => {
   return {
     headerRight: (
       <SafeAreaView>
-        <View style={{ flexDirection: "row" }}>
-          <Button transparent onPress={() => navigation.navigate("BookReservation")}
+        <View style={{flexDirection: 'row'}}>
+          <Button
+            transparent
+            onPress={() => {
+              navigation.navigate('MyReservations');
+            }}
             style={{
-              marginTop: 20, marginBottom: 20
+              marginTop: 20,
+              marginBottom: 20,
             }}>
-            <Icon type="FontAwesome"
-              name="book" />
-            <Text>Réserver</Text>
-          </Button>
-
-          <Button transparent onPress={() => {
-            navigation.navigate("MyReservations");
-
-          }
-          }
-            style={{
-              marginTop: 20, marginBottom: 20
-            }}>
-            <Icon type="FontAwesome"
-              name="book" />
+            <Icon type="FontAwesome" name="book" />
             <Text>Mes Réservation</Text>
           </Button>
-          <Button transparent onPress={() => navigation.navigate("BookFavoriteList")}
+          <Button
+            transparent
+            onPress={() => navigation.navigate('BookFavoriteList')}
             style={{
-              marginTop: 20, marginBottom: 20, marginRight: 20
-            }}
-
-          >
-            <Icon type="FontAwesome"
-              name="star" />
+              marginTop: 20,
+              marginBottom: 20,
+              marginRight: 20,
+            }}>
+            <Icon type="FontAwesome" name="star" />
             <Text>Favoris</Text>
           </Button>
         </View>
-
       </SafeAreaView>
     ),
   };
-
-}
+};
 export default connect(mapStateToProps, mapDispatchToProps)(LibraryScreen);

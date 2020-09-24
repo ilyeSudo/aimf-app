@@ -21,7 +21,6 @@ import {liveVideoReducer} from './reducers/liveVideoRedux';
 import {associationReducer} from './reducers/associationRedux';
 import {bookReducer} from './reducers/bookRedux';
 
-
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,

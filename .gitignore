@@ -28,6 +28,7 @@ project.xcworkspace
 android/*.hprof
 build/
 .idea
+.vscode
 .gradle
 local.properties
 *.iml

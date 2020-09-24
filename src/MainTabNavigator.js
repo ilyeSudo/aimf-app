@@ -1,8 +1,8 @@
 import React from 'react';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 
-import { Icon } from 'native-base';
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import {Icon} from 'native-base';
+import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import icoMoonConfig from '../config/icons/selection.json';
 
 import HomeScreen from './screens/HomeScreen';
@@ -20,7 +20,6 @@ import BookReservation from './screens/LibraryScreen/BookReservation';
 import MyReservations from './screens/LibraryScreen/MyReservations';
 import BookFavoriteList from './screens/LibraryScreen/BookFavoriteList';
 
-
 const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig);
 // ----------------------------------------------HomeScreen-----------------------------------------------------
 const HomeStack = createStackNavigator({
@@ -29,7 +28,7 @@ const HomeStack = createStackNavigator({
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Accueil',
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <CustomIcon name="minaret" size={25} color="#000" />
   ),
 };
@@ -40,8 +39,8 @@ const disableHomeStack = createStackNavigator({
 
 disableHomeStack.navigationOptions = {
   tabBarLabel: 'Accueil',
-  tabBarIcon: ({ focused }) => (
-    <CustomIcon style={{ opacity: 0.5 }} name="minaret" size={25} color="#000" />
+  tabBarIcon: ({focused}) => (
+    <CustomIcon style={{opacity: 0.5}} name="minaret" size={25} color="#000" />
   ),
 };
 
@@ -52,11 +51,11 @@ const PostWorkflowStack = createStackNavigator({
 
 PostWorkflowStack.navigationOptions = {
   tabBarLabel: 'Post',
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <Icon
       type="AntDesign"
       name="addfile"
-      style={{ fontSize: 23, marginBottom: -3 }}
+      style={{fontSize: 23, marginBottom: -3}}
       color={focused ? '#2f95dc' : '#ccc'}
     />
   ),
@@ -84,7 +83,7 @@ const KoranStack = createStackNavigator({
 
 KoranStack.navigationOptions = {
   tabBarLabel: 'Khetma',
-  tabBarIcon: ({ focused }) => <CustomIcon name="coran" size={25} color="#000" />,
+  tabBarIcon: ({focused}) => <CustomIcon name="coran" size={25} color="#000" />,
 };
 
 const disableKoranStack = createStackNavigator({
@@ -93,8 +92,8 @@ const disableKoranStack = createStackNavigator({
 
 disableKoranStack.navigationOptions = {
   tabBarLabel: 'Khetma',
-  tabBarIcon: ({ focused }) => (
-    <CustomIcon name="coran" style={{ opacity: 0.5 }} size={25} color="#000" />
+  tabBarIcon: ({focused}) => (
+    <CustomIcon name="coran" style={{opacity: 0.5}} size={25} color="#000" />
   ),
 };
 
@@ -119,30 +118,29 @@ const libraryStack = createStackNavigator({
 });
 
 libraryStack.navigationOptions = {
-  tabBarLabel: "Bibliothèque",
-  tabBarIcon: ({ focused }) => (
+  tabBarLabel: 'Bibliothèque',
+  tabBarIcon: ({focused}) => (
     <Icon
       type="FontAwesome"
       name="book"
-      color={focused ? "#2f95dc" : "#ccc"}
-      style={{ fontSize: 28, marginBottom: -3 }}
+      color={focused ? '#2f95dc' : '#ccc'}
+      style={{fontSize: 28, marginBottom: -3}}
     />
   ),
 };
-
 
 const disableLibraryStack = createStackNavigator({
   Timeline: UnaccessibleScreen,
 });
 
 disableLibraryStack.navigationOptions = {
-  tabBarLabel: "Bibliothèque",
-  tabBarIcon: ({ focused }) => (
+  tabBarLabel: 'Bibliothèque',
+  tabBarIcon: ({focused}) => (
     <Icon
       type="FontAwesome"
       name="book"
-      color={focused ? "#2f95dc" : "#ccc"}
-      style={{ fontSize: 35, marginBottom: -3 }}
+      color={focused ? '#2f95dc' : '#ccc'}
+      style={{fontSize: 35, marginBottom: -3}}
     />
   ),
 };
@@ -153,16 +151,15 @@ const YouTubeStack = createStackNavigator({
 
 YouTubeStack.navigationOptions = {
   tabBarLabel: 'Direct',
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <Icon
       type="SimpleLineIcons"
       name="social-youtube"
-      style={{ fontSize: 30, marginBottom: -3 }}
+      style={{fontSize: 30, marginBottom: -3}}
       color={focused ? '#2f95dc' : '#ccc'}
     />
   ),
 };
-
 
 const disableYouTubeStack = createStackNavigator({
   Youtube: UnaccessibleScreen,
@@ -170,11 +167,11 @@ const disableYouTubeStack = createStackNavigator({
 
 disableYouTubeStack.navigationOptions = {
   tabBarLabel: 'Direct',
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <Icon
       type="SimpleLineIcons"
       name="social-youtube"
-      style={{ opacity: 0.5 }}
+      style={{opacity: 0.5}}
       color="#000"
     />
   ),
@@ -187,12 +184,12 @@ const AccountStack = createStackNavigator({
 
 AccountStack.navigationOptions = {
   tabBarLabel: 'Compte',
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <Icon
       type="EvilIcons"
       name="user"
       color={focused ? '#2f95dc' : '#ccc'}
-      style={{ fontSize: 35, marginBottom: -3 }}
+      style={{fontSize: 35, marginBottom: -3}}
     />
   ),
 };
@@ -204,12 +201,12 @@ const UserStack = createStackNavigator({
 
 UserStack.navigationOptions = {
   tabBarLabel: 'User',
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <Icon
       type="FontAwesome5"
       name="user-check"
       color={focused ? '#2f95dc' : '#ccc'}
-      style={{ marginBottom: -3, fontSize: 18 }}
+      style={{marginBottom: -3, fontSize: 18}}
     />
   ),
 };
@@ -232,7 +229,7 @@ export const unActiveUserTabNavigator = createBottomTabNavigator(
   },
   {
     defaultNavigationOptions: {
-      tabBarOnPress: ({ navigation, defaultHandler }) => {
+      tabBarOnPress: ({navigation, defaultHandler}) => {
         if (
           navigation.state.routeName === 'disableHomeStack' ||
           navigation.state.routeName === 'disableKoranStack' ||
@@ -240,7 +237,7 @@ export const unActiveUserTabNavigator = createBottomTabNavigator(
         ) {
           return null;
         }
-        return defaultHandler();
+        defaultHandler();
       },
     },
     initialRouteName: 'AccountStack',
@@ -275,7 +272,7 @@ export const adminUserTabNavigator = createBottomTabNavigator(
   },
   {
     defaultNavigationOptions: {
-      tabBarOnPress: ({ navigation, defaultHandler }) => {
+      tabBarOnPress: ({navigation, defaultHandler}) => {
         if (navigation.state.routeName === 'disableYouTubeStack') {
           return null;
         }
@@ -306,7 +303,7 @@ export const adminAssociationTabNavigator = createBottomTabNavigator(
   },
   {
     defaultNavigationOptions: {
-      tabBarOnPress: ({ navigation, defaultHandler }) => {
+      tabBarOnPress: ({navigation, defaultHandler}) => {
         if (navigation.state.routeName === 'disableYouTubeStack') {
           return null;
         }
