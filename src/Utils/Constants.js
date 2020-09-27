@@ -41,6 +41,15 @@ export const FEMALE_GENDER = 'female';
 export const SERVER_ERROR_MESSAGE =
   'Une erreur est survenue, merci de réessayer ultérieurement';
 
+export const BOOK_GENRES = [
+  {id: 0, label: 'Tous'},
+  {id: 1, label: 'Roman & Fiction'},
+  {id: 2, label: 'BD & Mangas'},
+  {id: 3, label: 'Religion'},
+  {id: 4, label: 'Art & Culture'},
+  {id: 5, label: 'Education'},
+  {id: 6, label: 'Santé'},
+];
 export const UPDATE_USER_STATUS_CONFIRM_MESSAGE =
   'Etes vous sûr de vouloir activer/désactiver cet utilisateur ?';
 export const UPDATE_ADMIN_ROLE_CONFIRM_MESSAGE =

@@ -36,10 +36,10 @@ export const getFrDate = (date, time = false) => {
   return date;
 };
 
-export const isoDateToFr = (isoDate: string) => {
+export const isoDateToFr = (isoDate: string, withTime = true) => {
   const fullDate = isoDate.split(' ');
   const date = fullDate[0].split('-');
-  const time = fullDate.length === 2 ? fullDate[1] : '';
+  const time = withTime ? (fullDate.length === 2 ? fullDate[1] : '') : '';
   return `${date[2]}/${date[1]}/${date[0]} ${time}`;
 };
 

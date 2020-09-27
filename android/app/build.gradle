@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 import com.android.build.OutputFile
 
@@ -129,6 +130,8 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true  // needed for firestore:
+        missingDimensionStrategy 'react-native-camera', 'mlkit' // <--- replace general with mlkit
+
     }
     signingConfigs {
         release {
@@ -176,7 +179,7 @@ android {
         pickFirst "lib/x86/libc++_shared.so"
         pickFirst "lib/x86_64/libc++_shared.so"
     }
-    
+
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->

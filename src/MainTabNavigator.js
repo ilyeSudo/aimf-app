@@ -14,6 +14,11 @@ import AccountScreen from './screens/AccountScreen';
 import UserScreen from './screens/UserScreen';
 import UnaccessibleScreen from './screens/UnaccessibleScreen';
 import YouTubeScreen from './screens/YouTubeSceen';
+import LibraryScreen from './screens/LibraryScreen';
+import BookDetails from './screens/LibraryScreen/BookDetails';
+import BookReservation from './screens/LibraryScreen/BookReservation';
+import MyReservations from './screens/LibraryScreen/MyReservations';
+import BookFavoriteList from './screens/LibraryScreen/BookFavoriteList';
 
 const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig);
 // ----------------------------------------------HomeScreen-----------------------------------------------------
@@ -92,6 +97,53 @@ disableKoranStack.navigationOptions = {
   ),
 };
 
+// ----------------------------------------------LibraryScreen-----------------------------------------------------
+
+const libraryStack = createStackNavigator({
+  LibraryTimeLine: {
+    screen: LibraryScreen,
+  },
+  BookDetails: {
+    screen: BookDetails,
+  },
+  BookReservation: {
+    screen: BookReservation,
+  },
+  BookFavoriteList: {
+    screen: BookFavoriteList,
+  },
+  MyReservations: {
+    screen: MyReservations,
+  },
+});
+
+libraryStack.navigationOptions = {
+  tabBarLabel: 'Bibliothèque',
+  tabBarIcon: ({focused}) => (
+    <Icon
+      type="FontAwesome"
+      name="book"
+      color={focused ? '#2f95dc' : '#ccc'}
+      style={{fontSize: 28, marginBottom: -3}}
+    />
+  ),
+};
+
+const disableLibraryStack = createStackNavigator({
+  Timeline: UnaccessibleScreen,
+});
+
+disableLibraryStack.navigationOptions = {
+  tabBarLabel: 'Bibliothèque',
+  tabBarIcon: ({focused}) => (
+    <Icon
+      type="FontAwesome"
+      name="book"
+      color={focused ? '#2f95dc' : '#ccc'}
+      style={{fontSize: 35, marginBottom: -3}}
+    />
+  ),
+};
 // ----------------------------------------------YouTubeScreen-----------------------------------------------------
 const YouTubeStack = createStackNavigator({
   YouTube: YouTubeScreen,
@@ -159,12 +211,19 @@ UserStack.navigationOptions = {
   ),
 };
 
+export const bottomActiveUserTabNavigator = createBottomTabNavigator({
+  HomeStack,
+  KoranStack,
+  libraryStack,
+  AccountStack,
+});
 // ----------------------------------------------Tab navigators-----------------------------------------------------
 
 export const unActiveUserTabNavigator = createBottomTabNavigator(
   {
     disableHomeStack,
     disableKoranStack,
+    libraryStack,
     disableYouTubeStack,
     AccountStack,
   },
@@ -188,6 +247,7 @@ export const unActiveUserTabNavigator = createBottomTabNavigator(
 export const activeUserWithYoutubeLiveTabNavigator = createBottomTabNavigator({
   HomeStack,
   KoranStack,
+  libraryStack,
   YouTubeStack,
   AccountStack,
 });
@@ -195,6 +255,7 @@ export const activeUserWithYoutubeLiveTabNavigator = createBottomTabNavigator({
 export const activeUserTabNavigator = createBottomTabNavigator({
   HomeStack,
   KoranStack,
+  libraryStack,
   YouTubeStack,
   AccountStack,
 });
@@ -203,6 +264,7 @@ export const adminUserTabNavigator = createBottomTabNavigator(
   {
     HomeStack,
     KoranStack,
+    libraryStack,
     PostWorkflowStack,
     disableYouTubeStack,
     UserStack,
@@ -224,6 +286,7 @@ export const adminUserTabNavigator = createBottomTabNavigator(
 export const adminUserWithYoutubeLiveTabNavigator = createBottomTabNavigator({
   HomeStack,
   KoranStack,
+  libraryStack,
   PostWorkflowStack,
   YouTubeStack,
   UserStack,
