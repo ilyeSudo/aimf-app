@@ -33,7 +33,7 @@ class Loading extends React.Component {
   }
 
   componentDidMount() {
-    this.notification = new Notifications(this.onRegister.bind(this), null);
+    //this.notification = new Notifications(this.onRegister.bind(this), null);
 
     if (this.props.account && this.props.account.access_token) {
       axios.defaults.headers.Authorization = `Bearer ${this.props.account.access_token}`;
@@ -70,6 +70,18 @@ class Loading extends React.Component {
 
   onNotification = (notification) => {
     console.log('[App] onNotification: ', notification);
+    const options = {
+      soundName: 'default',
+      playSound: true,
+    };
+
+    this.localNotificationService.showNotification(
+      0,
+      notification.title,
+      notification.body,
+      notification,
+      options,
+    );
     if (
       notification?.notification_alias ||
       notification?.data?.notification_alias

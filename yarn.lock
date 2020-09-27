@@ -1062,6 +1062,13 @@
   dependencies:
     invariant "^2.2.4"
 
+"@react-native-community/push-notification-ios@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/push-notification-ios/-/push-notification-ios-1.5.0.tgz#b41802b58d2388c8cb76cd219bbeec9ac9a4c06d"
+  integrity sha512-88Uwu6S8oRVnuMfBMGN+MtTyUjiVmMKwfObYrPmm+b2E2Aqk0WlZ4clfECukG8QIzv1pfELJZ5uZMVTYMI6klg==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-community/toolbar-android@react-native-community/toolbar-android":
   version "0.1.0-rc.2"
   resolved "https://codeload.github.com/react-native-community/toolbar-android/tar.gz/e7b37ad740580c5ac202524fa888768af419cd67"
@@ -7675,7 +7682,6 @@ react-native-modal-datetime-picker@^8.9.3:
   dependencies:
     prop-types "^15.7.2"
 
-<<<<<<< Updated upstream
 react-native-push-notification@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-5.1.0.tgz#7dca8e95093ffc3b01cc4e38a78d4b27787b0f1d"
@@ -7683,8 +7689,6 @@ react-native-push-notification@^5.1.0:
   dependencies:
     "@react-native-community/push-notification-ios" "^1.4.0"
 
-=======
->>>>>>> Stashed changes
 react-native-ratings@^6.3.0:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-6.5.0.tgz#a1606ccba3c5b54eec8e6cfa4765a45cf0e4ab8d"
