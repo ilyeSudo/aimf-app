@@ -11,7 +11,7 @@ import {getFavoriteListIds} from '../store/selectors/bookingSelector';
 import FilterList from './LibraryScreen/FilterList';
 import ErrorModal from '../Components/ErrorModal';
 import Loader from '../Components/Loader';
-import {isAdmin, isSuperAdmin} from '../Utils/Account';
+import {canReserveBook} from '../Utils/Account';
 
 const mapStateToProps = (state) => ({
   books: state.bookStore.books,
@@ -139,7 +139,7 @@ const LibraryScreen = ({
 
   return (
     <>
-      {
+      {canReserveBook(account.user) && (
         <View
           style={{
             flexDirection: 'row-reverse',
@@ -151,7 +151,7 @@ const LibraryScreen = ({
             <Text>Réserver</Text>
           </Button>
         </View>
-      }
+      )}
       <SafeAreaView style={{marginTop: 0, opacity: 1}}>
         <Item
           rounded

@@ -1,5 +1,10 @@
 import axios from 'axios';
-import {ADMIN_ROLE, MEMBER_ROLE, SUPER_ADMIN_ROLE} from './Constants';
+import {
+  ADMIN_ROLE,
+  LIBRARIAN_ROLE,
+  MEMBER_ROLE,
+  SUPER_ADMIN_ROLE,
+} from './Constants';
 
 export const isSuperAdmin = (user) => {
   if (user && user.roles) {
@@ -35,11 +40,22 @@ export const isAuthorized = (user) => {
   return (
     isSuperAdmin(user) ||
     isAdmin(user) ||
+    isLibrarian(user) ||
     isMember(user) ||
     isAssociationAdmin(user)
   );
 };
 
+export const isLibrarian = (user) => {
+  if (user && user.roles) {
+    return !!user.roles.find((role) => role.name === LIBRARIAN_ROLE);
+  }
+  return false;
+};
+
+export const canReserveBook = (user) => {
+  return isSuperAdmin(user) || isAdmin(user) || isLibrarian(user);
+};
 export const navigate = (
   account,
   navigation,
@@ -61,7 +77,7 @@ export const navigate = (
           ? 'adminAssociationTabNavigator'
           : 'adminAssociationWithYoutubeLiveTabNavigator',
       );
-    } else if (isMember(account.user)) {
+    } else if (isMember(account.user) || isLibrarian(account.user)) {
       navigation.navigate(
         youtube
           ? 'activeUserWithYoutubeLiveTabNavigator'
