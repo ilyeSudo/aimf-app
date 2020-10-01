@@ -211,12 +211,6 @@ UserStack.navigationOptions = {
   ),
 };
 
-export const bottomActiveUserTabNavigator = createBottomTabNavigator({
-  HomeStack,
-  KoranStack,
-  libraryStack,
-  AccountStack,
-});
 // ----------------------------------------------Tab navigators-----------------------------------------------------
 
 export const unActiveUserTabNavigator = createBottomTabNavigator(
@@ -256,7 +250,7 @@ export const activeUserTabNavigator = createBottomTabNavigator({
   HomeStack,
   KoranStack,
   libraryStack,
-  YouTubeStack,
+  disableYouTubeStack,
   AccountStack,
 });
 
