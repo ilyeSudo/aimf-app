@@ -62,31 +62,23 @@ export const navigate = (
   defaultNavigation = 'Login',
   youtube = false,
 ) => {
+  let screen = defaultNavigation;
+  let live = !!youtube;
   if (account.user && account.access_token) {
     axios.defaults.headers.Authorization = `Bearer ${account.access_token}`;
 
     if (isAdmin(account.user) || isSuperAdmin(account.user)) {
-      navigation.navigate(
-        youtube
-          ? 'adminUserWithYoutubeLiveTabNavigator'
-          : 'adminUserTabNavigator',
-      );
+      screen = 'adminUser';
     } else if (isAssociationAdmin(account.user)) {
-      navigation.navigate(
-        youtube
-          ? 'adminAssociationTabNavigator'
-          : 'adminAssociationWithYoutubeLiveTabNavigator',
-      );
+      screen = 'adminAssociation';
     } else if (isMember(account.user) || isLibrarian(account.user)) {
-      navigation.navigate(
-        youtube
-          ? 'activeUserWithYoutubeLiveTabNavigator'
-          : 'activeUserTabNavigator',
-      );
+      screen = 'activeUser';
     } else {
+      screen = 'unActiveUser';
+      live = false;
       navigation.navigate('unActiveUserTabNavigator');
     }
-    return;
+    screen = screen + (live ? 'WithYoutubeLive' : '') + 'TabNavigator';
   }
-  navigation.navigate(defaultNavigation);
+  navigation.navigate(screen);
 };
