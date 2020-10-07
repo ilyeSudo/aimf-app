@@ -58,7 +58,7 @@ const BookReservation = ({
   const [returnDate, setReturnDate] = useState(addDays(new Date(), 15));
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
-  const [zip_code, setZipCode] = useState('');
+  const [zipCode, setZipCode] = useState('');
   const [city, setCity] = useState('');
   const [copyNumber, setCopyNumber] = useState(null);
 
@@ -68,7 +68,7 @@ const BookReservation = ({
       setReturnDate(booking.user.returnDate);
       setAddress1(booking.user.address1);
       setAddress2(booking.user.address2);
-      setZipCode(booking.user.zip_code);
+      setZipCode(booking.user.zipCode);
       setCity(booking.user.city);
     }
   }, [booking]);
@@ -87,7 +87,7 @@ const BookReservation = ({
     if (!phoneNumber) {
       return 'Veuillez renseigner le numéro de téléphone.';
     }
-    if ((!address1 && !address2) || !zip_code || !city) {
+    if ((!address1 && !address2) || !zipCode || !city) {
       return "Veuillez renseigner l'addresse personnelle de celui qui va reserver le livre.";
     }
     if (!isCorrectPhoneNumber(phoneNumber)) {
@@ -161,7 +161,7 @@ const BookReservation = ({
               keyboardType="numeric"
               onChange={setZipCode}
               required
-              value={zip_code}
+              value={zipCode}
             />
             <RenderInput
               label="Ville"
@@ -196,7 +196,7 @@ const BookReservation = ({
                   userId: booking.user.id,
                   address1,
                   address2,
-                  zipCode: zip_code,
+                  zipCode: zipCode,
                   city,
                   phoneNumber,
                   copyNumber,
