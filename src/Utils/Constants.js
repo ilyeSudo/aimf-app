@@ -1,10 +1,13 @@
 export const CREDENTIALS_EMPTY_ERROR =
   'Merci de saisir votre login et mot de passse';
-export const LIST_ACTION = 'list';
-export const SHOW_ACTION = 'show';
-export const CREATE_ACTION = 'create';
-export const UPDATE_ACTION = 'update';
+export const LIST_USER_ACTION = 'list_user';
+export const SHOW_USER_ACTION = 'show_user';
+export const CREATE_ACCOUNT_ACTION = 'create_account';
+export const SHOW_ACCOUNT_ACTION = 'show_account';
+export const UPDATE_ACCOUNT_ACTION = 'update_account';
 export const SHOW_CONDITION_ACTION = 'show_condition';
+export const LIST_BOOK_ACTION = 'list_book';
+
 export const MARRIED = 'married';
 export const SINGLE = 'single';
 

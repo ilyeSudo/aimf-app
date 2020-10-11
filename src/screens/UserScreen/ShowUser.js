@@ -6,7 +6,7 @@ import SpinnerButton from 'react-native-spinner-button';
 import InformationsModal from '../../Components/InformationsModal';
 import SettingsSwitch from '../../Components/switch';
 import {
-  LIST_ACTION,
+  LIST_USER_ACTION,
   MARRIED,
   FEMALE_GENDER,
   UPDATE_ADMIN_ROLE_CONFIRM_MESSAGE,
@@ -96,7 +96,10 @@ class ShowUser extends Component {
 
   getSecurityQuestionBlock = () => {
     const rows = [];
-    if (this.props.data.securityQuestions.length > 0) {
+    if (
+      this.props?.data?.securityQuestions &&
+      this.props.data.securityQuestions.length > 0
+    ) {
       rows.push(
         <View
           key="securityQuestions"
@@ -175,7 +178,7 @@ class ShowUser extends Component {
 
   getChildrenBlock = () => {
     const rows = [];
-    if (this.props.data.children.length > 0) {
+    if (this.props?.data?.children && this.props.data.children.length > 0) {
       rows.push(
         <View
           key="childrens"
@@ -363,7 +366,7 @@ class ShowUser extends Component {
           <Button
             transparent
             onPress={() => {
-              this.props.updateAction(LIST_ACTION);
+              this.props.updateAction(LIST_USER_ACTION);
             }}
             style={{borderRadius: 30, marginLeft: 20, marginBottom: 20}}>
             <Icon

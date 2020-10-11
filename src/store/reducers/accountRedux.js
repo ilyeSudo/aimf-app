@@ -7,7 +7,7 @@ import {
   POST_RESET_PASSWORD_URI,
 } from '../../Utils/ApiUrl';
 import {dispatchError} from './errorMessageRedux';
-import {SHOW_ACTION} from '../../Utils/Constants';
+import {SHOW_ACCOUNT_ACTION} from '../../Utils/Constants';
 
 export const PATCH_UPDATE_USER_REQUEST = 'PATCH_UPDATE_USER_REQUEST';
 export const PATCH_UPDATE_USER_SUCCESS = 'PATCH_UPDATE_USER_SUCCESS';
@@ -41,7 +41,7 @@ const patchUpdateError = () => {
 const patchUpdateSuccess = (data) => {
   return {
     type: PATCH_UPDATE_USER_SUCCESS,
-    payload: {loading: false, action: SHOW_ACTION, ...data},
+    payload: {loading: false, action: SHOW_ACCOUNT_ACTION, ...data},
   };
 };
 
@@ -160,7 +160,7 @@ export const storeAccount = (data) => {
   };
 };
 
-const initialState = {action: SHOW_ACTION};
+const initialState = {action: SHOW_ACCOUNT_ACTION};
 
 export const accountReducer = (state = initialState, action) => {
   switch (action.type) {
