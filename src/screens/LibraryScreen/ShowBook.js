@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {ScrollView, View} from 'react-native';
 import {Button, Icon} from 'native-base';
-import {LIST_ACTION} from '../../Utils/Constants';
+import {LIST_BOOK_ACTION} from '../../Utils/Constants';
 
 class ShowBook extends Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class ShowBook extends Component {
             transparent
             onPress={() => {
               this.props.updateState({
-                action: LIST_ACTION,
+                action: LIST_BOOK_ACTION,
               });
             }}
             style={{borderRadius: 30, marginLeft: 20, marginBottom: 20}}>
