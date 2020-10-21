@@ -36,6 +36,10 @@ target 'AIMF_APP' do
   pod 'AppCenter/Analytics', '~> 3.0.0'
   pod 'AppCenterReactNativeShared', '~> 3.0.0'
   pod "YoutubePlayer-in-WKWebView", "~> 0.3.0"
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Database'
+  pod 'Firebase/Firestore'
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
   use_native_modules!

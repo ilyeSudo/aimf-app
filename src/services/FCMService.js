@@ -82,7 +82,8 @@ export default class FCMService {
         remoteMessage,
       );
       if (remoteMessage) {
-        onOpenNotification(remoteMessage);
+        const notification = remoteMessage.notification;
+        onOpenNotification(notification);
         // this.removeDeliveredNotification(notification.notificationId)
       }
     });
@@ -106,16 +107,16 @@ export default class FCMService {
     this.messageListener = messaging().onMessage(async (remoteMessage) => {
       console.log('[FCMService] A new FCM message arrived!', remoteMessage);
       if (remoteMessage) {
-        // let notification = null;
-        // if (Platform.OS === 'ios') {
-        //   notification = remoteMessage.data.notification;
-        // } else {
-        //   notification = remoteMessage.notification;
-        //   notification = {
-        //     ...notification,
-        //     notification_alias: remoteMessage.data.notification_alias,
-        //   };
-        // }
+        let notification = null;
+        if (Platform.OS === 'ios') {
+          notification = remoteMessage.data.notification;
+        } else {
+          notification = remoteMessage.notification;
+          notification = {
+            ...notification,
+            notification_alias: remoteMessage.data.notification_alias,
+          };
+        }
         onNotification(remoteMessage);
       }
     });

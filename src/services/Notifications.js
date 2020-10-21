@@ -1,11 +1,5 @@
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import {Platform} from 'react-native';
-
-// PushNotificationIOS.addEventListener(
-//   'register',
-//   this.appRegistrationHandlerIos,
-// );
 
 export default class Notifications {
   configure = (onRegister, onNotification) => {

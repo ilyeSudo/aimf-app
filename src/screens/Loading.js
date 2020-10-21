@@ -109,6 +109,8 @@ class Loading extends React.Component {
         ? notification.notification_alias
         : notification.data.notification_alias;
 
+      console.log('Action: ', action);
+
       if (action === ACTIVE_USER_ALIAS) {
         this.props.logout();
       }
