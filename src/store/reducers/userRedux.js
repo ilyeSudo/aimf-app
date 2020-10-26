@@ -2,7 +2,7 @@ import {batchActions} from 'redux-batched-actions';
 import getAxiosInstance from '../../Utils/axios';
 import {GET_USERS_URI, PATCH_UPDATE_USER_URI} from '../../Utils/ApiUrl';
 import {dispatchError} from './errorMessageRedux';
-import {SHOW_ACTION} from '../../Utils/Constants';
+import {SHOW_USER_ACTION} from '../../Utils/Constants';
 
 const GET_USERS_REQUEST = 'GET_USERS_REQUEST';
 const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS';
@@ -138,7 +138,7 @@ export const showUser = (data, currentUserIndex) => {
     type: SHOW_USER,
     payload: {
       userToShow: data,
-      action: SHOW_ACTION,
+      action: SHOW_USER_ACTION,
       currentUserIndex,
     },
   };

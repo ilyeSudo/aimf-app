@@ -58,6 +58,7 @@ const BookReservation = ({
 
   useEffect(() => {
     if (booking && booking.isLoading == false) {
+
       booking.user.phoneNumber && setPhoneNumber(booking.user.phoneNumber);
       booking.user.returnDate && setReturnDate(booking.user.returnDate);
       booking.user.address1 && setAddress1(booking.user.address1);

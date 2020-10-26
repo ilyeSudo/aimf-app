@@ -5,7 +5,11 @@ import {
   isCorrectPassword,
   isCorrectZipCode,
 } from '../../Utils/Functions';
-import {CREATE_ACTION, MARRIED, UPDATE_ACTION} from '../../Utils/Constants';
+import {
+  CREATE_ACCOUNT_ACTION,
+  MARRIED,
+  UPDATE_ACCOUNT_ACTION,
+} from '../../Utils/Constants';
 
 const checkFormValues = (values) => {
   if (!values.gender) {
@@ -35,7 +39,7 @@ const checkFormValues = (values) => {
   if (!values.email) {
     return 'Veuillez renseigner votre email';
   }
-  if (values.action === CREATE_ACTION) {
+  if (values.action === CREATE_ACCOUNT_ACTION) {
     if (!values.response1) {
       return 'Veuillez renseigner la réponse à la première question';
     }
@@ -43,18 +47,18 @@ const checkFormValues = (values) => {
       return 'Veuillez renseigner la réponse à la deuxième question';
     }
   }
-  if (values.action === UPDATE_ACTION && !values.functionName) {
+  if (values.action === UPDATE_ACCOUNT_ACTION && !values.functionName) {
     return 'Veuillez renseigner votre fonction';
   }
   if (
-    values.action === UPDATE_ACTION &&
+    values.action === UPDATE_ACCOUNT_ACTION &&
     values.maritalStatus === MARRIED &&
     !(parseInt(values.childrenNumber, 10) >= 0)
   ) {
     return 'Veuillez renseigner le nombre de vos enfants scolarisés';
   }
   const errorsPAssword =
-    values.action === CREATE_ACTION &&
+    values.action === CREATE_ACCOUNT_ACTION &&
     (!isCorrectPassword(values.password) ||
       !isCorrectPassword(values.confirmPassword));
 
@@ -63,7 +67,8 @@ const checkFormValues = (values) => {
     !isCorrectName(values.lastName) ||
     !isCorrectName(values.firstName) ||
     !isCorrectName(values.middleName) ||
-    (!values.action === UPDATE_ACTION && isCorrectName(values.functionName)) ||
+    (!values.action === UPDATE_ACCOUNT_ACTION &&
+      isCorrectName(values.functionName)) ||
     !isCorrectPhoneNumber(values.phoneNumber) ||
     !isCorrectZipCode(values.zipCode) ||
     errorsPAssword
@@ -75,7 +80,7 @@ const checkFormValues = (values) => {
     return 'Les deux mots de passe doivent êtres identiques';
   }
 
-  if (values.action === UPDATE_ACTION) {
+  if (values.action === UPDATE_ACCOUNT_ACTION) {
     if (values.oldPassword && (!values.password || !values.confirmPassword)) {
       return 'Veuillez saisir le nouveau mot de passe et la confirmation de celui-ci';
     }
@@ -84,7 +89,7 @@ const checkFormValues = (values) => {
     }
   }
 
-  if (values.action === CREATE_ACTION) {
+  if (values.action === CREATE_ACCOUNT_ACTION) {
     if (!values.readTermsOfUse) {
       return 'Veuillez lire et accépter les conditions générales';
     }
