@@ -139,8 +139,8 @@ disableLibraryStack.navigationOptions = {
     <Icon
       type="FontAwesome"
       name="book"
-      color={focused ? '#2f95dc' : '#ccc'}
-      style={{fontSize: 35, marginBottom: -3}}
+      color="#000"
+      style={{fontSize: 35, marginBottom: -3, opacity: 0.5}}
     />
   ),
 };
@@ -217,7 +217,7 @@ export const unActiveUserTabNavigator = createBottomTabNavigator(
   {
     disableHomeStack,
     disableKoranStack,
-    libraryStack,
+    disableLibraryStack,
     disableYouTubeStack,
     AccountStack,
   },
@@ -227,7 +227,8 @@ export const unActiveUserTabNavigator = createBottomTabNavigator(
         if (
           navigation.state.routeName === 'disableHomeStack' ||
           navigation.state.routeName === 'disableKoranStack' ||
-          navigation.state.routeName === 'disableYouTubeStack'
+          navigation.state.routeName === 'disableYouTubeStack' ||
+          navigation.state.routeName === 'disableLibraryStack'
         ) {
           return null;
         }

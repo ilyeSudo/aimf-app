@@ -5,7 +5,7 @@ import * as PropTypes from 'prop-types';
 import ShowAccount from './AccountScreen/ShowAccount';
 import AccountForm from '../Components/AccountForm';
 import {getFullName, getIsoDate} from '../Utils/Functions';
-import {SHOW_ACTION, UPDATE_ACTION} from '../Utils/Constants';
+import {SHOW_ACCOUNT_ACTION, UPDATE_ACCOUNT_ACTION} from '../Utils/Constants';
 import ErrorModal from '../Components/ErrorModal';
 import {logout} from '../store/reducers/authenticationRedux';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
@@ -97,7 +97,10 @@ class AccountScreen extends Component {
   };
 
   onSubmit = () => {
-    const data = {...this.getDataFromState(true), action: UPDATE_ACTION};
+    const data = {
+      ...this.getDataFromState(true),
+      action: UPDATE_ACCOUNT_ACTION,
+    };
     const error = checkFormValues(data);
     if (error) {
       this.props.dispatchErrorMessage(error);
@@ -144,7 +147,7 @@ class AccountScreen extends Component {
     if (this.state.email) {
       return (
         <>
-          {this.props.action === SHOW_ACTION ? (
+          {this.props.action === SHOW_ACCOUNT_ACTION ? (
             <ShowAccount
               user={this.props.account && this.props.account.user}
               gender={this.state.gender}
@@ -157,7 +160,7 @@ class AccountScreen extends Component {
               scrollViewOpacity={
                 this.props.loading || this.props.errorMessage ? 0.6 : 1
               }
-              action={UPDATE_ACTION}
+              action={UPDATE_ACCOUNT_ACTION}
               data={data}
               initData={this.state.initData}
               navigation={this.props.navigation}

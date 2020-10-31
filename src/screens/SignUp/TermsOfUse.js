@@ -1,7 +1,7 @@
 import {ScrollView, Text, View} from 'react-native';
 import React, {Component} from 'react';
 import {Button, Icon} from 'native-base';
-import {CREATE_ACTION} from '../../Utils/Constants';
+import {CREATE_ACCOUNT_ACTION} from '../../Utils/Constants';
 import {Text as ElementText} from 'react-native-elements';
 import * as PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -24,7 +24,7 @@ class TermsOfUse extends Component {
         <View>
           <Button
             transparent
-            onPress={() => this.props.updateAction(CREATE_ACTION)}
+            onPress={() => this.props.updateAction(CREATE_ACCOUNT_ACTION)}
             style={{borderRadius: 30, width: 50}}>
             <Icon
               style={{color: '#000'}}
