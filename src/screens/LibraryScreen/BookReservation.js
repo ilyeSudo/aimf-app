@@ -1,20 +1,12 @@
-// just for admin
-// read QR code to retreive book and user
-// Request Un new reseravation from back end
-// Date de disponibilite
-// saisir le numero d'examplaire s'il y a plusiur
-// valider.
-// send reservation to backend
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
-import {requestBooking, validateBooking} from '../../store/reducers/bookRedux';
+import {requestBooking, validateBooking,cancelBooking} from '../../store/reducers/bookRedux';
 import {dispatchErrorMessage} from '../../store/reducers/errorMessageRedux';
 import {Button, Container, Icon, Item, View, Label, Content} from 'native-base';
 import DatePicker from '../../Components/DatePicker';
 import moment from 'moment';
 import {Text, ActivityIndicator} from 'react-native';
 import RenderInput from '../../Components/RenderInput';
-
 import {isCorrectPhoneNumber} from '../../Utils/Functions';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
@@ -25,6 +17,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   requestBooking: (...args) => dispatch(requestBooking(...args)),
   validateBooking: (...args) => dispatch(validateBooking(...args)),
+  cancelBooking:(...args) => dispatch(cancelBooking(...args)),
   dispatchErrorMessage: (...args) => dispatch(dispatchErrorMessage(...args)),
 });
 const getQrCodeBooking = (qrCodeBooking) => {
@@ -38,7 +31,7 @@ const getQrCodeBooking = (qrCodeBooking) => {
         return objRequestBooking;
       }
     } catch (e) {
-      alert(e); // error in the above string (in this case, yes)!
+      alert(e); 
     }
     return null;
   }
@@ -52,6 +45,7 @@ const BookReservation = ({
   booking,
   requestBooking,
   validateBooking,
+  cancelBooking,
   navigation,
 }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -60,16 +54,17 @@ const BookReservation = ({
   const [address2, setAddress2] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [city, setCity] = useState('');
-  const [copyNumber, setCopyNumber] = useState(null);
+  const [copyNumber, setCopyNumber] = useState('1');
 
   useEffect(() => {
     if (booking && booking.isLoading == false) {
-      setPhoneNumber(booking.user.phoneNumber);
-      setReturnDate(booking.user.returnDate);
-      setAddress1(booking.user.address1);
-      setAddress2(booking.user.address2);
-      setZipCode(booking.user.zipCode);
-      setCity(booking.user.city);
+
+      booking.user.phoneNumber && setPhoneNumber(booking.user.phoneNumber);
+      booking.user.returnDate && setReturnDate(booking.user.returnDate);
+      booking.user.address1 && setAddress1(booking.user.address1);
+      booking.user.address2 && setAddress2(booking.user.address2);
+      booking.user.zipCode && setZipCode(booking.user.zipCode);
+      booking.user.city && setCity(booking.user.city);
     }
   }, [booking]);
 
@@ -131,7 +126,7 @@ const BookReservation = ({
               <Label>Genre: {booking.book.genre.name}</Label>
             </Item>
             <Item regular>
-              <Label>Rayon: {booking.book.rayon}</Label>
+              <Label>Rayon: {booking.book.shelf}</Label>
             </Item>
 
             <RenderInput
@@ -196,7 +191,7 @@ const BookReservation = ({
                   userId: booking.user.id,
                   address1,
                   address2,
-                  zipCode: zipCode,
+                  zipCode,
                   city,
                   phoneNumber,
                   copyNumber,
@@ -207,6 +202,16 @@ const BookReservation = ({
               }}>
               <Icon name="home" />
               <Text>Confirmer la réservation</Text>
+            </Button>
+            <Button
+              rounded
+              warning
+              onPress={() => {
+                cancelBooking();
+                navigation.goBack();
+              }}>
+              <Icon name="cancel" />
+              <Text>Annuler la réservation</Text>
             </Button>
           </Content>
         </Container>

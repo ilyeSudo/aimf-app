@@ -12,6 +12,8 @@ import {
 import {TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import {API_BASE_URL} from 'react-native-dotenv';
+import {isoDateToFr} from '../../Utils/Functions';
+
 
 const BookCard = ({data, showBook}) => {
   const {
@@ -65,7 +67,7 @@ const BookCard = ({data, showBook}) => {
                 color: isAvailable ? 'green' : 'gray',
               }}
             />
-            {availabilityDate && <Text note>{availabilityDate} </Text>}
+            {availabilityDate && <Text note>{isoDateToFr(availabilityDate,false)} </Text>}
           </Row>
         </Body>
       </Right>
