@@ -125,7 +125,7 @@ const BookReservation = ({
               <Label>Genre: {booking.book.genre.name}</Label>
             </Item>
             <Item regular>
-              <Label>Rayon: {booking.book.rayon}</Label>
+              <Label>Rayon: {booking.book.shelf}</Label>
             </Item>
 
             <RenderInput

@@ -1,9 +1,3 @@
-// show selectedBook
-//show images find react component
-// request from back end
-// show QR code for request reservation
-// show navigation to return to list book
-// add favorite List
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {
@@ -34,6 +28,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
+import {isoDateToFr} from '../../Utils/Functions';
 
 const mapStateToProps = (state) => ({
   selectedBook: state.bookStore.selectedBook,
@@ -146,7 +141,7 @@ const BookDetails = ({
                   }}
                 />
                 {selectedBook.availabilityDate && (
-                  <Text note>{selectedBook.availabilityDate} </Text>
+                  <Text note>{isoDateToFr(selectedBook.availabilityDate,false)} </Text>
                 )}
               </CardItem>
               <ScrollView>
