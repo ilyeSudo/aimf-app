@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, Component} from 'react';
 import {connect} from 'react-redux';
 import {
   Card,
@@ -21,14 +21,21 @@ import {
   addToFavoritesRequest,
   getBooks,
 } from '../../store/reducers/bookRedux';
-import {
-  View,
-  ScrollView,
-  Text,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, ActivityIndicator, TouchableOpacity, ScrollView} from 'react-native';
 import {isoDateToFr} from '../../Utils/Functions';
+import {
+  failColor,
+  mainColor,
+  placeholderTextColor,
+  secondaryColor,
+} from '../../Utils/colors';
+import {HeartIcon} from '../../Components/icons/HeartIcon';
+import IconForms from '../../Components/icons/IconForms';
+import {
+  FCalendarIcon,
+  GCalendarIcon,
+} from '../../Components/icons/CalendarIcon';
+import {LIBRARY_STR} from "../../Utils/Constants";
 
 const mapStateToProps = (state) => ({
   selectedBook: state.bookStore.selectedBook,
@@ -41,6 +48,26 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(removeFromFavoritesRequest(...args)),
   addToFavoritesRequest: (...args) => dispatch(addToFavoritesRequest(...args)),
 });
+
+const renderButton: Component = (callback, title, {disabled, icon}) => {
+  const color = callback && !disabled ? 'black' : placeholderTextColor;
+  return (
+    <TouchableOpacity
+      style={styles.buttonStyle}
+      hitSlop={{x: 10, y: 10}}
+      onPress={callback}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        {icon}
+        <Text style={{...styles.buttonText, color}}>{title}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const BookDetails = ({
   selectedBook,
@@ -76,6 +103,15 @@ const BookDetails = ({
     return addToFavoritesRequest(selectedBook, getFavoriteListIds);
   };
 
+  const renderInfoLine = (label, value) => {
+    return (
+      <Row>
+        <Text style={styles.labelStyle}>{label} </Text>
+        {value && <Text style={{fontWeight: '600'}}>{value}</Text>}
+      </Row>
+    );
+  };
+
   if (selectedBook.isLoading) {
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
@@ -85,82 +121,102 @@ const BookDetails = ({
   } else {
     return (
       selectedBook && (
-        <Container>
-          <CarouselImages images={selectedBook.images} />
-          <Content>
-            <Card>
-              <CardItem header bordered>
-                <Col>
-                  <Row>
-                    <Text>Auteur : {selectedBook.author}</Text>
-                  </Row>
-                  <Row>
-                    <Text>genre : {selectedBook.genre.name}</Text>
-                  </Row>
-                  <Row>
-                    <Text>Nombre de pages : {selectedBook.pages}</Text>
-                  </Row>
-                </Col>
-                <Col>
-                  <Row>
-                    <Text>Biblio : {selectedBook.location.name}</Text>
-                  </Row>
-                  <Row>
-                    <Text>language : {selectedBook.language}</Text>
-                  </Row>
-                </Col>
-              </CardItem>
-              <CardItem header bordered>
-                <TouchableOpacity
-                  hitSlop={{x: 10, y: 10}}
-                  onPress={handleFavorites}>
-                  <Icon
-                    type="FontAwesome"
-                    name="star"
-                    style={{
-                      fontSize: 28,
-                      marginBottom: -3,
-                      color: isFavorited ? 'green' : 'gray',
-                    }}
-                  />
-                </TouchableOpacity>
-                {selectedBook.isAvailable && (
-                  <TouchableOpacity
-                    hitSlop={{x: 10, y: 10}}
-                    onPress={handleShowQrCode}>
-                    <Text>Je veux réserver</Text>
-                  </TouchableOpacity>
-                )}
-                <Icon
-                  type="FontAwesome"
-                  name="calendar-check-o"
-                  style={{
-                    fontSize: 14,
-                    marginBottom: -3,
-                    color: selectedBook.isAvailable ? 'green' : 'gray',
-                  }}
-                />
-                {selectedBook.availabilityDate && (
-                  <Text note>{isoDateToFr(selectedBook.availabilityDate,false)} </Text>
-                )}
-              </CardItem>
-              <ScrollView>
-                <CardItem bordered>
+        <Container style={styles.mainContainer}>
+          <ScrollView>
+            <CarouselImages images={selectedBook.images} />
+            <Content>
+              <Card
+                  style={{...styles.upperContainer, justifyContent: 'flex-start'}}>
+                <CardItem header>
+                  <Col style={{justifyContent: 'flex-start'}}>
+                    {renderInfoLine('Auteur', selectedBook.author)}
+                    {renderInfoLine('genre', selectedBook.genre.name)}
+                  </Col>
+                  <Col style={{justifyContent: 'flex-start'}}>
+                    {renderInfoLine('Langue', selectedBook.language)}
+                    {renderInfoLine('Pages', selectedBook.pages)}
+                  </Col>
+                </CardItem>
+                <CardItem>
+                  <Col>
+                    {renderInfoLine('Biblio', selectedBook.location.name)}
+                    <Row>
+                      <Text style={styles.labelStyle}>Statut </Text>
+                      {selectedBook.isAvailable && (
+                          <Text style={styles.dispoStatusInfo}>{LIBRARY_STR.available}</Text>
+                      )}
+                      {!selectedBook.isAvailable &&
+                      selectedBook.availabilityDate && (
+                          <Text style={styles.notDispoStatusInfo}>
+                            {`${LIBRARY_STR.available_starting_from} `}
+                            {isoDateToFr(
+                                selectedBook?.availabilityDate.toString(),
+                                false,
+                            )}
+                          </Text>
+                      )}
+                    </Row>
+                  </Col>
+                </CardItem>
+                <CardItem header>
+                  <Col style={{...styles.buttonWrapper, borderLeftWidth: 0}}>
+                    <Row>
+                      {!isFavorited
+                          ? renderButton(handleFavorites, LIBRARY_STR.add_to_bookmarked, {
+                            icon: (
+                                <HeartIcon
+                                    iconForm={IconForms.gradient()}
+                                    color1={mainColor}
+                                    color2={secondaryColor}
+                                />
+                            ),
+                          })
+                          : renderButton(handleFavorites, LIBRARY_STR.remove_from_bookmarked, {
+                            disabled: true,
+                            icon: (
+                                <HeartIcon
+                                    iconForm={IconForms.filled()}
+                                    color1={placeholderTextColor}
+                                />
+                            ),
+                          })}
+                    </Row>
+                  </Col>
+                  <Col style={{...styles.buttonWrapper, borderRightWidth: 0}}>
+                    <Row>
+                      {selectedBook.isAvailable
+                          ? renderButton(handleShowQrCode, LIBRARY_STR.i_want_to_borrow, {
+                            icon: (
+                                <GCalendarIcon
+                                    color1={mainColor}
+                                    color2={secondaryColor}
+                                />
+                            ),
+                          })
+                          : renderButton(null, LIBRARY_STR.i_want_to_borrow, {
+                            icon: <FCalendarIcon color={placeholderTextColor} />,
+                          })}
+                    </Row>
+                  </Col>
+                </CardItem>
+                <CardItem>
                   <Body>
-                    <Text>{selectedBook.description}</Text>
+                    <Text style={styles.descriptionText}>
+                      {selectedBook.description}
+                    </Text>
                   </Body>
                 </CardItem>
-              </ScrollView>
-            </Card>
-            <QrCodeModal
-              label="Veuillez présenter ce QrCode à la bibliothèque"
-              qrCodeString={getQrCodeString}
-              visible={showQrCodeForBooking}
-              onClose={() => {
-                setShowQrCodeForBooking(false);
-              }}
-            />
-          </Content>
+              </Card>
+              <QrCodeModal
+                  label={LIBRARY_STR.please_show_the_qrcode_at_the_library}
+                  qrCodeString={getQrCodeString}
+                  visible={showQrCodeForBooking}
+                  onClose={() => {
+                    setShowQrCodeForBooking(false);
+                  }}
+              />
+            </Content>
+          </ScrollView>
         </Container>
       )
     );
@@ -176,4 +232,47 @@ BookDetails.navigationOptions = (navigationData) => {
     },
   };
 };
+
+const styles = {
+  upperContainer: {
+    paddingBottom: 70,
+  },
+  dispoStatusInfo: {
+    color: '#17986A',
+    fontWeight: '700',
+  },
+  notDispoStatusInfo: {
+    fontWeight: '600',
+    color: failColor,
+  },
+  labelStyle: {
+    color: placeholderTextColor,
+    fontWeight: 'bold',
+    fontSize: 14,
+    flexWrap: 'wrap'
+  },
+  buttonText: {
+    fontSize: 14,
+    fontWeight: '700',
+    marginLeft: 5,
+  },
+  buttonWrapper: {
+    borderWidth: 0.5,
+    borderStyle: 'solid',
+    borderColor: mainColor,
+  },
+  buttonStyle: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: 10,
+  },
+  descriptionText: {
+    fontSize: 13,
+    paddingVertical: 0,
+    paddingHorizontal: 8,
+  },
+};
+
 export default connect(mapStateToProps, mapDispatchToProps)(BookDetails);

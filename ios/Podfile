@@ -50,6 +50,8 @@ target 'AIMF_APP' do
 
   pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
 
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
 end
 
 target 'AIMF_APP-tvOS' do

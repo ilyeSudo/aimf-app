@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {View, FlatList, SafeAreaView, Text} from 'react-native';
+import {View, FlatList, SafeAreaView, Text, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {Icon, Input, Item, Button} from 'native-base';
 import * as PropTypes from 'prop-types';
 import BookCard from './LibraryScreen/BookCard';
-import {BOOK_GENRES} from '../Utils/Constants';
+import {BOOK_GENRES, LIBRARY_STR} from '../Utils/Constants';
 import {getBooks, getFavoriteList, showBook} from '../store/reducers/bookRedux';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import {getFavoriteListIds} from '../store/selectors/bookingSelector';
@@ -12,7 +12,11 @@ import FilterList from './LibraryScreen/FilterList';
 import ErrorModal from '../Components/ErrorModal';
 import Loader from '../Components/Loader';
 import {canReserveBook} from '../Utils/Account';
-
+import {BookClosedIcon} from '../Components/icons/book/BookClosedIcon';
+import {SearchIcon} from '../Components/icons/SearchIcon';
+import {HeartIcon} from '../Components/icons/HeartIcon';
+import IconForms from '../Components/icons/IconForms';
+import {OCalendarIcon} from "../Components/icons/CalendarIcon";
 
 const mapStateToProps = (state) => ({
   books: state.bookStore.books,
@@ -53,6 +57,8 @@ const LibraryScreen = ({
   const [filterValue, setFilterValue] = useState(null);
   const [lanceSearch, setLanceSearch] = useState(false);
 
+  const {coloredButton, searchInputStyle} = styles;
+
   useEffect(() => {
     getFavoriteList();
     handleRefresh();
@@ -67,7 +73,7 @@ const LibraryScreen = ({
 
   const handleRefresh = () => {
     if (!refreshing && !handleMore && !loading) {
-      var search = searchValue == '' ? null : searchValue;
+      let search = searchValue == '' ? null : searchValue;
       getBooks([], 1, search, filterValue, true);
     }
   };
@@ -143,44 +149,35 @@ const LibraryScreen = ({
       {canReserveBook(account.user) && (
         <View
           style={{
-            flexDirection: 'row-reverse',
+            ...styles.topButtonContainer,
           }}>
           <Button
             transparent
+            style={{...coloredButton}}
             onPress={() => navigation.navigate('BookReservation')}>
-            <Icon type="FontAwesome" name="book" />
-            <Text>Réserver</Text>
+            <BookClosedIcon color={'#fff'} />
+            <Text style={styles.colorButtonText}>
+              {LIBRARY_STR.borrow_book}
+            </Text>
           </Button>
         </View>
       )}
-      <SafeAreaView style={{marginTop: 0, opacity: 1}}>
-        <Item
-          rounded
-          style={{
-            margin: 10,
-            marginLeft: 15,
-            paddingHorizontal: 10,
-            paddingLeft: 5,
-            borderRadius: 5,
-            height: 40,
-            backgroundColor: '#FFF',
-            fontSize: 12,
-          }}>
-          <Icon type="AntDesign" name="search1" />
+      <SafeAreaView style={{...styles.filterContainer}}>
+        <Item rounded style={searchInputStyle}>
+          <SearchIcon color={searchValue ? '#000' : '#C4C4C4'} />
           <Input
             onChangeText={setSearchValue}
             onBlur={search}
-            style={{
-              fontSize: 15,
-              paddingLeft: 10,
-            }}
+            style={styles.searchInputStyle_text}
             keyboardType="default"
-            placeholder="Rechercher un livre"
+            placeholder={LIBRARY_STR.search_book}
+            placeholderTextColor={'#C4C4C4'}
             value={searchValue}
           />
         </Item>
-        <View style={{flexDirection: 'row-reverse'}}>
+        <View style={{flexDirection: 'row-reverse', marginBottom: 3}}>
           <FilterList
+            isEmpty={!filterValue}
             selectedValue={getFilterLabel()}
             updateValue={updaterFilterValue}
           />
@@ -189,7 +186,6 @@ const LibraryScreen = ({
           data={books}
           renderItem={renderItem}
           keyExtractor={(item) => `${item.id}`}
-          ItemSeparatorComponent={renderSeparator}
           onRefresh={handleRefresh}
           refreshing={false}
           onEndReached={handleLoadMore}
@@ -219,35 +215,80 @@ LibraryScreen.propTypes = {
 
 LibraryScreen.navigationOptions = ({navigation}) => {
   return {
+    headerLeft: (
+      <SafeAreaView>
+        <Button
+          transparent
+          onPress={() => {
+            navigation.navigate('MyReservations');
+          }}
+          style={styles.navigationBtn}>
+          <OCalendarIcon color={'black'} size={22}/>
+          <Text style={styles.navigationText}>
+            {LIBRARY_STR.my_reservations}
+          </Text>
+        </Button>
+      </SafeAreaView>
+    ),
     headerRight: (
       <SafeAreaView>
-        <View style={{flexDirection: 'row'}}>
-          <Button
-            transparent
-            onPress={() => {
-              navigation.navigate('MyReservations');
-            }}
-            style={{
-              marginTop: 20,
-              marginBottom: 20,
-            }}>
-            <Icon type="FontAwesome" name="book" />
-            <Text>Mes Réservation</Text>
-          </Button>
-          <Button
-            transparent
-            onPress={() => navigation.navigate('BookFavoriteList')}
-            style={{
-              marginTop: 20,
-              marginBottom: 20,
-              marginRight: 20,
-            }}>
-            <Icon type="FontAwesome" name="star" />
-            <Text>Favoris</Text>
-          </Button>
-        </View>
+        <Button
+          transparent
+          onPress={() => navigation.navigate('BookFavoriteList')}
+          style={styles.navigationBtn}>
+          <HeartIcon iconForm={IconForms.outline()} color1={'black'} size={22} />
+          <Text style={styles.navigationText}>Favoris</Text>
+        </Button>
       </SafeAreaView>
     ),
   };
 };
+
+const styles = StyleSheet.create({
+  topButtonContainer: {
+    padding: 10,
+    flexDirection: 'row-reverse',
+  },
+  coloredButton: {
+    backgroundColor: '#CB8347',
+    shadowOffset: {width: 4, height: 4},
+    shadowColor: 'rgba(0, 0, 0, 1)',
+    shadowOpacity: 5,
+    borderRadius: 3,
+    elevation: 7,
+    paddingVertical: 3,
+    paddingHorizontal: 7,
+  },
+  colorButtonText: {
+    marginHorizontal: 5,
+    color: 'white',
+    fontFamily: 'Roboto',
+    fontWeight: '600',
+    fontSize: 13,
+  },
+  searchInputStyle: {
+    marginTop: 0,
+    paddingHorizontal: 10,
+    paddingLeft: 5,
+    borderRadius: 5,
+    height: 40,
+    backgroundColor: '#FFF',
+    fontSize: 12,
+  },
+  searchInputStyle_text: {
+    fontSize: 16,
+    paddingLeft: 10,
+    fontWeight: 'bold',
+  },
+  filterContainer: {
+    padding: 10,
+    marginTop: 0,
+    opacity: 1,
+  },
+  navigationBtn: {
+    paddingHorizontal: 20,
+  },
+  navigationText: {fontSize: 16, marginLeft: 10},
+});
+
 export default connect(mapStateToProps, mapDispatchToProps)(LibraryScreen);
