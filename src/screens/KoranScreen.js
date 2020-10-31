@@ -24,7 +24,7 @@ import {
 import {receiveKoran} from '../store/reducers/koranRedux';
 import {white, black, orange2, orangeBackgroud} from '../Utils/colors';
 import HistoryItem from '../Components/KoranScreen/HistoryItem';
-import {isAdmin, isSuperAdmin} from '../Utils/Account';
+import {isAdmin, isSuperAdmin, isAssociationAdmin} from '../Utils/Account';
 import ErrorModal from '../Components/ErrorModal';
 import Loader from '../Components/Loader';
 
@@ -130,7 +130,7 @@ class KoranScreen extends Component {
   };
 
   render() {
-    const {khatmaHistory, openKhatma, loading, account} = this.props;
+    const {khatmaHistory, openKhatma, loading, user} = this.props;
 
     return (
       <SafeAreaView style={styles.container}>
@@ -213,7 +213,7 @@ class KoranScreen extends Component {
             </View>
           </View>
         </ScrollView>
-        {(isAdmin(account.user) || isSuperAdmin(account.user)) && (
+        {(isSuperAdmin(user) || isAdmin(user) || isAssociationAdmin(user)) && (
           <View
             style={{
               flexDirection: 'row-reverse',
@@ -249,7 +249,7 @@ class KoranScreen extends Component {
 
 function mapStateToProps(state) {
   const {userAssociationList} = state.associationStore;
-
+  const {user} = state.accountStore;
   const openKhatma = Object.values(state.khatmaStore.khatma).filter(
     (khatma) => {
       return (
@@ -270,12 +270,11 @@ function mapStateToProps(state) {
   );
 
   const {errorMessage} = state.errorMessageStore;
-
   return {
     khatmaHistory,
     openKhatma,
     loading: state.khatmaStore.loading || state.associationStore.loading,
-    account: state.accountStore,
+    user,
     errorMessage,
   };
 }
@@ -286,7 +285,7 @@ KoranScreen.propTypes = {
   loading: PropTypes.bool,
   navigation: PropTypes.object,
   dispatch: PropTypes.func,
-  account: PropTypes.object,
+  user: PropTypes.object,
 };
 
 export default connect(mapStateToProps)(KoranScreen);

@@ -43,6 +43,8 @@
 	<string>Nous souhaitons avoir votre persmission pour avoir accès à votre localisation</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Nous souhaitons avoir votre persmission pour avoir accès à votre localisation</string>
+	<key>NSCameraUsageDescription</key>
+  	<string>Nous souhaitons avoir votre persmission pour avoir accès à votre camera</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
