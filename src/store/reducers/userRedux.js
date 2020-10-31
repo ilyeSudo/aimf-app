@@ -71,6 +71,7 @@ export const getUsers = (
   handleMore = false,
 ) => {
   return (dispatch) => {
+    console.log(GET_USERS_URI);
     dispatch(getUserRequest(refreshing, handleMore));
     getAxiosInstance()
       .get(GET_USERS_URI, {
@@ -93,8 +94,11 @@ export const getUsers = (
               response.data.meta.last_page === response.data.meta.current_page,
           }),
         );
+
+        console.log(response);
       })
       .catch(function (error) {
+        console.log(error);
         dispatch(
           batchActions(
             [dispatchError(error), getUserError()],

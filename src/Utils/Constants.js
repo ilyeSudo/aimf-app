@@ -192,3 +192,11 @@ export const THAKHAROUBTS = [
 ];
 
 export const AIMF_ASSOCIATION_ID = 1;
+
+export const LIBRARY_STR = {
+  search_book: 'Rechercher un livre',
+  borrow_book: 'Réserver un livre',
+  my_reservations: 'Mes Réservation',
+  category: 'Genre',
+  author: 'Auteur',
+};

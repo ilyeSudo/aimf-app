@@ -393,7 +393,7 @@ export const bookReducer = (state = initialState, action) => {
       };
     }
 
-    
+
     case FAVORITE_LIST_REQUEST: {
       return {
         ...state,

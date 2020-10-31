@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   inputItem: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginBottom:0,
+    marginBottom: 0,
     paddingHorizontal: 10,
     width: 300,
     borderRadius: 10,
@@ -65,10 +65,10 @@ class Login extends React.Component {
   componentDidUpdate() {
     if (this.props.loadingLiveVideo === false) {
       navigate(
-        this.props.account,
-        this.props.navigation,
-        'Login',
-        !!this.props.video && this.props.video.youtube_id,
+          this.props.account,
+          this.props.navigation,
+          'Login',
+          !!this.props.video && this.props.video.youtube_id,
       );
     }
   }
@@ -87,42 +87,42 @@ class Login extends React.Component {
     const {email, password} = this.state;
     const logo = require('../../assets/images/logo_transparent.png');
     return (
-      <>
-        <View style={styles.bodyWrapper}>
-          <Image style={{width: 120, height: 120}} source={logo} />
-          <RenderInput
-            keyboardType="email-address"
-            onChange={(value) => this.setState({email: value})}
-            value={email}
-            placeholder="Adresse email"
-            itemStyle={styles.inputItem}
-          />
-          <RenderPassword
-            onChange={(value) => this.setState({password: value})}
-            value={password}
-            placeholder="Mot de passe"
-            itemStyle={styles.inputItem}
-          />
-          <SpinnerButton
-            buttonStyle={styles.loginButton}
-            isLoading={this.props.loading}
-            onPress={this.handleLogin}
-            spinnerType="SkypeIndicator">
-            <Text style={styles.nextButtonText}>Connexion</Text>
-          </SpinnerButton>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('SignUp')}
-            style={styles.touchable}
-            activeOpacity={0.6}>
-            <Text style={styles.createAccount}>
-              Vous n&apos;avez pas encore un compte?
-            </Text>
-          </TouchableOpacity>
-        </View>
-        {this.props.errorMessage && (
-          <ErrorModal visible message={this.props.errorMessage} />
-        )}
-      </>
+        <>
+          <View style={styles.bodyWrapper}>
+            <Image style={{width: 120, height: 120}} source={logo}/>
+            <RenderInput
+                keyboardType="email-address"
+                onChange={(value) => this.setState({email: value})}
+                value={email}
+                placeholder="Adresse email"
+                itemStyle={styles.inputItem}
+            />
+            <RenderPassword
+                onChange={(value) => this.setState({password: value})}
+                value={password}
+                placeholder="Mot de passe"
+                itemStyle={styles.inputItem}
+            />
+            <SpinnerButton
+                buttonStyle={styles.loginButton}
+                isLoading={this.props.loading}
+                onPress={this.handleLogin}
+                spinnerType="SkypeIndicator">
+              <Text style={styles.nextButtonText}>Connexion</Text>
+            </SpinnerButton>
+            <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('SignUp')}
+                style={styles.touchable}
+                activeOpacity={0.6}>
+              <Text style={styles.createAccount}>
+                Vous n&apos;avez pas encore un compte?
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {this.props.errorMessage && (
+              <ErrorModal visible message={this.props.errorMessage}/>
+          )}
+        </>
     );
   }
 }
@@ -142,9 +142,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (email, password) => dispatch(login(email, password)),
-    dispatchErrorMessage: (errorMessage) =>
-      dispatch(dispatchErrorMessage(errorMessage)),
+    login: (email, password) => {
+      console.log(email, password);
+      dispatch(login(email, password))
+    },
+    dispatchErrorMessage: (errorMessage) => {
+      console.log(errorMessage);
+      dispatch(dispatchErrorMessage(errorMessage))
+    },
   };
 };
 

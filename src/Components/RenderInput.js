@@ -23,28 +23,28 @@ const RenderInput = ({
         </Label>
       )}
       <Item
-        rounded
-        style={itemStyle || styles.inputItem}
-        success={
-          value !== null &&
-          checkFunction &&
-          value.length > 0 &&
-          checkFunction(value)
-        }
-        error={
-          value !== null &&
-          checkFunction &&
-          value.length > 0 &&
-          !checkFunction(value)
-        }>
-        <Input
-          style={styles.input}
-          keyboardType={keyboardType || 'default'}
-          maxLength={maxLength}
-          onChangeText={onChange}
-          value={value}
-          disabled={disabled}
-          placeholder={placeholder}
+          rounded={true}
+          style={{...itemStyle || styles.inputItem, borderRadius: 4}}
+          success={
+              value !== null &&
+              checkFunction &&
+              value.length > 0 &&
+              checkFunction(value)
+          }
+          error={
+              value !== null &&
+              checkFunction &&
+              value.length > 0 &&
+              !checkFunction(value)
+          }>
+          <Input
+              style={styles.input}
+              keyboardType={keyboardType || 'default'}
+              maxLength={maxLength}
+              onChangeText={onChange}
+              value={value}
+              disabled={disabled}
+              placeholder={placeholder}
         />
         {value && checkFunction && value.length > 0 ? (
           <Icon

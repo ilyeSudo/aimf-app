@@ -1,179 +1,276 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, Component} from 'react';
 import {connect} from 'react-redux';
 import {
-  Card,
-  CardItem,
-  Icon,
-  Container,
-  Content,
-  Body,
-  Row,
-  Col,
+    Card,
+    CardItem,
+    Icon,
+    Container,
+    Content,
+    Body,
+    Row,
+    Col,
 } from 'native-base';
 import CarouselImages from '../../Components/CaraouselImages';
 import QrCodeModal from './QrCodeModal';
 import {
-  getQrCodeString,
-  getFavoriteListIds,
+    getQrCodeString,
+    getFavoriteListIds,
 } from '../../store/selectors/bookingSelector';
 import {
-  removeFromFavoritesRequest,
-  addToFavoritesRequest,
-  getBooks,
+    removeFromFavoritesRequest,
+    addToFavoritesRequest,
+    getBooks,
 } from '../../store/reducers/bookRedux';
 import {
-  View,
-  ScrollView,
-  Text,
-  ActivityIndicator,
-  TouchableOpacity,
+    View,
+    Text,
+    ActivityIndicator,
+    TouchableOpacity,
 } from 'react-native';
 import {isoDateToFr} from '../../Utils/Functions';
+import {failColor, mainColor, placeholderTextColor, secondaryColor} from "../../Utils/colors";
+import {HeartIcon} from "../../Components/icons/HeartIcon";
+import IconForms from "../../Components/icons/IconForms";
+import {FCalendarIcon, GCalendarIcon} from "../../Components/icons/CalendarIcon";
 
 const mapStateToProps = (state) => ({
-  selectedBook: state.bookStore.selectedBook,
-  getQrCodeString: getQrCodeString(state),
-  getFavoriteListIds: getFavoriteListIds(state),
+    selectedBook: state.bookStore.selectedBook,
+    getQrCodeString: getQrCodeString(state),
+    getFavoriteListIds: getFavoriteListIds(state),
 });
 const mapDispatchToProps = (dispatch) => ({
-  getBooks: (...args) => dispatch(getBooks(...args)),
-  removeFromFavoritesRequest: (...args) =>
-    dispatch(removeFromFavoritesRequest(...args)),
-  addToFavoritesRequest: (...args) => dispatch(addToFavoritesRequest(...args)),
+    getBooks: (...args) => dispatch(getBooks(...args)),
+    removeFromFavoritesRequest: (...args) =>
+        dispatch(removeFromFavoritesRequest(...args)),
+    addToFavoritesRequest: (...args) => dispatch(addToFavoritesRequest(...args)),
 });
 
+
+const renderButton: Component = (callback, title, {disabled, icon}) => {
+    const color = callback && !disabled ? 'black' : placeholderTextColor
+    return <TouchableOpacity
+        style={styles.buttonStyle}
+        hitSlop={{x: 10, y: 10}}
+        onPress={callback}>
+        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            {icon}
+            <Text style={{...styles.buttonText, color}}>{title}</Text>
+        </View>
+    </TouchableOpacity>;
+}
+
 const BookDetails = ({
-  selectedBook,
-  getQrCodeString,
-  removeFromFavoritesRequest,
-  addToFavoritesRequest,
-  getFavoriteListIds,
-}) => {
-  const [isFavorited, setIsFavorited] = useState(false);
+                         selectedBook,
+                         getQrCodeString,
+                         removeFromFavoritesRequest,
+                         addToFavoritesRequest,
+                         getFavoriteListIds,
+                     }) => {
+    const [isFavorited, setIsFavorited] = useState(false);
 
-  const [showQrCodeForBooking, setShowQrCodeForBooking] = useState(false);
+    const [showQrCodeForBooking, setShowQrCodeForBooking] = useState(false);
 
-  useEffect(() => {
-    if (selectedBook) {
-      if (!selectedBook.isLoading) {
+    useEffect(() => {
+        if (selectedBook) {
+            if (!selectedBook.isLoading) {
+                setIsFavorited(getFavoriteListIds.includes(selectedBook.id));
+            }
+        }
+    }, [selectedBook]);
+
+    useEffect(() => {
         setIsFavorited(getFavoriteListIds.includes(selectedBook.id));
-      }
+    }, [getFavoriteListIds]);
+
+    const handleShowQrCode = () => {
+        setShowQrCodeForBooking(true);
+    };
+
+    const handleFavorites = () => {
+        if (isFavorited) {
+            return removeFromFavoritesRequest(selectedBook, getFavoriteListIds);
+        }
+        return addToFavoritesRequest(selectedBook, getFavoriteListIds);
+    };
+
+
+    const renderInfoLine = (label, value) => {
+        return (
+            <Row>
+                <Text style={styles.labelStyle}>{label} </Text>
+                {value && <Text style={{fontWeight: '600'}}>{value}</Text>}
+            </Row>
+        )
     }
-  }, [selectedBook]);
 
-  useEffect(() => {
-    setIsFavorited(getFavoriteListIds.includes(selectedBook.id));
-  }, [getFavoriteListIds]);
 
-  const handleShowQrCode = () => {
-    setShowQrCodeForBooking(true);
-  };
+    if (selectedBook.isLoading) {
+        return (
+            <View style={{flex: 1, justifyContent: 'center'}}>
+                <ActivityIndicator animating size="large"/>
+            </View>
+        );
+    } else {
 
-  const handleFavorites = () => {
-    if (isFavorited) {
-      return removeFromFavoritesRequest(selectedBook, getFavoriteListIds);
+
+        return (
+            selectedBook && (
+                <Container style={styles.mainContainer}>
+                    <CarouselImages images={selectedBook.images}/>
+                    <Content>
+                        <Card style={{...styles.upperContainer, justifyContent: 'flex-start'}}>
+                            <CardItem header>
+                                <Col style={{justifyContent: 'flex-start'}}>
+                                    {renderInfoLine('Auteur', selectedBook.author)}
+                                    {renderInfoLine('genre', selectedBook.genre.name)}
+                                </Col>
+                                <Col style={{justifyContent: 'flex-start'}}>
+                                    {renderInfoLine('Langue', selectedBook.language)}
+                                    {renderInfoLine('Pages', selectedBook.pages)}
+                                </Col>
+                            </CardItem>
+                            <CardItem>
+                                <Col>
+                                    {renderInfoLine('Biblio', selectedBook.location.name)}
+                                    <Row>
+                                        <Text style={styles.labelStyle}>Statut </Text>
+                                        {
+                                            selectedBook.isAvailable &&
+
+                                            <Text style={styles.dispoStatusInfo}>{'Disponible'}</Text>
+
+                                        }
+                                        {
+                                            !selectedBook.isAvailable && selectedBook.availabilityDate &&
+                                            <Text style={styles.notDispoStatusInfo}>
+                                                disponible à partir
+                                                de {isoDateToFr(selectedBook?.availabilityDate.toString(), false)}
+                                            </Text>
+
+                                        }
+                                    </Row>
+                                </Col>
+                            </CardItem>
+                            <CardItem header>
+                                <Col style={{...styles.buttonWrapper, borderLeftWidth: 0}}>
+                                    <Row>
+                                        {
+                                            !selectedBook.isFavorited ?
+                                                renderButton(
+                                                    handleFavorites,
+                                                    'Ajouter aux favoris',
+                                                    {
+                                                        icon: <HeartIcon
+                                                            iconForm={IconForms.gradient()}
+                                                            color1={mainColor}
+                                                            color2={secondaryColor}
+                                                        />
+                                                    }) :
+                                                renderButton(
+                                                    handleFavorites,
+                                                    'Supprimer des favoris',
+                                                    {
+                                                        disabled: true,
+                                                        icon: <HeartIcon
+                                                            iconForm={IconForms.filled()}
+                                                            color1={placeholderTextColor}
+                                                        />
+                                                    })
+
+                                        }
+                                    </Row>
+                                </Col>
+                                <Col style={{...styles.buttonWrapper, borderRightWidth: 0}}>
+                                    <Row>
+                                        {
+                                            selectedBook.isAvailable ?
+                                                renderButton(handleShowQrCode, 'Je veux réserver',
+                                                    {
+                                                        icon:
+                                                            <GCalendarIcon
+                                                                color1={mainColor}
+                                                                color2={secondaryColor}
+                                                            />
+                                                    })
+                                                :
+                                                renderButton(null, 'Je veux réserver',
+                                                    {
+                                                        icon: <FCalendarIcon color={placeholderTextColor}/>
+                                                    })
+                                        }
+                                    </Row>
+
+                                </Col>
+                            </CardItem>
+                            <CardItem>
+                                <Body>
+                                    <Text style={styles.descriptionText}>{selectedBook.description}</Text>
+                                </Body>
+                            </CardItem>
+                        </Card>
+                        <QrCodeModal
+                            label="Veuillez présenter ce QrCode à la bibliothèque"
+                            qrCodeString={getQrCodeString}
+                            visible={showQrCodeForBooking}
+                            onClose={() => {
+                                setShowQrCodeForBooking(false);
+                            }}
+                        />
+                    </Content>
+                </Container>
+            )
+        );
     }
-    return addToFavoritesRequest(selectedBook, getFavoriteListIds);
-  };
-
-  if (selectedBook.isLoading) {
-    return (
-      <View style={{flex: 1, justifyContent: 'center'}}>
-        <ActivityIndicator animating size="large" />
-      </View>
-    );
-  } else {
-    return (
-      selectedBook && (
-        <Container>
-          <CarouselImages images={selectedBook.images} />
-          <Content>
-            <Card>
-              <CardItem header bordered>
-                <Col>
-                  <Row>
-                    <Text>Auteur : {selectedBook.author}</Text>
-                  </Row>
-                  <Row>
-                    <Text>genre : {selectedBook.genre.name}</Text>
-                  </Row>
-                  <Row>
-                    <Text>Nombre de pages : {selectedBook.pages}</Text>
-                  </Row>
-                </Col>
-                <Col>
-                  <Row>
-                    <Text>Biblio : {selectedBook.location.name}</Text>
-                  </Row>
-                  <Row>
-                    <Text>language : {selectedBook.language}</Text>
-                  </Row>
-                </Col>
-              </CardItem>
-              <CardItem header bordered>
-                <TouchableOpacity
-                  hitSlop={{x: 10, y: 10}}
-                  onPress={handleFavorites}>
-                  <Icon
-                    type="FontAwesome"
-                    name="star"
-                    style={{
-                      fontSize: 28,
-                      marginBottom: -3,
-                      color: isFavorited ? 'green' : 'gray',
-                    }}
-                  />
-                </TouchableOpacity>
-                {selectedBook.isAvailable && (
-                  <TouchableOpacity
-                    hitSlop={{x: 10, y: 10}}
-                    onPress={handleShowQrCode}>
-                    <Text>Je veux réserver</Text>
-                  </TouchableOpacity>
-                )}
-                <Icon
-                  type="FontAwesome"
-                  name="calendar-check-o"
-                  style={{
-                    fontSize: 14,
-                    marginBottom: -3,
-                    color: selectedBook.isAvailable ? 'green' : 'gray',
-                  }}
-                />
-                {selectedBook.availabilityDate && (
-                  <Text note>{isoDateToFr(selectedBook.availabilityDate,false)} </Text>
-                )}
-              </CardItem>
-              <ScrollView>
-                <CardItem bordered>
-                  <Body>
-                    <Text>{selectedBook.description}</Text>
-                  </Body>
-                </CardItem>
-              </ScrollView>
-            </Card>
-            <QrCodeModal
-              label="Veuillez présenter ce QrCode à la bibliothèque"
-              qrCodeString={getQrCodeString}
-              visible={showQrCodeForBooking}
-              onClose={() => {
-                setShowQrCodeForBooking(false);
-              }}
-            />
-          </Content>
-        </Container>
-      )
-    );
-  }
 };
 BookDetails.navigationOptions = (navigationData) => {
-  const bookTitle = navigationData.navigation.getParam('bookTitle');
-  return {
-    headerTitle: bookTitle,
-    headerTitleStyle: {
-      textAlign: 'center',
-      flex: 1,
-    },
-  };
+    const bookTitle = navigationData.navigation.getParam('bookTitle');
+    return {
+        headerTitle: bookTitle,
+        headerTitleStyle: {
+            textAlign: 'center',
+            flex: 1,
+        },
+    };
 };
+
+
+const styles = {
+    upperContainer: {
+        paddingBottom: 70
+    },
+    dispoStatusInfo: {
+        color: '#17986A',
+        fontWeight: '700'
+    },
+    notDispoStatusInfo: {
+        fontWeight: '600',
+        color: failColor
+    },
+    labelStyle: {
+        color: placeholderTextColor,
+        fontWeight: 'bold',
+        fontSize: 14
+    },
+    buttonText: {
+        fontSize: 14,
+        fontWeight: '700',
+        marginLeft: 5
+    },
+    buttonWrapper: {
+        borderWidth: 0.5,
+        borderStyle: 'solid',
+        borderColor: mainColor,
+    },
+    buttonStyle: {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'row', justifyContent: 'center',
+        paddingVertical: 10
+    },
+    descriptionText: {
+        fontSize: 13,
+        padding: 8
+    }
+}
+
 export default connect(mapStateToProps, mapDispatchToProps)(BookDetails);

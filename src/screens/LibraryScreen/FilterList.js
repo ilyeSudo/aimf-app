@@ -4,6 +4,8 @@ import {View, Text} from 'react-native';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import {BOOK_GENRES} from '../../Utils/Constants';
 import {Icon} from 'native-base';
+import PropTypes from 'prop-types';
+import {black, gray} from '../../Utils/colors';
 
 class FilterList extends React.PureComponent {
   constructor(props) {
@@ -37,30 +39,32 @@ class FilterList extends React.PureComponent {
     return list;
   };
 
+  getColor = () => {
+    return this.props.isEmpty ? gray : black;
+  };
+
   render() {
     return (
       <View
         style={{
-          marginRight: 20,
-          marginTop: 20,
-          width: 170,
-          borderBottomWidth: 1,
-          paddingBottom: 7,
-          borderBottomColor: '#545454',
+          ...styles.globalContainer,
+          borderBottomColor: this.getColor(),
         }}>
         <View
           style={{
-            width: 170,
             flexDirection: 'row',
+            justifyContent: 'flex-end',
           }}>
-          <Text style={{width: 158}} onPress={this.showMenu}>
+          <Text
+            style={{...styles.label, color: this.getColor()}}
+            onPress={this.showMenu}>
             {this.props.selectedValue}
           </Text>
           <Text onPress={this.showMenu}>
             <Icon
               type="AntDesign"
               name="caretdown"
-              style={{fontSize: 12, color: '#545454'}}
+              style={{fontSize: 12, color: this.getColor()}}
             />
           </Text>
         </View>
@@ -69,5 +73,28 @@ class FilterList extends React.PureComponent {
     );
   }
 }
+
+const styles = {
+  label: {
+    fontFamily: 'Open Sans',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 12,
+    lineHeight: 14,
+    marginHorizontal: 10,
+  },
+  globalContainer: {
+    marginRight: 20,
+    marginTop: 10,
+    borderBottomWidth: 1,
+    paddingBottom: 7,
+  },
+};
+
+FilterList.propTypes = {
+  isEmpty: PropTypes.bool,
+  updateValue: PropTypes.func,
+  selectedValue: PropTypes.string,
+};
 
 export default FilterList;
