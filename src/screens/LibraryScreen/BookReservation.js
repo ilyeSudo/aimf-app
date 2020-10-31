@@ -11,7 +11,7 @@ import DatePicker from '../../Components/DatePicker';
 import moment from 'moment';
 import {Text, ActivityIndicator} from 'react-native';
 import RenderInput from '../../Components/RenderInput';
-import {isCorrectPhoneNumber} from '../../Utils/Functions';
+import {isCorrectPhoneNumber,isCorrectNumberCopie} from '../../Utils/Functions';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import {
@@ -66,6 +66,7 @@ const BookReservation = ({
   validateBooking,
   cancelBooking,
   navigation,
+  dispatchErrorMessage,
 }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [returnDate, setReturnDate] = useState(addDays(new Date(), 15));
@@ -100,12 +101,19 @@ const BookReservation = ({
     if (!phoneNumber) {
       return 'Veuillez renseigner le numéro de téléphone.';
     }
+    if (!copyNumber) {
+      return 'Veuillez renseigner le numéro de copie en chiffre';
+    }
     if ((!address1 && !address2) || !zipCode || !city) {
       return "Veuillez renseigner l'addresse personnelle de celui qui va reserver le livre.";
     }
     if (!isCorrectPhoneNumber(phoneNumber)) {
       return 'Veuillez corriger le numéro de téléphone';
     }
+    if (!isCorrectNumberCopie(copyNumber)) {
+      return 'Veuillez corriger le numéro de copie en chiffre';
+    }
+    
     return null;
   };
   const onConfirmClicked = () => {
@@ -124,9 +132,8 @@ const BookReservation = ({
       phoneNumber,
       copyNumber,
       returnDate,
-    });
+    },navigation);
 
-    navigation.goBack();
   };
   const onCancelClicked = () => {
     cancelBooking();
@@ -231,26 +238,7 @@ const BookReservation = ({
               bgColor1={mainColorLight}
               bgColor2={mainColor}
               style={styles.buttonStyle}
-              callback={() => {
-                const error = checkBookingValues();
-                if (error) {
-                  dispatchErrorMessage(error);
-                  return;
-                }
-                validateBooking({
-                  bookId: booking.book.id,
-                  userId: booking.user.id,
-                  address1,
-                  address2,
-                  zipCode,
-                  city,
-                  phoneNumber,
-                  copyNumber,
-                  returnDate,
-                });
-
-                navigation.goBack();
-              }}>
+              callback={onConfirmClicked}>
               <Icon
                 name="checkmark-sharp"
                 type={'Ionicons'}

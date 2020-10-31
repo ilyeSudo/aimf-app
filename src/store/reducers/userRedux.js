@@ -96,7 +96,6 @@ export const getUsers = (
 
       })
       .catch(function (error) {
-        console.log(error);
         dispatch(
           batchActions(
             [dispatchError(error), getUserError()],

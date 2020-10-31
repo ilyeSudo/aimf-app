@@ -184,7 +184,7 @@ const BookDetails = ({
                   </Col>
                   <Col style={{...styles.buttonWrapper, borderRightWidth: 0}}>
                     <Row>
-                      {selectedBook.isAvailable
+                      {(selectedBook.canReserveBook && selectedBook.isAvailable)
                           ? renderButton(handleShowQrCode, LIBRARY_STR.i_want_to_borrow, {
                             icon: (
                                 <GCalendarIcon
