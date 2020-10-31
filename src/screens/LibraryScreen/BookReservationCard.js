@@ -3,6 +3,7 @@ import {CardItem, Text, Left, Right, Body, Thumbnail, Row} from 'native-base';
 import PropTypes from 'prop-types';
 import {isoDateToFr} from '../../Utils/Functions';
 import {API_BASE_URL} from 'react-native-dotenv';
+import {gray} from "../../Utils/colors";
 
 const BookReservationCard = ({data}) => {
   const {book, returnDate} = data;
@@ -14,26 +15,28 @@ const BookReservationCard = ({data}) => {
     return isoDateToFr(date, false);
   };
   return (
-    <CardItem>
+    <CardItem style={{borderBottomWidth: 0.5, borderBottomColor: gray, marginHorizontal: 10}}>
       <Left>
-        <Thumbnail source={{uri: getUrlThumbnail()}} />
-
+        <Thumbnail style={{...styles.thumbnail}} source={{uri: getUrlThumbnail()}} />
         <Body>
           <Text>{book.title}</Text>
+          <Text style={{width: '100%', textAlign: 'right'}} note>le {getDateStr(returnDate)} </Text>
         </Body>
       </Left>
-      <Right>
-        <Body>
-          <Row>
-            <Text note>{getDateStr(returnDate)} </Text>
-          </Row>
-        </Body>
-      </Right>
     </CardItem>
   );
 };
 BookReservationCard.propTypes = {
   data: PropTypes.object,
 };
+
+
+const styles = {
+  thumbnail: {
+    borderRadius: 3,
+    height: 80,
+    width: 57,
+  },
+}
 
 export default BookReservationCard;

@@ -136,9 +136,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (email, password) => dispatch(login(email, password)),
-    dispatchErrorMessage: (errorMessage) =>
-      dispatch(dispatchErrorMessage(errorMessage)),
+    login: (email, password) => {
+      dispatch(login(email, password));
+    },
+    dispatchErrorMessage: (errorMessage) => {
+      dispatch(dispatchErrorMessage(errorMessage));
+    },
   };
 };
 
