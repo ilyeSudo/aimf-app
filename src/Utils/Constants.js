@@ -60,6 +60,7 @@ export const UPDATE_ADMIN_ROLE_CONFIRM_MESSAGE =
 
 export const SUPER_ADMIN_ROLE = 'superadmin';
 export const ADMIN_ROLE = 'admin';
+export const ASSOCIATION_ADMIN_ROLE = 'admin_';
 export const MEMBER_ROLE = 'member';
 export const LIBRARIAN_ROLE = 'librarian';
 export const NEW_MEMBER_ROLE = 'new_member';

@@ -14,7 +14,7 @@ export const POST_BOOK_RESERVATION_URI = `${API_URL}user-booking`;
 export const GET_BOOK_RESERVATION_URI = `${API_URL}user-booking?with_image=1`;
 export const GET_LIST_TIKHEROUBINS_URI = `${API_URL}takharoubt`;
 export const POST_ADD_KHATMA_URI = `${API_URL}khatma`;
-export const PATCH_KHATMA_URI = `${API_URL}khatma/`;
+export const PATCH_KHATMA_URI = `${API_URL}khatma`;
 export const PATCH_USER_TAKHAROUBT_URI = `${API_URL}user-takharoubt/`;
 export const GET_LIST_KHATMA_URI = `${API_URL}khatma`;
 export const GET_KHATMA_URI = `${API_URL}khatma/`;

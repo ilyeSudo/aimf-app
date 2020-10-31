@@ -344,10 +344,13 @@ export const updateKhatma = (khatmaId, status) => {
   return (dispatch) => {
     dispatch(loadingKhatmaData());
     getAxiosInstance()
-      .patch(`${PATCH_KHATMA_URI + khatmaId}`, {
-        isOpen: status,
-        endAt: status ? MAX_DATE : formatDateAsApiDate(Date.now()),
-      })
+      .patch(
+        `${PATCH_KHATMA_URI}/${khatmaId}?with_takharoubts=1&with_association=1`,
+        {
+          isOpen: status,
+          endAt: status ? MAX_DATE : formatDateAsApiDate(Date.now()),
+        },
+      )
       .then((response) => {
         getAxiosInstance()
           .get(

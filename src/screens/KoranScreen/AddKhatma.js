@@ -10,7 +10,7 @@ import DatePicker from '../../Components/DatePicker';
 import ErrorModal from '../../Components/ErrorModal';
 import Loader from '../../Components/Loader';
 import SelectAssociation from '../../Components/SelectAssociation';
-import {isSuperAdmin} from '../../Utils/Account';
+import {isSuperAdmin, isAdmin} from '../../Utils/Account';
 import {AIMF_ASSOCIATION_ID} from '../../Utils/Constants';
 
 const styles = StyleSheet.compose({
@@ -96,19 +96,20 @@ class AddKhatma extends Component {
             minimumDate={new Date()}
             onCustomChange={(date) => this.setState({chosenDate: date})}
           />
-          {isSuperAdmin(this.props.user) && associationId && (
-            <View style={{marginLeft: 0, marginBottom: 50}}>
-              <Text style={styles.title}>Sélectionner l'association</Text>
-              <SelectAssociation
-                selectedAssociationId={associationId}
-                onChangeItem={(item) => {
-                  this.setState({
-                    associationId: item.id,
-                  });
-                }}
-              />
-            </View>
-          )}
+          {(isSuperAdmin(this.props.user) || isAdmin(this.props.user)) &&
+            associationId && (
+              <View style={{marginLeft: 0, marginBottom: 50}}>
+                <Text style={styles.title}>Sélectionner l'association</Text>
+                <SelectAssociation
+                  selectedAssociationId={associationId}
+                  onChangeItem={(item) => {
+                    this.setState({
+                      associationId: item.id,
+                    });
+                  }}
+                />
+              </View>
+            )}
         </View>
         {this.props.errorMessage && (
           <ErrorModal visible message={this.props.errorMessage} />
