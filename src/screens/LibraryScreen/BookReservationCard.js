@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import {isoDateToFr} from '../../Utils/Functions';
 import {API_BASE_URL} from 'react-native-dotenv';
 import {gray} from "../../Utils/colors";
+import {OCalendarIcon} from "../../Components/icons/CalendarIcon";
+import {View} from "react-native";
 
 const BookReservationCard = ({data}) => {
   const {book, returnDate} = data;
@@ -15,12 +17,16 @@ const BookReservationCard = ({data}) => {
     return isoDateToFr(date, false);
   };
   return (
-    <CardItem style={{borderBottomWidth: 0.5, borderBottomColor: gray, marginHorizontal: 10}}>
+    <CardItem style={{alignItems:'center', marginHorizontal: 5, elevation: 4, marginVertical: 5}}>
       <Left>
         <Thumbnail style={{...styles.thumbnail}} source={{uri: getUrlThumbnail()}} />
         <Body>
           <Text>{book.title}</Text>
-          <Text style={{width: '100%', textAlign: 'right'}} note>le {getDateStr(returnDate)} </Text>
+          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
+            <OCalendarIcon color={'gray'} size={20}></OCalendarIcon>
+            <Text note>
+              {' '}le {getDateStr(returnDate)} </Text>
+          </View>
         </Body>
       </Left>
     </CardItem>

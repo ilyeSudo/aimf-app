@@ -23,7 +23,7 @@ import {
   updateKhatma,
 } from '../../store/reducers/khatmaRedux';
 import {formatDateWithDayAndMonthName} from '../../Utils/Functions';
-import {black, orangeBackgroud, orange2} from '../../Utils/colors';
+import {black, orange2, backgroundColor} from '../../Utils/colors';
 import {
   isAdmin,
   isSpecifiedAssociationAdmin,
@@ -36,7 +36,7 @@ const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: orangeBackgroud,
+    backgroundColor,
     paddingTop: 0,
   },
   header: {

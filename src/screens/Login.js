@@ -11,6 +11,7 @@ import {login} from '../store/reducers/authenticationRedux';
 import {navigate} from '../Utils/Account';
 import RenderInput from '../Components/RenderInput';
 import RenderPassword from '../Components/RenderPassoword';
+import {backgroundColor} from "../Utils/colors";
 
 const styles = StyleSheet.create({
   bodyWrapper: {
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 150,
     borderRadius: 10,
-    backgroundColor: '#cb8347',
+    backgroundColor,
   },
   nextButtonText: {
     fontSize: 18,

@@ -17,7 +17,7 @@ export const OCalendarIcon = ({color = 'black', size = 40}) => {
       />
       <Path
         d="M15.1868 42.7801H19.2774V45.3276H12.6271V35.2847H15.1868V42.7801Z"
-        fill="black"
+        fill={color}
       />
     </Svg>
   );

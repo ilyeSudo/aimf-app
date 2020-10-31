@@ -16,6 +16,7 @@ import {
   ayncReceiveKhatma,
   asyncReceiveUserKhatma,
 } from '../store/reducers/khatmaRedux';
+import {backgroundColor} from "../Utils/colors";
 
 class HomeScreen extends Component {
   static navigationOptions = {
@@ -90,7 +91,7 @@ class HomeScreen extends Component {
         <SafeAreaView
           style={{
             paddingTop: 0,
-            backgroundColor: '#fce3ba',
+            backgroundColor: backgroundColor,
             opacity: this.props.loading || this.props.errorMessage ? 0.6 : 1,
           }}>
           <AssociationMenu screenerTitle="Actualités" />

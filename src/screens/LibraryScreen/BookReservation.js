@@ -19,7 +19,7 @@ import {
   failDarkColor,
   mainColor,
   successColor,
-  mainColorLight,
+  backgroundColor, secondaryColor, mainColor2Button,
 } from '../../Utils/colors';
 import GradientButton from '../../Components/GradientButton';
 
@@ -113,7 +113,7 @@ const BookReservation = ({
     if (!isCorrectNumberCopie(copyNumber)) {
       return 'Veuillez corriger le numéro de copie en chiffre';
     }
-    
+
     return null;
   };
   const onConfirmClicked = () => {
@@ -235,7 +235,7 @@ const BookReservation = ({
             />
 
             <GradientButton
-              bgColor1={mainColorLight}
+              bgColor1={mainColor2Button}
               bgColor2={mainColor}
               style={styles.buttonStyle}
               callback={onConfirmClicked}>
