@@ -68,7 +68,7 @@ class YouTubeScreen extends Component {
           }}>
           <View style={{width: '80%'}}>
             <Text style={{fontSize: 17, fontWeight: 'bold'}}>
-              {this.props.video && this.props.video.title}
+              {this.props?.video?.title}
             </Text>
           </View>
           <View style={{marginLeft: 10}}>
@@ -80,9 +80,7 @@ class YouTubeScreen extends Component {
           style={{
             margin: 25,
           }}>
-          <Text style={{fontSize: 16}}>
-            {this.props.video && this.props.video.description}
-          </Text>
+          <Text style={{fontSize: 16}}>{this.props?.video?.description}</Text>
         </View>
       </ScrollView>
     );

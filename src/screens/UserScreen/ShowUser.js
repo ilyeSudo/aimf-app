@@ -17,6 +17,7 @@ import {
   UPDATE_USER_STATUS_CONFIRM_MESSAGE,
 } from '../../Utils/Constants';
 import {isAdmin, isSuperAdmin, isAuthorized} from '../../Utils/Account';
+import {isoDateToFr} from '../../Utils/Functions';
 
 class ShowUser extends Component {
   constructor(props) {
@@ -43,7 +44,7 @@ class ShowUser extends Component {
   setConfirmModalVisible = (visible) => {
     if (!visible) {
       this.setState({
-        isAuthorized: isAuthorized(),
+        isAuthorized: isAuthorized(this.props.data),
         isSuperAdmin: isSuperAdmin(this.props.data),
         isAdmin: isAdmin(this.props.data),
       });
@@ -271,7 +272,9 @@ class ShowUser extends Component {
             {row.label}
           </Text>
           <Text style={{color: '#3E3E3E', fontSize: 15}}>
-            {this.props.data[row.field]}
+            {row.field === 'birthday'
+              ? isoDateToFr(this.props.data[row.field])
+              : this.props.data[row.field]}
           </Text>
         </View>,
       );
@@ -295,6 +298,7 @@ class ShowUser extends Component {
             onValueChange={(value) => {
               this.setState({
                 isAuthorized: value,
+                isAdmin: this.state.isAdmin && value,
                 confirmMessage: UPDATE_USER_STATUS_CONFIRM_MESSAGE,
               });
               this.setConfirmModalVisible(true);
