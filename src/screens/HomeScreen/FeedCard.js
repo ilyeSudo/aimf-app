@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import {Card, CardItem, Thumbnail, Text, Left, Body} from 'native-base';
 import * as PropTypes from 'prop-types';
 import {View} from 'react-native';
+import {API_BASE_URL} from 'react-native-dotenv';
 
 class FeedCard extends Component {
   render() {
-    const logo = require('../../../assets/images/logo_transparent.png');
     return (
       <Card style={{flex: 0, marginLeft: 10, marginRight: 10}}>
         <CardItem style={{backgroundColor: this.props.backgroundColor}}>
@@ -15,7 +15,11 @@ class FeedCard extends Component {
                 justifyContent: 'center',
                 flexDirection: 'column',
               }}>
-              <Thumbnail source={logo} />
+              <Thumbnail
+                source={{
+                  uri: `${API_BASE_URL}/${this.props.logo}`,
+                }}
+              />
               <Text
                 style={{fontSize: 10, marginRight: 'auto', marginLeft: 'auto'}}>
                 {this.props.associationName}
@@ -44,6 +48,7 @@ FeedCard.propTypes = {
   date: PropTypes.string.isRequired,
   backgroundColor: PropTypes.string.isRequired,
   associationName: PropTypes.string.isRequired,
+  logo: PropTypes.string.isRequired,
 };
 
 export default FeedCard;
