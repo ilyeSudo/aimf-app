@@ -3,7 +3,10 @@ import SpinnerButton from 'react-native-spinner-button';
 import {Text, TouchableOpacity} from 'react-native';
 import * as PropTypes from 'prop-types';
 import styles from './css';
-import {UPDATE_ACCOUNT_ACTION, CREATE_ACCOUNT_ACTION} from '../../Utils/Constants';
+import {
+  UPDATE_ACCOUNT_ACTION,
+  CREATE_ACCOUNT_ACTION,
+} from '../../Utils/Constants';
 
 export default class ActionsButton extends Component {
   render() {
@@ -19,7 +22,9 @@ export default class ActionsButton extends Component {
           indicatorCount={10}
           spinnerType="SkypeIndicator">
           <Text style={styles.nextButtonText}>
-            {this.props.action === CREATE_ACCOUNT_ACTION ? 'Continuer' : 'Valider'}
+            {this.props.action === CREATE_ACCOUNT_ACTION
+              ? 'Continuer'
+              : 'Valider'}
           </Text>
         </SpinnerButton>
 

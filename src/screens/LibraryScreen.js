@@ -13,7 +13,6 @@ import ErrorModal from '../Components/ErrorModal';
 import Loader from '../Components/Loader';
 import {canReserveBook} from '../Utils/Account';
 
-
 const mapStateToProps = (state) => ({
   books: state.bookStore.books,
   loading: state.bookStore.loading,

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
 import {Item, Input} from 'native-base';
@@ -31,7 +25,7 @@ const styles = StyleSheet.create({
   inputItem: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginBottom:0,
+    marginBottom: 0,
     paddingHorizontal: 10,
     width: 300,
     borderRadius: 10,

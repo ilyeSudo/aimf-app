@@ -21,7 +21,7 @@ const REQUEST_BOOKING_REQUEST = 'REQUEST_BOOKING_REQUEST';
 const REQUEST_BOOKING_SUCCESS = 'REQUEST_BOOKING_SUCCESS';
 const REQUEST_BOOKING_ERROR = 'REQUEST_BOOKING_ERROR';
 const VALIDATE_BOOKING_SUCCESS = 'VALIDATE_BOOKING_SUCCESS';
-const CANCEL_BOOKING ='CANCEL_BOOKING';
+const CANCEL_BOOKING = 'CANCEL_BOOKING';
 
 const FAVORITE_LIST_REQUEST = 'FAVORITE_LIST_REQUEST';
 const FAVORITE_LIST_SUCCESS = 'FAVORITE_LIST_SUCCESS';
@@ -124,11 +124,11 @@ export const getMyReservations = () => {
     getAxiosInstance()
       .get(GET_BOOK_RESERVATION_URI)
       .then(function (response) {
-          dispatch(
-            getMyReservationsSuccess({
-              myReservations: response.data.data,
-            }),
-          );
+        dispatch(
+          getMyReservationsSuccess({
+            myReservations: response.data.data,
+          }),
+        );
       })
       .catch(function (error) {
         dispatch(
@@ -144,11 +144,11 @@ export const getFavoriteList = () => {
     getAxiosInstance()
       .get(GET_BOOK_FAVORITE_LIST_URI)
       .then(function (response) {
-          dispatch(
-            getFavoriteListSuccess({
-              favoriteList: response.data.data.map((item) => item.book),
-            }),
-          );
+        dispatch(
+          getFavoriteListSuccess({
+            favoriteList: response.data.data.map((item) => item.book),
+          }),
+        );
       })
       .catch(function (error) {
         dispatch(
@@ -177,18 +177,17 @@ export const getBooks = (
         },
       })
       .then(function (response) {
-          dispatch(
-            getBookSuccess({
-              books:
-                page === 1
-                  ? response.data.data
-                  : [...currentBooks, ...response.data.data],
-              page,
-              lastPage:
-                response.data.meta.last_page ===
-                response.data.meta.current_page,
-            }),
-          );
+        dispatch(
+          getBookSuccess({
+            books:
+              page === 1
+                ? response.data.data
+                : [...currentBooks, ...response.data.data],
+            page,
+            lastPage:
+              response.data.meta.last_page === response.data.meta.current_page,
+          }),
+        );
       })
       .catch(function (error) {
         dispatch(
@@ -229,11 +228,11 @@ export const showBook = (idBook) => (dispatch) => {
   getAxiosInstance()
     .get(`${GET_BOOK_URI}${idBook}?with_image=1`)
     .then(function (response) {
-        dispatch(
-          showBookSuccess({
-            selectedBook: response.data.data,
-          }),
-        );
+      dispatch(
+        showBookSuccess({
+          selectedBook: response.data.data,
+        }),
+      );
     })
     .catch(function (error) {
       dispatch(batchActions([dispatchError(error), showBookError()]));
@@ -270,9 +269,9 @@ const requestBookingSuccess = (data) => {
     payload: data,
   };
 };
-export const cancelBooking= () =>(dispatch)=>{
+export const cancelBooking = () => (dispatch) => {
   dispatch(cancelBookingStore());
-}
+};
 export const requestBooking = (objRequestBooking) => (dispatch) => {
   //requete sur le serveur pour demander la reservation
   //Si c'est OK recuprer l'objet booking avec les données pré rempli
@@ -284,11 +283,11 @@ export const requestBooking = (objRequestBooking) => (dispatch) => {
       `${GET_BOOK_RESERVATION_REQUEST_URI}/${objRequestBooking.userId}/${objRequestBooking.bookId}`,
     )
     .then(function (response) {
-        dispatch(
-          requestBookingSuccess({
-            booking: response.data.data,
-          }),
-        );
+      dispatch(
+        requestBookingSuccess({
+          booking: response.data.data,
+        }),
+      );
     })
     .catch(function (error) {
       dispatch(requestBookingError());
@@ -299,11 +298,11 @@ export const validateBooking = (booking) => (dispatch) => {
   getAxiosInstance()
     .post(`${POST_BOOK_RESERVATION_URI}`, booking)
     .then(function (response) {
-        dispatch(
-          validateBookingSuccess({
-            booking: null,
-          }),
-        );
+      dispatch(
+        validateBookingSuccess({
+          booking: null,
+        }),
+      );
     })
     .catch(function (error) {
       dispatch(batchActions([dispatchError(error), showBookError()]));
@@ -393,7 +392,6 @@ export const bookReducer = (state = initialState, action) => {
       };
     }
 
-    
     case FAVORITE_LIST_REQUEST: {
       return {
         ...state,
