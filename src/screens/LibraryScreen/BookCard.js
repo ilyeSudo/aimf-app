@@ -14,7 +14,6 @@ import PropTypes from 'prop-types';
 import {API_BASE_URL} from 'react-native-dotenv';
 import {isoDateToFr} from '../../Utils/Functions';
 
-
 const BookCard = ({data, showBook}) => {
   const {
     title,
@@ -67,7 +66,9 @@ const BookCard = ({data, showBook}) => {
                 color: isAvailable ? 'green' : 'gray',
               }}
             />
-            {availabilityDate && <Text note>{isoDateToFr(availabilityDate,false)} </Text>}
+            {availabilityDate && (
+              <Text note>{isoDateToFr(availabilityDate, false)} </Text>
+            )}
           </Row>
         </Body>
       </Right>

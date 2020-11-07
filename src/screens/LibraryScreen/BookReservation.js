@@ -1,6 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
-import {requestBooking, validateBooking,cancelBooking} from '../../store/reducers/bookRedux';
+import {
+  requestBooking,
+  validateBooking,
+  cancelBooking,
+} from '../../store/reducers/bookRedux';
 import {dispatchErrorMessage} from '../../store/reducers/errorMessageRedux';
 import {Button, Container, Icon, Item, View, Label, Content} from 'native-base';
 import DatePicker from '../../Components/DatePicker';
@@ -17,7 +21,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   requestBooking: (...args) => dispatch(requestBooking(...args)),
   validateBooking: (...args) => dispatch(validateBooking(...args)),
-  cancelBooking:(...args) => dispatch(cancelBooking(...args)),
+  cancelBooking: (...args) => dispatch(cancelBooking(...args)),
   dispatchErrorMessage: (...args) => dispatch(dispatchErrorMessage(...args)),
 });
 const getQrCodeBooking = (qrCodeBooking) => {
@@ -31,7 +35,7 @@ const getQrCodeBooking = (qrCodeBooking) => {
         return objRequestBooking;
       }
     } catch (e) {
-      alert(e); 
+      alert(e);
     }
     return null;
   }
@@ -58,7 +62,6 @@ const BookReservation = ({
 
   useEffect(() => {
     if (booking && booking.isLoading == false) {
-
       booking.user.phoneNumber && setPhoneNumber(booking.user.phoneNumber);
       booking.user.returnDate && setReturnDate(booking.user.returnDate);
       booking.user.address1 && setAddress1(booking.user.address1);

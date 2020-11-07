@@ -92,7 +92,10 @@ class SignUp extends Component {
   };
 
   onSubmit = () => {
-    const data = {...this.getDataFromState(true), action: CREATE_ACCOUNT_ACTION};
+    const data = {
+      ...this.getDataFromState(true),
+      action: CREATE_ACCOUNT_ACTION,
+    };
     const error = checkFormValues(data);
     if (error) {
       this.props.dispatchErrorMessage(error);

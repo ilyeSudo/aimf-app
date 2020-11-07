@@ -141,7 +141,9 @@ const BookDetails = ({
                   }}
                 />
                 {selectedBook.availabilityDate && (
-                  <Text note>{isoDateToFr(selectedBook.availabilityDate,false)} </Text>
+                  <Text note>
+                    {isoDateToFr(selectedBook.availabilityDate, false)}{' '}
+                  </Text>
                 )}
               </CardItem>
               <ScrollView>
