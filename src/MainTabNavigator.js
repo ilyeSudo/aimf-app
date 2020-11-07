@@ -19,6 +19,8 @@ import BookDetails from './screens/LibraryScreen/BookDetails';
 import BookReservation from './screens/LibraryScreen/BookReservation';
 import MyReservations from './screens/LibraryScreen/MyReservations';
 import BookFavoriteList from './screens/LibraryScreen/BookFavoriteList';
+import Login from './screens/Login';
+import SignUp from './screens/SignUp';
 
 const CustomIcon = createIconSetFromIcoMoon(icoMoonConfig);
 // ----------------------------------------------HomeScreen-----------------------------------------------------
@@ -211,8 +213,108 @@ UserStack.navigationOptions = {
   ),
 };
 
-// ----------------------------------------------Tab navigators-----------------------------------------------------
+// ##################################################### Tab navigators ###############################################
 
+// ----------------------------------------------Admin User without Youtube Live-----------------------------------
+export const adminUserTabNavigator = createBottomTabNavigator(
+  {
+    HomeStack,
+    KoranStack,
+    libraryStack,
+    PostWorkflowStack,
+    disableYouTubeStack,
+    UserStack,
+    AccountStack,
+  },
+  {
+    defaultNavigationOptions: {
+      tabBarOnPress: ({navigation, defaultHandler}) => {
+        if (navigation.state.routeName === 'disableYouTubeStack') {
+          return null;
+        }
+        defaultHandler();
+      },
+    },
+    initialRouteName: 'HomeStack',
+  },
+);
+
+// ----------------------------------------------Admin User with Youtube Live-----------------------------------
+export const adminUserWithYoutubeLiveTabNavigator = createBottomTabNavigator({
+  HomeStack,
+  KoranStack,
+  libraryStack,
+  PostWorkflowStack,
+  YouTubeStack,
+  UserStack,
+  AccountStack,
+});
+
+// ----------------------------------------------Association Admin without Youtube Live-----------------------------------
+export const adminAssociationTabNavigator = createBottomTabNavigator(
+  {
+    HomeStack,
+    KoranStack,
+    PostWorkflowStack,
+    disableYouTubeStack,
+    AccountStack,
+  },
+  {
+    defaultNavigationOptions: {
+      tabBarOnPress: ({navigation, defaultHandler}) => {
+        if (navigation.state.routeName === 'disableYouTubeStack') {
+          return null;
+        }
+        defaultHandler();
+      },
+    },
+    initialRouteName: 'HomeStack',
+  },
+);
+
+// ----------------------------------------------Association Admin with Youtube Live-----------------------------------
+export const adminAssociationWithYoutubeLiveTabNavigator = createBottomTabNavigator(
+  {
+    HomeStack,
+    KoranStack,
+    PostWorkflowStack,
+    YouTubeStack,
+    AccountStack,
+  },
+);
+
+// ----------------------------------------------Active User With Youtube Live-----------------------------------
+export const activeUserWithYoutubeLiveTabNavigator = createBottomTabNavigator({
+  HomeStack,
+  KoranStack,
+  libraryStack,
+  YouTubeStack,
+  AccountStack,
+});
+
+// ----------------------------------------------Active User without Youtube Live-----------------------------------
+export const activeUserTabNavigator = createBottomTabNavigator(
+  {
+    HomeStack,
+    KoranStack,
+    libraryStack,
+    disableYouTubeStack,
+    AccountStack,
+  },
+  {
+    defaultNavigationOptions: {
+      tabBarOnPress: ({navigation, defaultHandler}) => {
+        if (navigation.state.routeName === 'disableYouTubeStack') {
+          return null;
+        }
+        defaultHandler();
+      },
+    },
+    initialRouteName: 'AccountStack',
+  },
+);
+
+// ----------------------------------------------UnActive User------------------------------------------------------
 export const unActiveUserTabNavigator = createBottomTabNavigator(
   {
     disableHomeStack,
@@ -239,95 +341,8 @@ export const unActiveUserTabNavigator = createBottomTabNavigator(
   },
 );
 
-export const activeUserWithYoutubeLiveTabNavigator = createBottomTabNavigator({
-  HomeStack,
-  KoranStack,
-  libraryStack,
-  YouTubeStack,
-  AccountStack,
+// ---------------------------------------------- Anonymous User ----------------------------------------------------
+export const AuthStackNavigator = createStackNavigator({
+  Login: Login,
+  SignUp: SignUp,
 });
-
-export const activeUserTabNavigator = createBottomTabNavigator(
-  {
-    HomeStack,
-    KoranStack,
-    libraryStack,
-    disableYouTubeStack,
-    AccountStack,
-  },
-  {
-    defaultNavigationOptions: {
-      tabBarOnPress: ({navigation, defaultHandler}) => {
-        if (navigation.state.routeName === 'disableYouTubeStack') {
-          return null;
-        }
-        defaultHandler();
-      },
-    },
-    initialRouteName: 'AccountStack',
-  },
-);
-
-export const adminUserTabNavigator = createBottomTabNavigator(
-  {
-    HomeStack,
-    KoranStack,
-    libraryStack,
-    PostWorkflowStack,
-    disableYouTubeStack,
-    UserStack,
-    AccountStack,
-  },
-  {
-    defaultNavigationOptions: {
-      tabBarOnPress: ({navigation, defaultHandler}) => {
-        if (navigation.state.routeName === 'disableYouTubeStack') {
-          return null;
-        }
-        defaultHandler();
-      },
-    },
-    initialRouteName: 'HomeStack',
-  },
-);
-
-export const adminUserWithYoutubeLiveTabNavigator = createBottomTabNavigator({
-  HomeStack,
-  KoranStack,
-  libraryStack,
-  PostWorkflowStack,
-  YouTubeStack,
-  UserStack,
-  AccountStack,
-});
-
-export const adminAssociationTabNavigator = createBottomTabNavigator(
-  {
-    HomeStack,
-    KoranStack,
-    PostWorkflowStack,
-    disableYouTubeStack,
-    AccountStack,
-  },
-  {
-    defaultNavigationOptions: {
-      tabBarOnPress: ({navigation, defaultHandler}) => {
-        if (navigation.state.routeName === 'disableYouTubeStack') {
-          return null;
-        }
-        defaultHandler();
-      },
-    },
-    initialRouteName: 'HomeStack',
-  },
-);
-
-export const adminAssociationWithYoutubeLiveTabNavigator = createBottomTabNavigator(
-  {
-    HomeStack,
-    KoranStack,
-    PostWorkflowStack,
-    YouTubeStack,
-    AccountStack,
-  },
-);
