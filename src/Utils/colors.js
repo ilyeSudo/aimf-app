@@ -12,3 +12,14 @@ export const lightPurp = '#7c53c3';
 export const pink = '#b93fb3';
 export const green = 'green';
 export const black = '#1c1c1e';
+
+export const mainColor = '#CB8347';
+export const mainColorLight = '#FCA55C';
+
+export const secondaryColor = '#FCE3BA';
+export const successColor = '#25CB8F';
+export const failColor = '#FC645D';
+export const placeholderTextColor = '#9F9F9F';
+
+export const successDarkColor = '#025834';
+export const failDarkColor = '#B42B00';

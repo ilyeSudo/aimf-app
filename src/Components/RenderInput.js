@@ -23,8 +23,8 @@ const RenderInput = ({
         </Label>
       )}
       <Item
-        rounded
-        style={itemStyle || styles.inputItem}
+        rounded={true}
+        style={{...(itemStyle || styles.inputItem), borderRadius: 4}}
         success={
           value !== null &&
           checkFunction &&

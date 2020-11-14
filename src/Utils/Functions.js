@@ -21,6 +21,10 @@ export const isCorrectZipCode = (zipCode) => {
   return !!zipCode.match(/^[0-9]{5}$/);
 };
 
+export const isCorrectNumberCopie = (nbCopie) => {
+  return !!nbCopie.match(/^\d+$/);
+};
+
 export const isCorrectPhoneNumber = (phone) => {
   return !!phone.match(/^0[1-9][0-9]{8}$/);
 };

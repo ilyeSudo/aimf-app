@@ -193,3 +193,18 @@ export const THAKHAROUBTS = [
 ];
 
 export const AIMF_ASSOCIATION_ID = 1;
+
+export const LIBRARY_STR = {
+  search_book: 'Rechercher un livre',
+  borrow_book: 'Réserver un livre',
+  my_reservations: 'Mes Réservation',
+  category: 'Genre',
+  author: 'Auteur',
+  available: 'disponible',
+  available_at: 'disponible le',
+  available_starting_from: 'disponible à partir de',
+  add_to_bookmarked: 'Ajouter aux favoris',
+  remove_from_bookmarked: 'Supprimer des favoris',
+  i_want_to_borrow: 'Je veux réserver',
+  please_show_the_qrcode_at_the_library: 'Veuillez présenter ce QrCode à la bibliothèque'
+};

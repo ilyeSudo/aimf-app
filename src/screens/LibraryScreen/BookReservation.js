@@ -6,14 +6,22 @@ import {
   cancelBooking,
 } from '../../store/reducers/bookRedux';
 import {dispatchErrorMessage} from '../../store/reducers/errorMessageRedux';
-import {Button, Container, Icon, Item, View, Label, Content} from 'native-base';
+import {Container, Icon, View, Content, Row, Col} from 'native-base';
 import DatePicker from '../../Components/DatePicker';
 import moment from 'moment';
 import {Text, ActivityIndicator} from 'react-native';
 import RenderInput from '../../Components/RenderInput';
-import {isCorrectPhoneNumber} from '../../Utils/Functions';
+import {isCorrectPhoneNumber,isCorrectNumberCopie} from '../../Utils/Functions';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
+import {
+  failColor,
+  failDarkColor,
+  mainColor,
+  successColor,
+  mainColorLight,
+} from '../../Utils/colors';
+import GradientButton from '../../Components/GradientButton';
 
 const mapStateToProps = (state) => ({
   booking: state.bookStore.booking,
@@ -45,12 +53,20 @@ const addDays = (date, days) => {
   result.setDate(result.getDate() + days);
   return result;
 };
+const buildInfo = (label, value) => {
+  return {
+    label,
+    value,
+  };
+};
+
 const BookReservation = ({
   booking,
   requestBooking,
   validateBooking,
   cancelBooking,
   navigation,
+  dispatchErrorMessage,
 }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [returnDate, setReturnDate] = useState(addDays(new Date(), 15));
@@ -85,14 +101,45 @@ const BookReservation = ({
     if (!phoneNumber) {
       return 'Veuillez renseigner le numéro de téléphone.';
     }
+    if (!copyNumber) {
+      return 'Veuillez renseigner le numéro de copie en chiffre';
+    }
     if ((!address1 && !address2) || !zipCode || !city) {
       return "Veuillez renseigner l'addresse personnelle de celui qui va reserver le livre.";
     }
     if (!isCorrectPhoneNumber(phoneNumber)) {
       return 'Veuillez corriger le numéro de téléphone';
     }
+    if (!isCorrectNumberCopie(copyNumber)) {
+      return 'Veuillez corriger le numéro de copie en chiffre';
+    }
+    
     return null;
   };
+  const onConfirmClicked = () => {
+    const error = checkBookingValues();
+    if (error) {
+      dispatchErrorMessage(error);
+      return;
+    }
+    validateBooking({
+      bookId: booking.book.id,
+      userId: booking.user.id,
+      address1,
+      address2,
+      zipCode,
+      city,
+      phoneNumber,
+      copyNumber,
+      returnDate,
+    },navigation);
+
+  };
+  const onCancelClicked = () => {
+    cancelBooking();
+    navigation.goBack();
+  };
+
   if (!booking) {
     return (
       <QRCodeScanner
@@ -113,24 +160,30 @@ const BookReservation = ({
         </View>
       );
     } else {
+      const bookInfo = [];
+      bookInfo.push(buildInfo('Titre', booking.book.title));
+      bookInfo.push(buildInfo('Pour', booking.user.firstName));
+      bookInfo.push(buildInfo('Genre', booking.book.genre.name));
+      bookInfo.push(buildInfo('Rayon', booking.book.shelf));
+
       return (
         <Container>
           <Content>
-            <Item regular>
-              <Label>Titre:{booking.book.title}</Label>
-            </Item>
-            <Item regular>
-              <Label>
-                Pour : {booking.user.firstName} {booking.user.lastName}
-              </Label>
-            </Item>
-
-            <Item regular>
-              <Label>Genre: {booking.book.genre.name}</Label>
-            </Item>
-            <Item regular>
-              <Label>Rayon: {booking.book.shelf}</Label>
-            </Item>
+            <View style={{paddingVertical: 10}}>
+              {bookInfo.map(({label, value}) => {
+                return (
+                  <Row style={{paddingHorizontal: 30, alignItems: 'center'}}>
+                    <Col style={{flex: 1, paddingVertical: 5}}>
+                      <Text style={styles.labelStyle}>{label}</Text>
+                    </Col>
+                    {/*<View style={{width:7, height:7, backgroundColor: mainColor, borderRadius:50, marginRight: -4}}></View>*/}
+                    <Col style={{flex: 5, paddingLeft: 10}}>
+                      <Text style={styles.valueTextStyle}>{value}</Text>
+                    </Col>
+                  </Row>
+                                                                                                                                                            );
+              })}
+            </View>
 
             <RenderInput
               checkFunction={isCorrectPhoneNumber}
@@ -180,42 +233,32 @@ const BookReservation = ({
               defaultDate={returnDate && moment(returnDate).toDate()}
               onCustomChange={(date) => setReturnDate(date)}
             />
-            <Button
-              rounded
-              success
-              onPress={() => {
-                const error = checkBookingValues();
-                if (error) {
-                  dispatchErrorMessage(error);
-                  return;
-                }
-                validateBooking({
-                  bookId: booking.book.id,
-                  userId: booking.user.id,
-                  address1,
-                  address2,
-                  zipCode,
-                  city,
-                  phoneNumber,
-                  copyNumber,
-                  returnDate,
-                });
 
-                navigation.goBack();
-              }}>
-              <Icon name="home" />
-              <Text>Confirmer la réservation</Text>
-            </Button>
-            <Button
-              rounded
-              warning
-              onPress={() => {
-                cancelBooking();
-                navigation.goBack();
-              }}>
-              <Icon name="cancel" />
-              <Text>Annuler la réservation</Text>
-            </Button>
+            <GradientButton
+              bgColor1={mainColorLight}
+              bgColor2={mainColor}
+              style={styles.buttonStyle}
+              callback={onConfirmClicked}>
+              <Icon
+                name="checkmark-sharp"
+                type={'Ionicons'}
+                style={{color: 'white'}}
+              />
+              <Text style={styles.textButton}>Confirmer la réservation</Text>
+            </GradientButton>
+
+            <GradientButton
+              bgColor1={failColor}
+              bgColor2={failDarkColor}
+              style={styles.buttonStyle}
+              callback={onCancelClicked}>
+              <Icon
+                name="close-sharp"
+                type={'Ionicons'}
+                style={{color: 'white'}}
+              />
+              <Text style={styles.textButton}>Annuler la réservation</Text>
+            </GradientButton>
           </Content>
         </Container>
       );
@@ -230,5 +273,25 @@ BookReservation.navigationOptions = (navigationData) => {
       flex: 1,
     },
   };
+};
+
+const styles = {
+  labelStyle: {
+    color: mainColor,
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+  valueTextStyle: {
+    fontSize: 15,
+  },
+  buttonStyle: {
+    marginBottom: 10,
+  },
+  textButton: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 15,
+    marginLeft: 5,
+  },
 };
 export default connect(mapStateToProps, mapDispatchToProps)(BookReservation);
