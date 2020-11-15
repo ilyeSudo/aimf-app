@@ -1,20 +1,15 @@
 import React from 'react';
-import Svg, {Defs, LinearGradient, Path, Stop} from 'react-native-svg';
-
-import IconForms, {FILLED, GRADIENT, OUTLINE} from './IconForms';
-import PropTypes from 'prop-types';
 import {View} from 'react-native';
+import Svg, {Defs, LinearGradient, Path, Stop} from 'react-native-svg';
+import PropTypes from 'prop-types';
+import IconForms, {FILLED, GRADIENT, OUTLINE} from './IconForms';
 
 class HeartIcon extends React.PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   getGradient = (size = 15) => {
     return (
       <Svg
         width={size}
-        height= {size * 0.88}
+        height={size * 0.88}
         viewBox="0 0 17 15"
         xmlns="http://www.w3.org/2000/svg">
         <Defs>
@@ -41,7 +36,7 @@ class HeartIcon extends React.PureComponent {
     return (
       <Svg
         width={size}
-        height= {size * 0.88}
+        height={size * 0.88}
         viewBox="0 0 17 15"
         fill="none"
         xmlns="http://www.w3.org/2000/svg">
@@ -57,7 +52,7 @@ class HeartIcon extends React.PureComponent {
     return (
       <Svg
         width={size}
-        height= {size * 0.88}
+        height={size * 0.88}
         viewBox="0 0 17 15"
         fill="none"
         xmlns="http://www.w3.org/2000/svg">
@@ -91,6 +86,7 @@ HeartIcon.propTypes = {
   iconForm: IconForms,
   color1: PropTypes.string,
   color2: PropTypes.string,
+  size: PropTypes.number,
 };
 
-export {HeartIcon};
+export default HeartIcon;

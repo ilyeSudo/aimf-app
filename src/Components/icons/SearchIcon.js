@@ -1,7 +1,7 @@
 import React from 'react';
 import Svg, {Path} from 'react-native-svg';
-
 import {View} from 'react-native';
+import PropTypes from 'prop-types';
 
 const SearchIcon = ({color}) => {
   const renderSvg = () => {
@@ -23,4 +23,8 @@ const SearchIcon = ({color}) => {
   return <View>{renderSvg()}</View>;
 };
 
-export {SearchIcon};
+SearchIcon.propTypes = {
+  color: PropTypes.string,
+};
+
+export default SearchIcon;

@@ -1,6 +1,6 @@
 import React from 'react';
 import Svg, {Path} from 'react-native-svg';
-
+import PropTypes from 'prop-types';
 import {View} from 'react-native';
 
 const BookClosedIcon = ({color}) => {
@@ -23,4 +23,8 @@ const BookClosedIcon = ({color}) => {
   return <View>{renderSvg()}</View>;
 };
 
-export {BookClosedIcon};
+BookClosedIcon.propTypes = {
+  color: PropTypes.string,
+};
+
+export default BookClosedIcon;

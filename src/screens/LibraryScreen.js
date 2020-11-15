@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, FlatList, SafeAreaView, Text, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
-import {Icon, Input, Item, Button} from 'native-base';
+import {Input, Item, Button} from 'native-base';
 import * as PropTypes from 'prop-types';
 import BookCard from './LibraryScreen/BookCard';
 import {BOOK_GENRES, LIBRARY_STR} from '../Utils/Constants';
@@ -12,11 +12,11 @@ import FilterList from './LibraryScreen/FilterList';
 import ErrorModal from '../Components/ErrorModal';
 import Loader from '../Components/Loader';
 import {canReserveBook} from '../Utils/Account';
-import {BookClosedIcon} from '../Components/icons/book/BookClosedIcon';
-import {SearchIcon} from '../Components/icons/SearchIcon';
-import {HeartIcon} from '../Components/icons/HeartIcon';
+import BookClosedIcon from '../Components/icons/book/BookClosedIcon';
+import SearchIcon from '../Components/icons/SearchIcon';
+import HeartIcon from '../Components/icons/HeartIcon';
 import IconForms from '../Components/icons/IconForms';
-import {OCalendarIcon} from "../Components/icons/CalendarIcon";
+import {OCalendarIcon} from '../Components/icons/CalendarIcon';
 
 const mapStateToProps = (state) => ({
   books: state.bookStore.books,
@@ -223,7 +223,7 @@ LibraryScreen.navigationOptions = ({navigation}) => {
             navigation.navigate('MyReservations');
           }}
           style={styles.navigationBtn}>
-          <OCalendarIcon color={'black'} size={22}/>
+          <OCalendarIcon color={'black'} size={22} />
           <Text style={styles.navigationText}>
             {LIBRARY_STR.my_reservations}
           </Text>
@@ -236,7 +236,11 @@ LibraryScreen.navigationOptions = ({navigation}) => {
           transparent
           onPress={() => navigation.navigate('BookFavoriteList')}
           style={styles.navigationBtn}>
-          <HeartIcon iconForm={IconForms.outline()} color1={'black'} size={22} />
+          <HeartIcon
+            iconForm={IconForms.outline()}
+            color1={'black'}
+            size={22}
+          />
           <Text style={styles.navigationText}>Favoris</Text>
         </Button>
       </SafeAreaView>

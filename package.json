@@ -8,7 +8,8 @@
     "ios": "npx react-native run-ios",
     "postinstall": "jetifier -r",
     "refresh:env": "rm -rf node_modules && rm -rf android/.gradle && rm -rf android/app/build && yarn install && npx jetify",
-    "test": "jest"
+    "test": "jest",
+    "lint:eslint": "eslint -c .eslintrc.json src/api src/Components/AccountForm"
   },
   "rnpm": {
     "assets": [
