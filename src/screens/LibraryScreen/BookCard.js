@@ -14,7 +14,7 @@ import {
     secondaryColor,
 } from '../../Utils/colors';
 import {LIBRARY_STR} from '../../Utils/Constants';
-import {HeartIcon} from '../../Components/icons/HeartIcon';
+import HeartIcon  from '../../Components/icons/HeartIcon';
 import IconForms from '../../Components/icons/IconForms';
 
 const BookCard = ({data, showBook}) => {

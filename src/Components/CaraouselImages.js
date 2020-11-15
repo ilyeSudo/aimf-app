@@ -8,37 +8,27 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import Caraousel, {Pagination} from 'react-native-snap-carousel';
+import Caraousel from 'react-native-snap-carousel';
 import {API_BASE_URL} from 'react-native-dotenv';
-
-const pagination = () => {
-  const {entries, activeSlide} = this.state;
-  return (
-    <Pagination
-      dotsLength={entries.length}
-      activeDotIndex={activeSlide}
-      containerStyle={{backgroundColor: 'rgba(0, 0, 0, 0.75)'}}
-      dotStyle={{
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        marginHorizontal: 8,
-        backgroundColor: 'rgba(255, 255, 255, 0.92)',
-      }}
-      inactiveDotStyle={
-        {
-          // Define styles for inactive dots here
-        }
-      }
-      inactiveDotOpacity={0.4}
-      inactiveDotScale={0.6}
-    />
-  );
-};
+import PropTypes from 'prop-types';
 
 const getUrlImage = (image) => {
   return `${API_BASE_URL}/${image.media.path}`;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: 150,
+    height: 200,
+    borderRadius: 15,
+    marginHorizontal: 'auto',
+  },
+});
 
 class CarouselImages extends React.PureComponent {
   constructor(props) {
@@ -136,17 +126,8 @@ class CarouselImages extends React.PureComponent {
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  image: {
-    width: 150,
-    height: 200,
-    borderRadius: 15,
-    marginHorizontal: 'auto',
-  },
-});
+CarouselImages.propTypes = {
+  images: PropTypes.array,
+};
+
 export default CarouselImages;

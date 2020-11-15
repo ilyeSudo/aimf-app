@@ -1,5 +1,6 @@
 import React from 'react';
 import Svg, {LinearGradient, Path, Defs, Stop} from 'react-native-svg';
+import PropTypes from 'prop-types';
 
 // Outline
 export const OCalendarIcon = ({color = 'black', size = 40}) => {
@@ -21,6 +22,11 @@ export const OCalendarIcon = ({color = 'black', size = 40}) => {
     </Svg>
   );
 };
+
+OCalendarIcon.propTypes = {
+  color: PropTypes.string,
+  size: PropTypes.number,
+};
 // Filled
 export const FCalendarIcon = ({color = 'black'}) => {
   return (
@@ -36,6 +42,10 @@ export const FCalendarIcon = ({color = 'black'}) => {
       />
     </Svg>
   );
+};
+
+FCalendarIcon.propTypes = {
+  color: PropTypes.string,
 };
 
 // Gradient
@@ -64,4 +74,8 @@ export const GCalendarIcon = ({color1 = 'black', color2 = 'white'}) => {
       />
     </Svg>
   );
+};
+GCalendarIcon.propTypes = {
+  color1: PropTypes.string,
+  color2: PropTypes.string,
 };

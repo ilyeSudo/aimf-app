@@ -29,7 +29,7 @@ import {
   placeholderTextColor,
   secondaryColor,
 } from '../../Utils/colors';
-import {HeartIcon} from '../../Components/icons/HeartIcon';
+import HeartIcon  from '../../Components/icons/HeartIcon';
 import IconForms from '../../Components/icons/IconForms';
 import {
   FCalendarIcon,
