@@ -3,6 +3,7 @@ import {Platform} from 'react-native';
 
 export default class FCMService {
   register = (onRegister, onNotification, onOpenNotification) => {
+    this.registerAppWithFCM();
     this.checkPermission(onRegister);
     this.createNotificationListeners(
       onRegister,
@@ -23,7 +24,6 @@ export default class FCMService {
       .hasPermission()
       .then((enabled) => {
         if (enabled) {
-          // User has permissions
           this.getToken(onRegister);
         } else {
           // User doesn't have permission
@@ -75,31 +75,36 @@ export default class FCMService {
     onNotification,
     onOpenNotification,
   ) => {
-    // When the application is running, but in the background
-    messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.log(
-        '[FCMService] onNotificationOpenedApp Notification caused app to open from background state:',
-        remoteMessage,
-      );
-      if (remoteMessage) {
-        const notification = remoteMessage.notification;
-        onOpenNotification(notification);
-        // this.removeDeliveredNotification(notification.notificationId)
-      }
-    });
-
-    // When the application is opened from a quit state.
-    messaging()
-      .getInitialNotification()
-      .then((remoteMessage) => {
+    // When a user tap on a push notification and the app is in background
+    this.backgroundNotificationListener = messaging().onNotificationOpenedApp(
+      async (remoteMessage) => {
         console.log(
-          '[FCMService] getInitialNotification Notification caused app to open from quit state:',
+          '[FCMService] onNotificationOpenedApp Notification caused app to open from background state:',
           remoteMessage,
         );
-
         if (remoteMessage) {
-          onOpenNotification(remoteMessage);
-          //  this.removeDeliveredNotification(notification.notificationId)
+          const notification = remoteMessage.notification;
+          onOpenNotification(notification);
+          // this.removeDeliveredNotification(notification.notificationId)
+        }
+      },
+    );
+
+    // When the application is opened from a quit state.
+    // When a user tap on a push notification and the app is CLOSED
+    this.closedAppNotificationListener = messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          console.log(
+            '[FCMService] getInitialNotification Notification caused app to open from quit state:',
+            remoteMessage,
+          );
+
+          if (remoteMessage) {
+            onOpenNotification(remoteMessage);
+            //  this.removeDeliveredNotification(notification.notificationId)
+          }
         }
       });
 

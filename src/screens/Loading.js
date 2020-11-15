@@ -52,7 +52,7 @@ class Loading extends React.Component {
     this.fcmService = new FCMService();
     this.localNotificationService = new LocalNotificationService();
 
-    this.fcmService.registerAppWithFCM();
+    //this.fcmService.registerAppWithFCM();
     this.fcmService.register(
       this.onRegister,
       this.onNotification,
