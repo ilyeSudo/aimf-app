@@ -1,15 +1,11 @@
 import React from 'react';
 import Svg, {Defs, LinearGradient, Path, Stop} from 'react-native-svg';
 
-import IconForms, {FILLED, GRADIENT, OUTLINE} from './IconForms';
 import PropTypes from 'prop-types';
 import {View} from 'react-native';
+import IconForms, {FILLED, GRADIENT, OUTLINE} from './IconForms';
 
 class HeartIcon extends React.PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   getGradient = (size = 15) => {
     return (
       <Svg

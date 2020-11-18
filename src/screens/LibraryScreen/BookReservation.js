@@ -11,7 +11,10 @@ import DatePicker from '../../Components/DatePicker';
 import moment from 'moment';
 import {Text, ActivityIndicator} from 'react-native';
 import RenderInput from '../../Components/RenderInput';
-import {isCorrectPhoneNumber,isCorrectNumberCopie} from '../../Utils/Functions';
+import {
+  isCorrectPhoneNumber,
+  isCorrectNumberCopie,
+} from '../../Utils/Functions';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import {
@@ -19,7 +22,9 @@ import {
   failDarkColor,
   mainColor,
   successColor,
-  backgroundColor, secondaryColor, mainColor2Button,
+  backgroundColor,
+  secondaryColor,
+  mainColor2Button,
 } from '../../Utils/colors';
 import GradientButton from '../../Components/GradientButton';
 
@@ -122,18 +127,20 @@ const BookReservation = ({
       dispatchErrorMessage(error);
       return;
     }
-    validateBooking({
-      bookId: booking.book.id,
-      userId: booking.user.id,
-      address1,
-      address2,
-      zipCode,
-      city,
-      phoneNumber,
-      copyNumber,
-      returnDate,
-    },navigation);
-
+    validateBooking(
+      {
+        bookId: booking.book.id,
+        userId: booking.user.id,
+        address1,
+        address2,
+        zipCode,
+        city,
+        phoneNumber,
+        copyNumber,
+        returnDate,
+      },
+      navigation,
+    );
   };
   const onCancelClicked = () => {
     cancelBooking();
@@ -181,7 +188,7 @@ const BookReservation = ({
                       <Text style={styles.valueTextStyle}>{value}</Text>
                     </Col>
                   </Row>
-                                                                                                                                                            );
+                );
               })}
             </View>
 

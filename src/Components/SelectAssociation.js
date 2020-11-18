@@ -1,12 +1,12 @@
 import {Label} from 'native-base';
-import DropDownPicker from './DropDownPicker';
 import {Image, StyleSheet} from 'react-native';
 import React, {Component} from 'react';
 import * as PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {API_BASE_URL} from 'react-native-dotenv';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import {receiveAssociationData} from '../store/reducers/associationRedux';
-import {API_BASE_URL} from 'react-native-dotenv';
+import DropDownPicker from './DropDownPicker';
 
 class SelectAssociation extends Component {
   constructor(props) {
@@ -16,6 +16,7 @@ class SelectAssociation extends Component {
   componentDidMount() {
     this.props.receiveAssociationData();
   }
+
   render() {
     return (
       <>

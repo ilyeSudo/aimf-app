@@ -11,7 +11,7 @@ import Loader from '../../Components/Loader';
 import SelectAssociation from '../../Components/SelectAssociation';
 import {isSuperAdmin, isAdmin} from '../../Utils/Account';
 import {AIMF_ASSOCIATION_ID} from '../../Utils/Constants';
-import {black, backgroundColor} from "../../Utils/colors";
+import {black, backgroundColor} from '../../Utils/colors';
 
 const styles = StyleSheet.compose({
   container: {

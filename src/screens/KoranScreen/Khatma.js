@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   panelHandle: {
     height: 2,
-    width: width,
+    width,
     backgroundColor: orange2,
     borderRadius: 6,
     alignSelf: 'center',
@@ -98,6 +98,7 @@ class Khatma extends Component {
   static navigationOptions = {
     header: null,
   };
+
   constructor(props) {
     super(props);
 
@@ -247,7 +248,7 @@ class Khatma extends Component {
           navigation={this.props.navigation}
           validate={this.validateUserChoise}
           rightIcon="send"
-          renderLogo={true}
+          renderLogo
         />
         <ScrollView scrollEventThrottle={16}>
           {(isSuperAdmin(user) ||
@@ -413,6 +414,7 @@ Khatma.propTypes = {
   navigation: PropTypes.object,
   dispatch: PropTypes.func,
   user: PropTypes.object,
+  errorMessage: PropTypes.string,
 };
 
 export default connect(mapStateToProps)(Khatma);

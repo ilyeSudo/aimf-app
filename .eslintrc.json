@@ -22,7 +22,8 @@
     "react/destructuring-assignment": 0,
     "react/prefer-stateless-function": 1,
     "jsx-a11y/label-has-associated-control": ["error", {"required":  {"some":  ["nesting", "id"]}}],
-    "jsx-a11y/label-has-for": ["error", {"required":  {"some":  ["nesting", "id"]}}]
+    "jsx-a11y/label-has-for": ["error", {"required":  {"some":  ["nesting", "id"]}}],
+    "react-native/no-inline-styles": 0 // todo fix no-inline-styles warning
   },
   "globals": {
     "windows": true,

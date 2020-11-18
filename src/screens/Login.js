@@ -10,7 +10,7 @@ import {login} from '../store/reducers/authenticationRedux';
 import {navigate} from '../Utils/Account';
 import RenderInput from '../Components/RenderInput';
 import RenderPassword from '../Components/RenderPassoword';
-import {mainColor3Button} from "../Utils/colors";
+import {mainColor3Button} from '../Utils/colors';
 
 const styles = StyleSheet.create({
   bodyWrapper: {
@@ -84,7 +84,10 @@ class Login extends React.Component {
     return (
       <>
         <View style={styles.bodyWrapper}>
-          <Image style={{width: 200, height: 130, borderRadius: 9}} source={logo} />
+          <Image
+            style={{width: 200, height: 130, borderRadius: 9}}
+            source={logo}
+          />
           <RenderInput
             keyboardType="email-address"
             onChange={(value) => this.setState({email: value})}

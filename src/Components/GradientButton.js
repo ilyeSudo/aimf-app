@@ -1,8 +1,8 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {successColor} from '../Utils/colors';
 import PropTypes from 'prop-types';
+import {successColor} from '../Utils/colors';
 
 const GradientButton = (props) => {
   const {bgColor1, bgColor2, callback, style} = props;

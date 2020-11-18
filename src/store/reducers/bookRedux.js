@@ -103,7 +103,6 @@ export const addToFavoritesRequest = (book, bookIds) => (dispatch) => {
     .catch(function (error) {
       dispatch(batchActions([dispatchError(error), showBookError()]));
       dispatch(removeFromFavorites(book));
-
     });
 };
 
@@ -298,7 +297,7 @@ export const requestBooking = (objRequestBooking) => (dispatch) => {
       dispatch(batchActions([dispatchError(error), showBookError()]));
     });
 };
-export const validateBooking = (booking,navigation) => (dispatch) => {
+export const validateBooking = (booking, navigation) => (dispatch) => {
   getAxiosInstance()
     .post(`${POST_BOOK_RESERVATION_URI}`, booking)
     .then(function (response) {
@@ -308,7 +307,6 @@ export const validateBooking = (booking,navigation) => (dispatch) => {
         }),
       );
       navigation.goBack();
-
     })
     .catch(function (error) {
       dispatch(batchActions([dispatchError(error), showBookError()]));

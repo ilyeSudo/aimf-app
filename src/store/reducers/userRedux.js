@@ -93,7 +93,6 @@ export const getUsers = (
               response.data.meta.last_page === response.data.meta.current_page,
           }),
         );
-
       })
       .catch(function (error) {
         dispatch(
