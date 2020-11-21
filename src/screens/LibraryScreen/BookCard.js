@@ -28,10 +28,6 @@ const BookCard = ({data, showBook}) => {
         isAvailable,
         availabilityDate,
     } = data;
-    //todo to test
-    // availabilityDate = '2020-12-10';
-    // isAvailable = false;
-    // isFavorited = true;
 
     const getUrlThumbnail = () => {
         const image = images.filter((image) => image.type == 'thumbnail');
@@ -43,8 +39,8 @@ const BookCard = ({data, showBook}) => {
             <View
                 style={{
                     borderRadius: 50,
-                    width: 7,
-                    height: 7,
+                    width: 9,
+                    height: 9,
                     marginHorizontal: 5,
                     backgroundColor: isAvailable ? successColor : failColor,
                 }}
@@ -101,12 +97,14 @@ BookCard.propTypes = {
 
 const styles = {
     cardContainer: {
-        borderTopColor: gray,
-        borderTopWidth: 0.5,
-        borderTopStyle: 'solid',
-        margin: 0,
+        borderRadius: 3,
+        marginHorizontal: 10,
+        marginVertical: 3,
         display: 'flex',
         flexDirection: 'row',
+        shadowColor: '#383838',
+        shadowOpacity: 0.3,
+        elevation: 4,
     },
     thumbnail: {
         borderRadius: 3,

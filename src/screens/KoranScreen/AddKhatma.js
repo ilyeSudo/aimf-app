@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {View, StyleSheet, Alert, Text, SafeAreaView} from 'react-native';
 import PropTypes from 'prop-types';
 import CostumHeader from '../../Components/KoranScreen/CostumHeader';
-import {black, orangeBackgroud} from '../../Utils/colors';
 import {ayncSaveKhatma} from '../../store/reducers/khatmaRedux';
 import {formatDateWithDayAndMonthName} from '../../Utils/Functions';
 import DatePicker from '../../Components/DatePicker';
@@ -12,11 +11,12 @@ import Loader from '../../Components/Loader';
 import SelectAssociation from '../../Components/SelectAssociation';
 import {isSuperAdmin, isAdmin} from '../../Utils/Account';
 import {AIMF_ASSOCIATION_ID} from '../../Utils/Constants';
+import {black, backgroundColor} from "../../Utils/colors";
 
 const styles = StyleSheet.compose({
   container: {
     flex: 1,
-    backgroundColor: orangeBackgroud,
+    backgroundColor,
     paddingTop: 0,
   },
   title: {

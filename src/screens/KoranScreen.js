@@ -22,7 +22,7 @@ import {
   asyncReceiveUserKhatma,
 } from '../store/reducers/khatmaRedux';
 import {receiveKoran} from '../store/reducers/koranRedux';
-import {white, black, orange2, orangeBackgroud} from '../Utils/colors';
+import {white, black, orange2, backgroundColor} from '../Utils/colors';
 import HistoryItem from '../Components/KoranScreen/HistoryItem';
 import {isAdmin, isSuperAdmin, isAssociationAdmin} from '../Utils/Account';
 import ErrorModal from '../Components/ErrorModal';
@@ -35,7 +35,7 @@ YellowBox.ignoreWarnings([
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: orangeBackgroud,
+    backgroundColor: backgroundColor,
     paddingTop: 0,
   },
   textHeader: {

@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import {View, FlatList, SafeAreaView, ActivityIndicator} from 'react-native';
 import BookReservationCard from '../LibraryScreen/BookReservationCard';
 import {getMyReservations} from '../../store/reducers/bookRedux';
+import {LIBRARY_STR} from "../../Utils/Constants";
+import {backgroundColor} from "../../Utils/colors";
 
 const mapStateToProps = (state) => ({
   myReservations: state.bookStore.myReservations,
@@ -34,7 +36,7 @@ const MyReservations = ({myReservations, getMyReservations}) => {
     );
   } else {
     return (
-      <SafeAreaView style={{marginTop: 0}}>
+      <SafeAreaView style={{marginTop: 0, backgroundColor, flex: 1, paddingTop: 5}}>
         <FlatList
           data={myReservations}
           renderItem={renderItem}
@@ -46,7 +48,7 @@ const MyReservations = ({myReservations, getMyReservations}) => {
 };
 MyReservations.navigationOptions = (navigationData) => {
   return {
-    headerTitle: 'Mes réservation',
+    headerTitle: LIBRARY_STR.my_reservations,
   };
 };
 
