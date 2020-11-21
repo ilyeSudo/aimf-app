@@ -90,6 +90,7 @@ class HomeScreen extends Component {
       <>
         <SafeAreaView
           style={{
+            flex: 1,
             paddingTop: 0,
             backgroundColor: backgroundColor,
             opacity: this.props.loading || this.props.errorMessage ? 0.6 : 1,

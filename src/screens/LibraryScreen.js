@@ -85,19 +85,6 @@ const LibraryScreen = ({
     }
   };
 
-  const renderSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 1,
-          width: '86%',
-          backgroundColor: '#CED0CE',
-          marginLeft: '14%',
-        }}
-      />
-    );
-  };
-
   const handleShowBook = (item) => {
     showBook(item.id);
     navigation.navigate('BookDetails', {
@@ -337,6 +324,7 @@ const styles = StyleSheet.create({
     filterContainer: {
         marginTop: 0,
         opacity: 1,
+        flex: 1,
         backgroundColor: backgroundColor,
     },
     navigationBtn: {
