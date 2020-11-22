@@ -54,7 +54,7 @@ const BookCard = ({data, showBook}) => {
                 <Left style={{flex: 1}}>
                     <Thumbnail
                         style={{...styles.thumbnail}}
-                        source={{uri: getUrlThumbnail()}}
+                        source={images && images.length ? {uri: getUrlThumbnail()} : require('../../../assets/images/book-cover-placeholder.png')}
                     />
 
                     <Body style={{flex: 4}}>
