@@ -51,7 +51,7 @@ class CarouselImages extends React.PureComponent {
       <TouchableOpacity onPress={() => this.setState({showImageModel: true})}>
         <View style={{alignItems: 'center'}}>
           <ImageBackground
-            source={{uri: getUrlImage(item)}}
+            source={!this.props.isLocal ? {uri: getUrlImage(item)}: item}
             style={styles.image}
             imageStyle={{borderRadius: 10}}
             resizeMode="cover"
@@ -83,25 +83,28 @@ class CarouselImages extends React.PureComponent {
   };
 
   showImageModal = () => {
+    if(this.props?.images)
     return (
-      <Modal
-        visible={this.state.showImageModel}
-        transparent={true}
-        onRequestClose={() => this.setState({showImageModel: false})}>
-        <ImageViewer
-          imageUrls={this.props?.images.map((m) => {
-            return {
-              url: getUrlImage(m),
-              props: {},
-            };
-          })}
-          index={this.state?.currentIndex || 0}
-        />
-      </Modal>
+              <Modal
+                  visible={this.state.showImageModel}
+                  transparent={true}
+                  onRequestClose={() => this.setState({showImageModel: false})}>
+                  <ImageViewer
+                      imageUrls={this.props?.images.map((m) => {
+                        return {
+                          url: getUrlImage(m),
+                          props: {},
+                        };
+                      })}
+                      index={this.state?.currentIndex || 0}
+                  />
+
+              </Modal>
     );
   };
 
   render() {
+
     return (
       <View style={{paddingTop: 35}}>
         <View style={{alignItems: 'center'}}>
@@ -110,7 +113,7 @@ class CarouselImages extends React.PureComponent {
             sliderWidth={200}
             itemWidth={200}
             layout={'stack'}
-            data={this.props.images}
+            data={this.props.images?.length? this.props.images: [require('../../assets/images/book-cover-placeholder.png')]}
             ref={(carousel) => {
               this._carousel = carousel;
             }}
@@ -128,6 +131,7 @@ class CarouselImages extends React.PureComponent {
 }
 CarouselImages.propTypes = {
   images: PropTypes.array,
+  isLocal: PropTypes.bool
 };
 
 export default CarouselImages;

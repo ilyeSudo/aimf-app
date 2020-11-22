@@ -326,6 +326,7 @@ const styles = StyleSheet.create({
         opacity: 1,
         flex: 1,
         backgroundColor: backgroundColor,
+        paddingBottom: 75
     },
     navigationBtn: {
         paddingHorizontal: 20,

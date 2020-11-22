@@ -1,107 +1,108 @@
 import React, {useState, useEffect, Component} from 'react';
 import {connect} from 'react-redux';
 import {
-  Card,
-  CardItem,
-  Icon,
-  Container,
-  Content,
-  Body,
-  Row,
-  Col,
+    Card,
+    CardItem,
+    Icon,
+    Container,
+    Content,
+    Body,
+    Row,
+    Col,
 } from 'native-base';
 import CarouselImages from '../../Components/CaraouselImages';
 import QrCodeModal from './QrCodeModal';
 import {
-  getQrCodeString,
-  getFavoriteListIds,
+    getQrCodeString,
+    getFavoriteListIds,
 } from '../../store/selectors/bookingSelector';
 import {
-  removeFromFavoritesRequest,
-  addToFavoritesRequest,
-  getBooks,
+    removeFromFavoritesRequest,
+    addToFavoritesRequest,
+    getBooks,
 } from '../../store/reducers/bookRedux';
 import {View, Text, ActivityIndicator, TouchableOpacity, ScrollView} from 'react-native';
 import {isoDateToFr} from '../../Utils/Functions';
 import {
-  failColor,
-  mainColor,
-  placeholderTextColor,
-  secondaryColor,
+    backgroundColor,
+    failColor,
+    mainColor,
+    placeholderTextColor,
+    secondaryColor,
 } from '../../Utils/colors';
-import HeartIcon  from '../../Components/icons/HeartIcon';
+import HeartIcon from '../../Components/icons/HeartIcon';
 import IconForms from '../../Components/icons/IconForms';
 import {
-  FCalendarIcon,
-  GCalendarIcon,
+    FCalendarIcon,
+    GCalendarIcon,
 } from '../../Components/icons/CalendarIcon';
 import {LIBRARY_STR} from "../../Utils/Constants";
 
 const mapStateToProps = (state) => ({
-  selectedBook: state.bookStore.selectedBook,
-  getQrCodeString: getQrCodeString(state),
-  getFavoriteListIds: getFavoriteListIds(state),
+    selectedBook: state.bookStore.selectedBook,
+    getQrCodeString: getQrCodeString(state),
+    getFavoriteListIds: getFavoriteListIds(state),
 });
 const mapDispatchToProps = (dispatch) => ({
-  getBooks: (...args) => dispatch(getBooks(...args)),
-  removeFromFavoritesRequest: (...args) =>
-    dispatch(removeFromFavoritesRequest(...args)),
-  addToFavoritesRequest: (...args) => dispatch(addToFavoritesRequest(...args)),
+    getBooks: (...args) => dispatch(getBooks(...args)),
+    removeFromFavoritesRequest: (...args) =>
+        dispatch(removeFromFavoritesRequest(...args)),
+    addToFavoritesRequest: (...args) => dispatch(addToFavoritesRequest(...args)),
 });
 
 const renderButton: Component = (callback, title, {disabled, icon}) => {
-  const color = callback && !disabled ? 'black' : placeholderTextColor;
-  return (
-    <TouchableOpacity
-      style={styles.buttonStyle}
-      hitSlop={{x: 10, y: 10}}
-      onPress={callback}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        {icon}
-        <Text style={{...styles.buttonText, color}}>{title}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+    const color = callback && !disabled ? 'black' : placeholderTextColor;
+    return (
+        <TouchableOpacity
+            style={styles.buttonStyle}
+            hitSlop={{x: 10, y: 10}}
+            onPress={callback}>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                {icon}
+                <Text style={{...styles.buttonText, color}}>{title}</Text>
+            </View>
+        </TouchableOpacity>
+    );
 };
 
 const BookDetails = ({
-  selectedBook,
-  getQrCodeString,
-  removeFromFavoritesRequest,
-  addToFavoritesRequest,
-  getFavoriteListIds,
-}) => {
-  const [isFavorited, setIsFavorited] = useState(false);
+                         selectedBook,
+                         getQrCodeString,
+                         removeFromFavoritesRequest,
+                         addToFavoritesRequest,
+                         getFavoriteListIds,
+                     }) => {
+    const [isFavorited, setIsFavorited] = useState(false);
 
-  const [showQrCodeForBooking, setShowQrCodeForBooking] = useState(false);
+    const [showQrCodeForBooking, setShowQrCodeForBooking] = useState(false);
 
-  useEffect(() => {
-    if (selectedBook) {
-      if (!selectedBook.isLoading) {
+    useEffect(() => {
+        if (selectedBook) {
+            if (!selectedBook.isLoading) {
+                setIsFavorited(getFavoriteListIds.includes(selectedBook.id));
+            }
+        }
+    }, [selectedBook]);
+
+    useEffect(() => {
         setIsFavorited(getFavoriteListIds.includes(selectedBook.id));
-      }
-    }
-  }, [selectedBook]);
+    }, [getFavoriteListIds]);
 
-  useEffect(() => {
-    setIsFavorited(getFavoriteListIds.includes(selectedBook.id));
-  }, [getFavoriteListIds]);
+    const handleShowQrCode = () => {
+        setShowQrCodeForBooking(true);
+    };
 
-  const handleShowQrCode = () => {
-    setShowQrCodeForBooking(true);
-  };
-
-  const handleFavorites = () => {
-    if (isFavorited) {
-      return removeFromFavoritesRequest(selectedBook, getFavoriteListIds);
-    }
-    return addToFavoritesRequest(selectedBook, getFavoriteListIds);
-  };
+    const handleFavorites = () => {
+        if (isFavorited) {
+            return removeFromFavoritesRequest(selectedBook, getFavoriteListIds);
+        }
+        return addToFavoritesRequest(selectedBook, getFavoriteListIds);
+    };
 
     const renderInfoLine = (label, value) => {
         return (
@@ -122,8 +123,9 @@ const BookDetails = ({
         return (
             selectedBook && (
                 <Container style={styles.mainContainer}>
-                    <ScrollView>
-                        <CarouselImages images={selectedBook.images}/>
+                    <ScrollView style={{flex: 1}}>
+                        <CarouselImages isLocal={!selectedBook.images.length}
+                                        images={selectedBook.images}/>
                         <Content>
                             <Card
                                 style={{...styles.upperContainer, justifyContent: 'flex-start'}}>
@@ -226,19 +228,22 @@ const BookDetails = ({
     }
 };
 BookDetails.navigationOptions = (navigationData) => {
-  const bookTitle = navigationData.navigation.getParam('bookTitle');
-  return {
-    headerTitle: bookTitle,
-    headerTitleStyle: {
-      textAlign: 'center',
-      flex: 1,
-    },
-  };
+    const bookTitle = navigationData.navigation.getParam('bookTitle');
+    return {
+        headerTitle: bookTitle,
+        headerTitleStyle: {
+            textAlign: 'center',
+            flex: 1,
+        },
+    };
 };
 
 const styles = {
+    mainContainer: {
+        backgroundColor
+    },
     upperContainer: {
-        paddingBottom: 70,
+        paddingBottom: 70
     },
     dispoStatusInfo: {
         color: '#17986A',
