@@ -10,10 +10,11 @@ import {login} from '../store/reducers/authenticationRedux';
 import {navigate} from '../Utils/Account';
 import RenderInput from '../Components/RenderInput';
 import RenderPassword from '../Components/RenderPassoword';
-import {mainColor} from "../Utils/colors";
+import {mainColor3Button} from "../Utils/colors";
 
 const styles = StyleSheet.create({
   bodyWrapper: {
+    backgroundColor: '#fff',
     height: 550,
     paddingTop: 50,
     alignItems: 'center',
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 150,
     borderRadius: 10,
-    backgroundColor: mainColor,
+    backgroundColor: mainColor3Button,
   },
   nextButtonText: {
     fontSize: 18,
@@ -79,11 +80,11 @@ class Login extends React.Component {
 
   render() {
     const {email, password} = this.state;
-    const logo = require('../../assets/images/logo_transparent.png');
+    const logo = require('../../assets/images/app_icon_text.png');
     return (
       <>
         <View style={styles.bodyWrapper}>
-          <Image style={{width: 120, height: 120}} source={logo} />
+          <Image style={{width: 200, height: 130, borderRadius: 9}} source={logo} />
           <RenderInput
             keyboardType="email-address"
             onChange={(value) => this.setState({email: value})}

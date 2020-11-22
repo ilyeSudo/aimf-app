@@ -120,11 +120,14 @@ const BookDetails = ({
             </View>
         );
     } else {
+        console.log(selectedBook);
+        console.log(selectedBook.images);
+
         return (
             selectedBook && (
                 <Container style={styles.mainContainer}>
                     <ScrollView style={{flex: 1}}>
-                        <CarouselImages isLocal={!selectedBook.images.length}
+                        <CarouselImages isLocal={!selectedBook.images?.length}
                                         images={selectedBook.images}/>
                         <Content>
                             <Card
