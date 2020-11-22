@@ -74,7 +74,6 @@ const LibraryScreen = ({
 
   const handleRefresh = () => {
     if (!refreshing && !handleMore && !loading) {
-      let search = searchValue == '' ? null : searchValue;
       getBooks([], 1, search, filterValue, true);
     }
   };

@@ -170,6 +170,7 @@ export const getBooks = (
   handleMore = false,
 ) => {
   return (dispatch) => {
+    search = search == '' ? null : search;
     dispatch(getBookRequest(refreshing, handleMore));
     getAxiosInstance()
       .get(GET_BOOK_LIST_URI, {
