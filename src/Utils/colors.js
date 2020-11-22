@@ -17,6 +17,7 @@ export const mainColor = '#CB8347';
 export const backgroundColor = '#FFF1E5';
 
 export const mainColor2Button = '#FFB87F';
+export const mainColor3Button = '#f65f19';
 
 export const secondaryColor = '#FCE3BA';
 export const successColor = '#25CB8F';

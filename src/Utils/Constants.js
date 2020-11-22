@@ -7,6 +7,7 @@ export const SHOW_ACCOUNT_ACTION = 'show_account';
 export const UPDATE_ACCOUNT_ACTION = 'update_account';
 export const SHOW_CONDITION_ACTION = 'show_condition';
 export const LIST_BOOK_ACTION = 'list_book';
+export const APP_NAME = 'Tawat Connect';
 
 export const MARRIED = 'married';
 export const SINGLE = 'single';
@@ -208,3 +209,6 @@ export const LIBRARY_STR = {
   i_want_to_borrow: 'Je veux réserver',
   please_show_the_qrcode_at_the_library: 'Veuillez présenter ce QrCode à la bibliothèque'
 };
+
+
+
