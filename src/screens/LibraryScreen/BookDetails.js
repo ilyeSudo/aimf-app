@@ -125,7 +125,7 @@ const BookDetails = ({
                 <Container style={styles.mainContainer}>
                     <ScrollView style={{flex: 1}}>
                         <CarouselImages isLocal={!selectedBook.images.length}
-                                        images={selectedBook.images.length}/>
+                                        images={selectedBook.images}/>
                         <Content>
                             <Card
                                 style={{...styles.upperContainer, justifyContent: 'flex-start'}}>
