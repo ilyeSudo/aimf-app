@@ -4,6 +4,7 @@ import IconForms, {GRADIENT, OUTLINE} from './IconForms';
 
 class CustomIcon extends React.PureComponent {
   getGradient: Function;
+
   getOutline: Function;
 
   renderIcon() {
@@ -24,8 +25,6 @@ class CustomIcon extends React.PureComponent {
 
 CustomIcon.propTypes = {
   iconForm: IconForms,
-  color1: PropTypes.string,
-  color2: PropTypes.string,
 };
 
 export default CustomIcon;

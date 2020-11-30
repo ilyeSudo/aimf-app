@@ -25,7 +25,13 @@ class ChildrenInformation extends Component {
           style={this.props.itemStyle ? this.props.itemStyle : styles.label}>
           Année de naissance {CHILDREN_YEAR_LABEL[index]} enfant
         </Label>
-        <Item rounded style={{...styles.inputItem, height: 60, padding: 5}}>
+        <Item
+          rounded
+          style={{
+            ...styles.inputItem,
+            height: 60,
+            padding: 5,
+          }}>
           <Picker
             style={{backgroundColor: '#FFF', width: 280, height: 55}}
             selectedValue={

@@ -4,7 +4,7 @@ import {View, FlatList, SafeAreaView, ActivityIndicator} from 'react-native';
 import {showBook, getFavoriteList} from '../../store/reducers/bookRedux';
 import BookCard from '../LibraryScreen/BookCard';
 import {getFavoriteListIds} from '../../store/selectors/bookingSelector';
-import {backgroundColor} from "../../Utils/colors";
+import {backgroundColor} from '../../Utils/colors';
 
 const mapStateToProps = (state) => ({
   favoriteList: state.bookStore.favoriteList,

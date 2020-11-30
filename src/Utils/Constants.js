@@ -207,8 +207,6 @@ export const LIBRARY_STR = {
   add_to_bookmarked: 'Ajouter aux favoris',
   remove_from_bookmarked: 'Supprimer des favoris',
   i_want_to_borrow: 'Je veux réserver',
-  please_show_the_qrcode_at_the_library: 'Veuillez présenter ce QrCode à la bibliothèque'
+  please_show_the_qrcode_at_the_library:
+    'Veuillez présenter ce QrCode à la bibliothèque',
 };
-
-
-

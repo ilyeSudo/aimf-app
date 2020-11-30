@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
 import PropTypes from 'prop-types';
@@ -116,4 +115,6 @@ HistoryItem.propTypes = {
   numberOfRead: PropTypes.number,
   loading: PropTypes.bool,
   navigate: PropTypes.func,
+  associationName: PropTypes.string,
+  associationLogo: PropTypes.string,
 };
