@@ -17,7 +17,9 @@ export const isSuperAdmin = (user) => {
 export const isAdmin = (user) => {
   if (user && user.roles) {
     return !!user.roles.find(
-      (role) => role.name.substring(0, 6) === ADMIN_ROLE,
+      (role) =>
+        role.name.substring(0, 6) === ADMIN_ROLE ||
+        role.name === SUPER_ADMIN_ROLE,
     );
   }
   return false;
@@ -93,7 +95,7 @@ export const navigate = (
       live = false;
       navigation.navigate('unActiveUserTabNavigator');
     }
-    screen = screen + (live ? 'WithYoutubeLive' : '') + 'TabNavigator';
+    screen = `${screen + (live ? 'WithYoutubeLive' : '')}TabNavigator`;
   }
   navigation.navigate(screen);
 };
