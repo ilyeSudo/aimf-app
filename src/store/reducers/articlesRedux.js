@@ -1,6 +1,10 @@
 import {batchActions} from 'redux-batched-actions';
 import getAxiosInstance from '../../Utils/axios';
-import {GET_ARTICLES_URI, GET_DRAFT_ARTICLE_URI} from '../../Utils/ApiUrl';
+import {
+  DELETE_ARTICLE_URI,
+  GET_ARTICLES_URI,
+  GET_DRAFT_ARTICLE_URI,
+} from '../../Utils/ApiUrl';
 import {dispatchError} from './errorMessageRedux';
 import {
   DRAFT_ARTICLE_STATUS,
@@ -18,6 +22,10 @@ const GET_DRAFT_ARTICLE_ERROR = 'GET_DRAFT_ARTICLE_ERROR';
 const POST_ARTICLES_REQUEST = 'POST_ARTICLES_REQUEST';
 const POST_ARTICLES_SUCCESS = 'POST_ARTICLES_SUCCESS';
 const POST_ARTICLES_ERROR = 'POST_ARTICLES_ERROR';
+
+const DELETE_ARTICLE_REQUEST = 'DELETE_ARTICLE_REQUEST';
+const DELETE_ARTICLE_SUCCESS = 'DELETE_ARTICLE_SUCCESS';
+const DELETE_ARTICLE_ERROR = 'DELETE_ARTICLE_ERROR';
 
 const BATCH_ARTICLES_ERROR = 'BATCH_ARTICLES_ERROR';
 
@@ -89,6 +97,15 @@ const postArticleError = () => {
   };
 };
 
+const deleteArticleRequest = () => {
+  return {
+    type: DELETE_ARTICLE_REQUEST,
+    data: {
+      loading: true,
+    },
+  };
+};
+
 export const getArticles = (
   currentArticles,
   page,
@@ -132,7 +149,7 @@ export const savePost = (data) => {
   return (dispatch) => {
     dispatch(saveArticleRequest());
     getAxiosInstance()
-      .post(GET_ARTICLES_URI + '?with_association=1', data)
+      .post(`${GET_ARTICLES_URI}?with_association=1`, data)
       .then(function (response) {
         if (response.data.data.status === PUBLISHED_ARTICLE_STATUS) {
           dispatch(getArticles([], 1, true));
@@ -169,6 +186,26 @@ export const getDraftArticle = () => {
   };
 };
 
+export const deleteArticle = (id) => {
+  return (dispatch) => {
+    dispatch(deleteArticleRequest());
+    getAxiosInstance()
+      .delete(`${DELETE_ARTICLE_URI}/${id}`)
+      // eslint-disable-next-line no-unused-vars
+      .then(function (response) {
+        dispatch(getArticles([], 1, true));
+      })
+      .catch(function (error) {
+        dispatch(
+          batchActions(
+            [dispatchError(error), getDraftArticleError()],
+            BATCH_ARTICLES_ERROR,
+          ),
+        );
+      });
+  };
+};
+
 const initialState = [];
 
 export const articleReducer = (state = initialState, action) => {
@@ -176,6 +213,7 @@ export const articleReducer = (state = initialState, action) => {
     case GET_ARTICLES_REQUEST:
     case GET_DRAFT_ARTICLE_REQUEST:
     case POST_ARTICLES_REQUEST:
+    case DELETE_ARTICLE_REQUEST:
       return {...state, ...action.data};
     case GET_ARTICLES_SUCCESS: {
       return {

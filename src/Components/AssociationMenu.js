@@ -19,7 +19,7 @@ import {
   receiveUserAssociationData,
   receiveAssociationData,
 } from '../store/reducers/associationRedux';
-import {white, black} from '../Utils/colors';
+import {white, black, backgroundColor} from '../Utils/colors';
 
 const styles = StyleSheet.create({
   activeAssociation: {
@@ -133,7 +133,7 @@ class AssociationMenu extends Component {
     const {screenerTitle, associationList, userAssociationList} = this.props;
     const {hideMenu} = this.state;
     return (
-      <View>
+      <View style={{backgroundColor}}>
         <View style={{flexDirection: 'row', paddingHorizontal: 14}}>
           <View>
             <Text style={{fontSize: 26, fontWeight: '700'}}>Bienvenue, </Text>

@@ -7,7 +7,7 @@ import {API_BASE_URL} from 'react-native-dotenv';
 class FeedCard extends Component {
   render() {
     return (
-      <Card style={{flex: 0, marginLeft: 10, marginRight: 10}}>
+      <Card style={{width: '74%', marginLeft: 10, marginRight: 10}}>
         <CardItem style={{backgroundColor: this.props.backgroundColor}}>
           <Left>
             <View

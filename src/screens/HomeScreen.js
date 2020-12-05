@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import {View, FlatList, SafeAreaView} from 'react-native';
+import {View, Text, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import {Icon} from 'react-native-elements';
 import {isoDateToFr} from '../Utils/Functions';
 import FeedCard from './HomeScreen/FeedCard';
-import {getArticles} from '../store/reducers/articlesRedux';
+import {deleteArticle, getArticles} from '../store/reducers/articlesRedux';
 import {
   receiveAssociationData,
   receiveUserAssociationData,
@@ -16,7 +18,8 @@ import {
   ayncReceiveKhatma,
   asyncReceiveUserKhatma,
 } from '../store/reducers/khatmaRedux';
-import {backgroundColor} from '../Utils/colors';
+import styles from './HomeScreen/css';
+import {isAdmin} from '../Utils/Account';
 
 class HomeScreen extends Component {
   static navigationOptions = {
@@ -59,55 +62,84 @@ class HomeScreen extends Component {
     }
   };
 
-  renderSeparator = () => {
+  renderItem = (item) => {
     return (
-      <View
-        style={{
-          height: 1,
-          width: '86%',
-          backgroundColor: '#CED0CE',
-          marginLeft: '14%',
-        }}
-      />
+      <View style={styles.articleView}>
+        <FeedCard
+          id={item.id}
+          title={item.title}
+          date={isoDateToFr(item.publishedAt)}
+          description={item.description}
+          backgroundColor={!item.isExpired ? '#ffffff' : '#dadada'}
+          associationName={item?.association?.name}
+          logo={item?.association?.logo}
+        />
+
+        {isAdmin(this.props.user) && (
+          <View style={styles.rowBack}>
+            <Icon
+              style={[styles.backRightBtn]}
+              color="#f26060"
+              name="delete"
+              type="MaterialCommunityIcons"
+            />
+          </View>
+        )}
+      </View>
     );
   };
 
-  renderItem = (item) => {
+  deleteArticle = (id) => {
+    Alert.alert(
+      'Confirmation',
+      'Êtes-vous sûr de vouloir supprimer cet article ?',
+      [
+        {
+          text: 'Confirmer',
+          onPress: () => this.props.deleteArticle(id),
+        },
+        {
+          text: 'Annuler',
+          onPress: () => {},
+          style: 'cancel',
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
+  renderHiddenItem = (data) => {
     return (
-      <FeedCard
-        title={item.title}
-        date={isoDateToFr(item.publishedAt)}
-        description={item.description}
-        backgroundColor={!item.isExpired ? '#ffffff' : '#dadada'}
-        associationName={item?.association?.name}
-        logo={item?.association?.logo}
-      />
+      <View style={styles.hiddenItemeContainer}>
+        <View style={styles.hiddenItemeTextContainer}>
+          <Text
+            style={styles.hiddenItemeText}
+            onPress={() => this.deleteArticle(data.item.id)}
+          />
+        </View>
+      </View>
     );
   };
 
   render() {
     return (
       <>
-        <SafeAreaView
+        <AssociationMenu screenerTitle="Actualités" />
+        <SwipeListView
           style={{
-            flex: 1,
-            paddingTop: 0,
-            backgroundColor,
+            ...styles.swipeListView,
             opacity: this.props.loading || this.props.errorMessage ? 0.6 : 1,
-          }}>
-          <AssociationMenu screenerTitle="Actualités" />
-          <FlatList
-            style={{marginBottom: 'auto'}}
-            data={this.props.articles}
-            renderItem={({item}) => this.renderItem(item)}
-            keyExtractor={(item) => `${item.id}`}
-            ItemSeparatorComponent={this.renderSeparator}
-            onRefresh={this.handleRefresh}
-            refreshing={false}
-            onEndReached={this.handleLoadMore}
-            onEndReachedThreshold={0.5}
-          />
-        </SafeAreaView>
+          }}
+          data={this.props.articles}
+          renderItem={({item}) => this.renderItem(item)}
+          renderHiddenItem={this.renderHiddenItem}
+          leftOpenValue={0}
+          rightOpenValue={isAdmin(this.props.user) ? -150 : 0}
+          onRefresh={this.handleRefresh}
+          refreshing={false}
+          onEndReached={this.handleLoadMore}
+          onEndReachedThreshold={0.5}
+        />
         <Loader visible={!!this.props.loading} />
         {this.props.errorMessage && (
           <ErrorModal visible message={this.props.errorMessage} />
@@ -127,7 +159,9 @@ const mapStateToProps = (state) => {
     page,
     lastPage,
   } = state.articleStore;
+  const {user} = state.accountStore;
   return {
+    user,
     articles,
     loading,
     refreshing,
@@ -142,6 +176,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getArticles: (articles, page, refreshing = false, handleMore = false) =>
       dispatch(getArticles(articles, page, refreshing, handleMore)),
+    deleteArticle: (id) => dispatch(deleteArticle(id)),
     receiveAssociationData: () => dispatch(receiveAssociationData()),
     receiveUserAssociationData: () => dispatch(receiveUserAssociationData()),
     ayncReceiveKhatma: () => dispatch(ayncReceiveKhatma()),
@@ -150,13 +185,19 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 HomeScreen.propTypes = {
+  user: PropTypes.object,
   page: PropTypes.number,
   articles: PropTypes.array,
   getArticles: PropTypes.func,
+  deleteArticle: PropTypes.func,
   loading: PropTypes.bool,
   refreshing: PropTypes.bool,
   handleMore: PropTypes.bool,
   lastPage: PropTypes.bool,
   errorMessage: PropTypes.string,
+  receiveAssociationData: PropTypes.func.isRequired,
+  receiveUserAssociationData: PropTypes.func.isRequired,
+  ayncReceiveKhatma: PropTypes.func.isRequired,
+  asyncReceiveUserKhatma: PropTypes.func.isRequired,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
