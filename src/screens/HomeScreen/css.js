@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   hiddenItemeTextContainer: {
     // borderWidth: 1,
-    width: '25%',
+    padding: 20,
   },
   hiddenItemeText: {
     marginTop: 'auto',

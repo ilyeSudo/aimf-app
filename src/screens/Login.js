@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import {Text, TouchableOpacity, Image, ScrollView, View} from 'react-native';
 import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
 import SpinnerButton from 'react-native-spinner-button';
@@ -10,43 +10,7 @@ import {login} from '../store/reducers/authenticationRedux';
 import {navigate} from '../Utils/Account';
 import RenderInput from '../Components/RenderInput';
 import RenderPassword from '../Components/RenderPassoword';
-import {mainColor3Button} from '../Utils/colors';
-
-const styles = StyleSheet.create({
-  bodyWrapper: {
-    backgroundColor: '#fff',
-    height: 550,
-    paddingTop: 50,
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-  },
-  createAccount: {
-    textAlign: 'center',
-  },
-  inputItem: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginBottom: 0,
-    paddingHorizontal: 10,
-    width: 300,
-    borderRadius: 10,
-  },
-  input: {
-    fontSize: 15,
-  },
-  loginButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 50,
-    width: 150,
-    borderRadius: 10,
-    backgroundColor: mainColor3Button,
-  },
-  nextButtonText: {
-    fontSize: 18,
-    color: '#fff',
-  },
-});
+import styles from './Login/css';
 
 class Login extends React.Component {
   constructor(props) {
@@ -83,9 +47,15 @@ class Login extends React.Component {
     const logo = require('../../assets/images/app_icon_text.png');
     return (
       <>
-        <View style={styles.bodyWrapper}>
+        <ScrollView style={styles.bodyWrapper}>
           <Image
-            style={{width: 200, height: 130, borderRadius: 9}}
+            style={{
+              width: 200,
+              height: 130,
+              borderRadius: 9,
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
             source={logo}
           />
           <RenderInput
@@ -101,22 +71,23 @@ class Login extends React.Component {
             placeholder="Mot de passe"
             itemStyle={styles.inputItem}
           />
-          <SpinnerButton
-            buttonStyle={styles.loginButton}
-            isLoading={this.props.loading}
-            onPress={this.handleLogin}
-            spinnerType="SkypeIndicator">
-            <Text style={styles.nextButtonText}>Connexion</Text>
-          </SpinnerButton>
+          <View style={styles.loginButtonContainer}>
+            <SpinnerButton
+              buttonStyle={styles.loginButton}
+              isLoading={this.props.loading}
+              onPress={this.handleLogin}
+              spinnerType="SkypeIndicator">
+              <Text style={styles.nextButtonText}>Connexion</Text>
+            </SpinnerButton>
+          </View>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('SignUp')}
-            style={styles.touchable}
             activeOpacity={0.6}>
             <Text style={styles.createAccount}>
               Vous n&apos;avez pas encore un compte?
             </Text>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
         {this.props.errorMessage && (
           <ErrorModal visible message={this.props.errorMessage} />
         )}

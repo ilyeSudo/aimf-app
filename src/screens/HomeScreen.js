@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import {View, Text, Alert} from 'react-native';
+import {View, Animated, FlatList} from 'react-native';
 import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
-import {SwipeListView} from 'react-native-swipe-list-view';
-import {Icon} from 'react-native-elements';
 import {isoDateToFr} from '../Utils/Functions';
-import FeedCard from './HomeScreen/FeedCard';
-import {deleteArticle, getArticles} from '../store/reducers/articlesRedux';
+import FeedCardOld from './HomeScreen/FeedCard';
+import {getArticles} from '../store/reducers/articlesRedux';
 import {
   receiveAssociationData,
   receiveUserAssociationData,
@@ -19,12 +17,18 @@ import {
   asyncReceiveUserKhatma,
 } from '../store/reducers/khatmaRedux';
 import styles from './HomeScreen/css';
-import {isAdmin} from '../Utils/Account';
 
 class HomeScreen extends Component {
   static navigationOptions = {
     header: null,
   };
+
+  constructor() {
+    super();
+    this.state = {
+      x: new Animated.Value(0),
+    };
+  }
 
   componentDidMount() {
     this.props.getArticles([], 1, true);
@@ -33,6 +37,13 @@ class HomeScreen extends Component {
     this.props.ayncReceiveKhatma();
     this.props.asyncReceiveUserKhatma();
   }
+
+  slide = (val) => {
+    Animated.spring(this.state.x, {
+      toValue: val,
+      useNativeDriver: true,
+    }).start();
+  };
 
   handleRefresh = () => {
     if (
@@ -65,7 +76,7 @@ class HomeScreen extends Component {
   renderItem = (item) => {
     return (
       <View style={styles.articleView}>
-        <FeedCard
+        <FeedCardOld
           id={item.id}
           title={item.title}
           date={isoDateToFr(item.publishedAt)}
@@ -74,49 +85,6 @@ class HomeScreen extends Component {
           associationName={item?.association?.name}
           logo={item?.association?.logo}
         />
-
-        {isAdmin(this.props.user) && (
-          <View style={styles.rowBack}>
-            <Icon
-              style={[styles.backRightBtn]}
-              color="#f26060"
-              name="delete"
-              type="MaterialCommunityIcons"
-            />
-          </View>
-        )}
-      </View>
-    );
-  };
-
-  deleteArticle = (id) => {
-    Alert.alert(
-      'Confirmation',
-      'Êtes-vous sûr de vouloir supprimer cet article ?',
-      [
-        {
-          text: 'Confirmer',
-          onPress: () => this.props.deleteArticle(id),
-        },
-        {
-          text: 'Annuler',
-          onPress: () => {},
-          style: 'cancel',
-        },
-      ],
-      {cancelable: false},
-    );
-  };
-
-  renderHiddenItem = (data) => {
-    return (
-      <View style={styles.hiddenItemeContainer}>
-        <View style={styles.hiddenItemeTextContainer}>
-          <Text
-            style={styles.hiddenItemeText}
-            onPress={() => this.deleteArticle(data.item.id)}
-          />
-        </View>
       </View>
     );
   };
@@ -125,16 +93,15 @@ class HomeScreen extends Component {
     return (
       <>
         <AssociationMenu screenerTitle="Actualités" />
-        <SwipeListView
+        <FlatList
           style={{
             ...styles.swipeListView,
             opacity: this.props.loading || this.props.errorMessage ? 0.6 : 1,
           }}
           data={this.props.articles}
           renderItem={({item}) => this.renderItem(item)}
-          renderHiddenItem={this.renderHiddenItem}
-          leftOpenValue={0}
-          rightOpenValue={isAdmin(this.props.user) ? -150 : 0}
+          keyExtractor={(item) => `${item.id}`}
+          ItemSeparatorComponent={this.renderSeparator}
           onRefresh={this.handleRefresh}
           refreshing={false}
           onEndReached={this.handleLoadMore}
@@ -159,9 +126,7 @@ const mapStateToProps = (state) => {
     page,
     lastPage,
   } = state.articleStore;
-  const {user} = state.accountStore;
   return {
-    user,
     articles,
     loading,
     refreshing,
@@ -176,7 +141,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getArticles: (articles, page, refreshing = false, handleMore = false) =>
       dispatch(getArticles(articles, page, refreshing, handleMore)),
-    deleteArticle: (id) => dispatch(deleteArticle(id)),
     receiveAssociationData: () => dispatch(receiveAssociationData()),
     receiveUserAssociationData: () => dispatch(receiveUserAssociationData()),
     ayncReceiveKhatma: () => dispatch(ayncReceiveKhatma()),
@@ -185,11 +149,9 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 HomeScreen.propTypes = {
-  user: PropTypes.object,
   page: PropTypes.number,
   articles: PropTypes.array,
   getArticles: PropTypes.func,
-  deleteArticle: PropTypes.func,
   loading: PropTypes.bool,
   refreshing: PropTypes.bool,
   handleMore: PropTypes.bool,
