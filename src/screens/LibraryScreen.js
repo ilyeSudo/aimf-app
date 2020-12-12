@@ -237,38 +237,6 @@ LibraryScreen.navigationOptions = ({navigation}) => {
       </SafeAreaView>
     ),
   };
-  return {
-    headerLeft: (
-      <SafeAreaView>
-        <Button
-          transparent
-          onPress={() => {
-            navigation.navigate('MyReservations');
-          }}
-          style={styles.navigationBtn}>
-          <OCalendarIcon color={'black'} size={22} />
-          <Text style={styles.navigationText}>
-            {LIBRARY_STR.my_reservations}
-          </Text>
-        </Button>
-      </SafeAreaView>
-    ),
-    headerRight: (
-      <SafeAreaView>
-        <Button
-          transparent
-          onPress={() => navigation.navigate('BookFavoriteList')}
-          style={styles.navigationBtn}>
-          <HeartIcon
-            iconForm={IconForms.outline()}
-            color1={'black'}
-            size={22}
-          />
-          <Text style={styles.navigationText}>Favoris</Text>
-        </Button>
-      </SafeAreaView>
-    ),
-  };
 };
 
 const styles = StyleSheet.create({

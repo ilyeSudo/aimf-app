@@ -30,6 +30,7 @@ const renderSeparator = () => {
 const BookFavoriteList = ({
   favoriteList,
   getFavoriteList,
+  showBook,
   navigation,
   getFavoriteListIds,
 }) => {

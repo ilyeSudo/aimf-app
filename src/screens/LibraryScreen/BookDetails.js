@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {
   Card,
   CardItem,
-  Icon,
   Container,
   Content,
   Body,
