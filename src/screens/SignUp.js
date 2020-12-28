@@ -14,6 +14,9 @@ import {getQuestions} from '../store/reducers/authenticationRedux';
 import TermsOfUse from './SignUp/TermsOfUse';
 
 class SignUp extends Component {
+  static navigationOptions = {
+    header: null,
+  };
   constructor(props) {
     super(props);
     this.state = {

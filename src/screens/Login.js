@@ -13,6 +13,9 @@ import RenderPassword from '../Components/RenderPassoword';
 import styles from './Login/css';
 
 class Login extends React.Component {
+  static navigationOptions = {
+    header: null,
+  };
   constructor(props) {
     super(props);
     this.state = {
