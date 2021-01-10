@@ -17,89 +17,6 @@ import {LIBRARY_STR} from '../../Utils/Constants';
 import HeartIcon from '../../Components/icons/HeartIcon';
 import IconForms from '../../Components/icons/IconForms';
 
-const BookCard = ({data, showBook}) => {
-  let {
-    title,
-    author,
-    genre,
-    images,
-    pages,
-    isFavorited,
-    isAvailable,
-    availabilityDate,
-  } = data;
-
-  const getUrlThumbnail = () => {
-    const image = images.filter((image) => image.type == 'thumbnail');
-    return `${API_BASE_URL}/${image[0].media.path}`;
-  };
-
-  const renderStatusIndicator = (isAvailable: boolean) => {
-    return (
-      <View
-        style={{
-          borderRadius: 50,
-          width: 9,
-          height: 9,
-          marginHorizontal: 5,
-          backgroundColor: isAvailable ? successColor : failColor,
-        }}
-      />
-    );
-  };
-
-  return (
-    <TouchableOpacity onPress={() => showBook(data)}>
-      <CardItem style={styles.cardContainer}>
-        <Left style={{flex: 1}}>
-          <Thumbnail
-            style={{...styles.thumbnail}}
-            source={
-              images && images.length
-                ? {uri: getUrlThumbnail()}
-                : require('../../../assets/images/book-cover-placeholder.png')
-            }
-          />
-
-          <Body style={{flex: 4}}>
-            <Text style={styles.category}>
-              {LIBRARY_STR.category + ': ' + genre.name}
-            </Text>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.subtitle}>{author} </Text>
-            <View style={styles.bottomContainer}>
-              <Text style={styles.statusInfo}>{pages + 'p'}</Text>
-              {renderStatusIndicator(isAvailable)}
-              {isAvailable && (
-                <Text style={styles.statusInfo}>{LIBRARY_STR.available}</Text>
-              )}
-              {availabilityDate && (
-                <Text style={styles.statusInfo}>
-                  {LIBRARY_STR.available_at +
-                    isoDateToFr(availabilityDate.toString(), false)}{' '}
-                </Text>
-              )}
-              {isFavorited ? (
-                <HeartIcon
-                  iconForm={IconForms.gradient()}
-                  color1={mainColor}
-                  color2={secondaryColor}
-                />
-              ) : (
-                <HeartIcon iconForm={IconForms.outline()} color1={black} />
-              )}
-            </View>
-          </Body>
-        </Left>
-      </CardItem>
-    </TouchableOpacity>
-  );
-};
-BookCard.propTypes = {
-  data: PropTypes.object,
-  showBook: PropTypes.func,
-};
-
 const styles = {
   cardContainer: {
     borderRadius: 3,
@@ -149,6 +66,89 @@ const styles = {
     marginRight: 8,
     fontFamily: 'Raleway-Regular',
   },
+};
+
+const BookCard = ({data, showBook}) => {
+  const {
+    title,
+    author,
+    genre,
+    images,
+    pages,
+    isFavorited,
+    isAvailable,
+    availabilityDate,
+  } = data;
+
+  const getUrlThumbnail = () => {
+    const image = images.filter((value) => value.type === 'thumbnail');
+    return `${API_BASE_URL}/${image[0].media.path}`;
+  };
+
+  const renderStatusIndicator = (value: boolean) => {
+    return (
+      <View
+        style={{
+          borderRadius: 50,
+          width: 9,
+          height: 9,
+          marginHorizontal: 5,
+          backgroundColor: value ? successColor : failColor,
+        }}
+      />
+    );
+  };
+
+  return (
+    <TouchableOpacity onPress={() => showBook(data)}>
+      <CardItem style={styles.cardContainer}>
+        <Left style={{flex: 1}}>
+          <Thumbnail
+            style={{...styles.thumbnail}}
+            source={
+              images && images.length
+                ? {uri: getUrlThumbnail()}
+                : require('../../../assets/images/book-cover-placeholder.png')
+            }
+          />
+
+          <Body style={{flex: 4}}>
+            <Text style={styles.category}>
+              {`${LIBRARY_STR.category}: ${genre.name}`}
+            </Text>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.subtitle}>{author} </Text>
+            <View style={styles.bottomContainer}>
+              <Text style={styles.statusInfo}>{`${pages}p`}</Text>
+              {renderStatusIndicator(isAvailable)}
+              {isAvailable && (
+                <Text style={styles.statusInfo}>{LIBRARY_STR.available}</Text>
+              )}
+              {availabilityDate && (
+                <Text style={styles.statusInfo}>
+                  {LIBRARY_STR.available_at +
+                    isoDateToFr(availabilityDate.toString(), false)}{' '}
+                </Text>
+              )}
+              {isFavorited ? (
+                <HeartIcon
+                  iconForm={IconForms.gradient()}
+                  color1={mainColor}
+                  color2={secondaryColor}
+                />
+              ) : (
+                <HeartIcon iconForm={IconForms.outline()} color1={black} />
+              )}
+            </View>
+          </Body>
+        </Left>
+      </CardItem>
+    </TouchableOpacity>
+  );
+};
+BookCard.propTypes = {
+  data: PropTypes.object.isRequired,
+  showBook: PropTypes.func,
 };
 
 export default BookCard;

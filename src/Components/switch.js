@@ -40,76 +40,27 @@ const style = StyleSheet.create({
 });
 
 class SettingsSwitch extends Component {
-  static propTypes = {
-    containerProps: PropTypes.object,
-    containerStyle: PropTypes.object,
-    disabledOverlayStyle: PropTypes.object,
-    titleProps: PropTypes.object,
-    titleStyle: PropTypes.object,
-    title: PropTypes.string.isRequired,
-    descriptionProps: PropTypes.object,
-    descriptionStyle: PropTypes.object,
-    description: PropTypes.string,
-    switchWrapperProps: PropTypes.object,
-    switchWrapperStyle: PropTypes.object,
-    value: PropTypes.bool.isRequired,
-    disabled: PropTypes.bool,
-    onValueChange: PropTypes.func.isRequired,
-    trackColor: PropTypes.shape({
-      true: PropTypes.string,
-      false: PropTypes.string,
-    }),
-    switchProps: PropTypes.object,
-  };
-
-  static defaultProps = {
-    containerProps: {},
-    containerStyle: {},
-    disabledOverlayStyle: {},
-    titleProps: {},
-    titleStyle: {},
-    descriptionProps: {},
-    descriptionStyle: {},
-    description: null,
-    switchWrapperProps: {},
-    switchWrapperStyle: {},
-    disabled: false,
-    switchProps: {},
-    trackColor: null,
-  };
-
   render() {
     const {
-      containerProps,
       containerStyle,
-      titleProps,
       titleStyle,
       title,
       disabled,
-      switchProps,
       disabledOverlayStyle,
-      switchWrapperProps,
       switchWrapperStyle,
       value,
       trackColor,
       onValueChange,
-      descriptionProps,
       descriptionStyle,
       description,
     } = this.props;
 
     return (
-      <View
-        {...containerProps}
-        style={[style.defaultContainerStyle, containerStyle]}>
+      <View style={[style.defaultContainerStyle, containerStyle]}>
         <View style={style.titleWrapper}>
-          <Text {...titleProps} style={[style.defaultTitleStyle, titleStyle]}>
-            {title}
-          </Text>
+          <Text style={[style.defaultTitleStyle, titleStyle]}>{title}</Text>
           {description ? (
-            <Text
-              {...descriptionProps}
-              style={[style.defaultDescriptionStyle, descriptionStyle]}>
+            <Text style={[style.defaultDescriptionStyle, descriptionStyle]}>
               {description}
             </Text>
           ) : null}
@@ -122,15 +73,12 @@ class SettingsSwitch extends Component {
             />
           ) : null}
         </View>
-        <View
-          {...switchWrapperProps}
-          style={[style.defaultSwitchWrapperStyle, switchWrapperStyle]}>
+        <View style={[style.defaultSwitchWrapperStyle, switchWrapperStyle]}>
           <Switch
             value={value}
             trackColor={trackColor}
             onValueChange={onValueChange}
             disabled={disabled}
-            {...switchProps}
           />
         </View>
       </View>
@@ -138,4 +86,31 @@ class SettingsSwitch extends Component {
   }
 }
 
+SettingsSwitch.defaultProps = {
+  containerStyle: {},
+  disabledOverlayStyle: {},
+  titleStyle: {},
+  descriptionStyle: {},
+  description: null,
+  switchWrapperStyle: {},
+  disabled: false,
+  trackColor: null,
+};
+
+SettingsSwitch.propTypes = {
+  containerStyle: PropTypes.object,
+  disabledOverlayStyle: PropTypes.object,
+  titleStyle: PropTypes.object,
+  title: PropTypes.string.isRequired,
+  descriptionStyle: PropTypes.object,
+  description: PropTypes.string,
+  switchWrapperStyle: PropTypes.object,
+  value: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
+  onValueChange: PropTypes.func.isRequired,
+  trackColor: PropTypes.shape({
+    true: PropTypes.string,
+    false: PropTypes.string,
+  }),
+};
 export default SettingsSwitch;

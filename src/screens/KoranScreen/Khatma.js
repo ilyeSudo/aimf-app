@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable react/no-unescaped-entities */
 import React, {Component} from 'react';
 import {
   ScrollView,
@@ -313,11 +311,12 @@ class Khatma extends Component {
                 {!numberOfToRead && (
                   <View>
                     <Text style={styles.textDetails}>
-                      Vous n'avez encore choisi aucune Takheroubt dans cette
-                      Khatma.
+                      Vous n&apos;avez encore choisi aucune Takheroubt dans
+                      cette Khatma.
                     </Text>
                     <Text style={styles.textDetails}>
-                      Privilégier une Takheroubte qui n'a pas encore été prise.
+                      Privilégier une Takheroubte qui n&apos;a pas encore été
+                      prise.
                     </Text>
                   </View>
                 )}

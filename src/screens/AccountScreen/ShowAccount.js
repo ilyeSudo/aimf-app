@@ -56,9 +56,10 @@ class ShowAccount extends Component {
   }
 }
 ShowAccount.propTypes = {
-  updateAction: PropTypes.func,
-  gender: PropTypes.string,
-  fullName: PropTypes.string,
-  logout: PropTypes.func,
+  updateAction: PropTypes.func.isRequired,
+  gender: PropTypes.string.isRequired,
+  fullName: PropTypes.string.isRequired,
+  logout: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 };
 export default ShowAccount;

@@ -20,14 +20,6 @@ class UserScreen extends Component {
     header: null,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      users: [],
-    };
-  }
-
   componentDidMount() {
     this.props.getUsers([], 1, true);
   }

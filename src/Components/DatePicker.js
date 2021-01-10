@@ -3,6 +3,7 @@ import {View, Text} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Item, Label} from 'native-base';
 import moment from 'moment';
+import PropTypes from 'prop-types';
 
 const DatePicker = ({
   label,
@@ -31,8 +32,9 @@ const DatePicker = ({
   const handleConfirm = (selectedDate) => {
     hideDatePicker();
     const currentDate = selectedDate || date;
-    setDate(currentDate);
-    onCustomChange && onCustomChange(currentDate);
+    if (onCustomChange) {
+      onCustomChange(currentDate);
+    }
   };
 
   return (
@@ -76,5 +78,15 @@ const DatePicker = ({
       </Item>
     </View>
   );
+};
+
+DatePicker.propTypes = {
+  label: PropTypes.string,
+  defaultDate: PropTypes.object,
+  onCustomChange: PropTypes.func,
+  style: PropTypes.object,
+  minimumDate: PropTypes.object,
+  maximumDate: PropTypes.object,
+  labelStyle: PropTypes.object,
 };
 export default DatePicker;

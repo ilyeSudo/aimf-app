@@ -2,28 +2,42 @@ import React from 'react';
 
 import {View, Text} from 'react-native';
 import Menu, {MenuItem} from 'react-native-material-menu';
-import {BOOK_GENRES} from '../../Utils/Constants';
 import {Icon} from 'native-base';
 import PropTypes from 'prop-types';
+import {BOOK_GENRES} from '../../Utils/Constants';
 import {black, gray} from '../../Utils/colors';
 
+const styles = {
+  label: {
+    fontFamily: 'Open Sans',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 12,
+    lineHeight: 14,
+    marginHorizontal: 10,
+  },
+  globalContainer: {
+    marginRight: 20,
+    marginTop: 10,
+    borderBottomWidth: 1,
+    paddingBottom: 7,
+  },
+};
+
 class FilterList extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    _menu = null;
-  }
+  menu = null;
 
   setMenuRef = (ref) => {
-    this._menu = ref;
+    this.menu = ref;
   };
 
   hideMenu = (value) => {
     this.props.updateValue(value);
-    this._menu.hide();
+    this.menu.hide();
   };
 
   showMenu = () => {
-    this._menu.show();
+    this.menu.show();
   };
 
   rendetListMenu = () => {
@@ -74,27 +88,10 @@ class FilterList extends React.PureComponent {
   }
 }
 
-const styles = {
-  label: {
-    fontFamily: 'Open Sans',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 12,
-    lineHeight: 14,
-    marginHorizontal: 10,
-  },
-  globalContainer: {
-    marginRight: 20,
-    marginTop: 10,
-    borderBottomWidth: 1,
-    paddingBottom: 7,
-  },
-};
-
 FilterList.propTypes = {
   isEmpty: PropTypes.bool,
   updateValue: PropTypes.func,
-  selectedValue: PropTypes.string,
+  selectedValue: PropTypes.string.isRequired,
 };
 
 export default FilterList;

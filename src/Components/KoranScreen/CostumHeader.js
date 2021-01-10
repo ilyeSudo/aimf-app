@@ -146,10 +146,10 @@ CostumHeader.propTypes = {
   subtitle: PropTypes.string,
   associationName: PropTypes.string,
   associationLogo: PropTypes.string,
-  validate: PropTypes.string,
-  navigation: PropTypes.string,
+  validate: PropTypes.func,
+  navigation: PropTypes.object,
   rightIcon: PropTypes.string,
-  renderLogo: PropTypes.string,
+  renderLogo: PropTypes.bool,
 };
 
 export default CostumHeader;
