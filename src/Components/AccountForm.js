@@ -317,8 +317,9 @@ export default class AccountForm extends Component {
           />
           <RenderInput
             checkFunction={
-              this.props.action === CREATE_ACCOUNT_ACTION &&
-              isCorrectEmailAddress
+              this.props.action === CREATE_ACCOUNT_ACTION
+                ? isCorrectEmailAddress
+                : undefined
             }
             label="Email"
             keyboardType="email-address"

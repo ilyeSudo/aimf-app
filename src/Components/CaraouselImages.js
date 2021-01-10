@@ -101,6 +101,7 @@ class CarouselImages extends React.PureComponent {
         </Modal>
       );
     }
+    return <></>;
   };
 
   render() {
@@ -117,9 +118,6 @@ class CarouselImages extends React.PureComponent {
                 ? this.props.images
                 : [require('../../assets/images/book-cover-placeholder.png')]
             }
-            ref={(carousel) => {
-              this._carousel = carousel;
-            }}
             onSnapToItem={this.updateIndex}
           />
           {this.numericPagination(

@@ -19,258 +19,6 @@ import IconForms from '../Components/icons/IconForms';
 import {OCalendarIcon} from '../Components/icons/CalendarIcon';
 import {backgroundColor} from '../Utils/colors';
 
-const mapStateToProps = (state) => ({
-  books: state.bookStore.books,
-  loading: state.bookStore.loading,
-  refreshing: state.bookStore.refreshing,
-  handleMore: state.bookStore.handleMore,
-  page: state.bookStore.page,
-  lastPage: state.bookStore.lastPage,
-  errorMessage: state.errorMessageStore.errorMessage,
-  getFavoriteListIds: getFavoriteListIds(state),
-  account: state.accountStore,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  getBooks: (...args) => dispatch(getBooks(...args)),
-  getFavoriteList: (...args) => dispatch(getFavoriteList(...args)),
-  dispatchErrorMessage: (...args) => dispatch(dispatchErrorMessage(...args)),
-  showBook: (...args) => dispatch(showBook(...args)),
-});
-
-const LibraryScreen = ({
-  books,
-  page,
-  lastPage,
-  loading,
-  refreshing,
-  handleMore,
-  getBooks,
-  showBook,
-  errorMessage,
-  navigation,
-  dispatchErrorMessage,
-  getFavoriteListIds,
-  getFavoriteList,
-  account,
-}) => {
-  const [searchValue, setSearchValue] = useState(null);
-  const [filterValue, setFilterValue] = useState(null);
-  const [lanceSearch, setLanceSearch] = useState(false);
-
-  const {coloredButton, searchInputStyle} = styles;
-
-  useEffect(() => {
-    getFavoriteList();
-    handleRefresh();
-  }, []);
-
-  useEffect(() => {
-    if (lanceSearch) {
-      handleRefresh();
-      setLanceSearch(false);
-    }
-  }, [lanceSearch]);
-
-  const handleRefresh = () => {
-    if (!refreshing && !handleMore && !loading) {
-      getBooks([], 1, searchValue, filterValue, true);
-    }
-  };
-
-  const handleLoadMore = () => {
-    if (!refreshing && !handleMore && !loading && !lastPage) {
-      getBooks(books, page + 1, searchValue, filterValue, false, true);
-    }
-  };
-
-  const handleShowBook = (item) => {
-    showBook(item.id);
-    navigation.navigate('BookDetails', {
-      bookId: item.id,
-      bookTitle: item.title,
-    });
-  };
-
-  const renderItem = ({item}) => {
-    const isFavorited = () => {
-      return getFavoriteListIds.includes(item.id);
-    };
-
-    return (
-      <BookCard
-        data={{...item, isFavorited: isFavorited()}}
-        showBook={handleShowBook}
-      />
-    );
-  };
-
-  const search = () => {
-    if (!searchValue || searchValue.length > 2) {
-      handleRefresh();
-    } else {
-      dispatchErrorMessage(
-        'Le mot recherché doit avoir au minimum 3 caractères',
-      );
-    }
-  };
-
-  const updaterFilterValue = (filterValue) => {
-    setFilterValue(filterValue);
-    setLanceSearch(true);
-  };
-
-  const getFilterLabel = () => {
-    if (!filterValue) {
-      return 'Sélectionner un genre...';
-    }
-    const bookGenre = BOOK_GENRES.find((element) => element.id === filterValue);
-    if (bookGenre) {
-      return bookGenre.label;
-    }
-    return '';
-  };
-
-  return (
-    <>
-      {canReserveBook(account.user) && (
-        <View
-          style={{
-            ...styles.topButtonContainer,
-          }}>
-          <Button
-            transparent
-            style={{...coloredButton}}
-            onPress={() => navigation.navigate('BookReservation')}>
-            <BookClosedIcon color={'#fff'} />
-            <Text style={styles.colorButtonText}>
-              {LIBRARY_STR.borrow_book}
-            </Text>
-          </Button>
-        </View>
-      )}
-      <SafeAreaView style={{...styles.filterContainer}}>
-        <View style={styles.upperContainer}>
-          <Item rounded style={searchInputStyle}>
-            <SearchIcon color={searchValue ? '#000' : '#C4C4C4'} />
-            <Input
-              onChangeText={setSearchValue}
-              onBlur={search}
-              style={styles.searchInputStyle_text}
-              keyboardType="default"
-              placeholder={LIBRARY_STR.search_book}
-              placeholderTextColor={'#C4C4C4'}
-              value={searchValue}
-            />
-          </Item>
-          <View style={{flexDirection: 'row-reverse', marginBottom: 3}}>
-            <FilterList
-              isEmpty={!filterValue}
-              selectedValue={getFilterLabel()}
-              updateValue={updaterFilterValue}
-            />
-          </View>
-        </View>
-        <View style={styles.listContainer}>
-          <FlatList
-            data={books}
-            renderItem={renderItem}
-            keyExtractor={(item) => `${item.id}`}
-            onRefresh={handleRefresh}
-            refreshing={false}
-            onEndReached={handleLoadMore}
-            onEndReachedThreshold={0.5}
-          />
-        </View>
-      </SafeAreaView>
-
-      <Loader visible={!!loading} />
-      {errorMessage && <ErrorModal visible message={errorMessage} />}
-    </>
-  );
-};
-
-LibraryScreen.propTypes = {
-  books: PropTypes.array,
-  page: PropTypes.number,
-  errorMessage: PropTypes.string,
-  dispatchErrorMessage: PropTypes.func,
-  loading: PropTypes.bool,
-  refreshing: PropTypes.bool,
-  handleMore: PropTypes.bool,
-  lastPage: PropTypes.bool,
-  getBooks: PropTypes.func,
-  showBook: PropTypes.func,
-  account: PropTypes.object,
-};
-
-LibraryScreen.navigationOptions = ({navigation}) => {
-  return {
-    headerLeft: (
-      <SafeAreaView>
-        <Button
-          transparent
-          onPress={() => {
-            navigation.navigate('MyReservations');
-          }}
-          style={styles.navigationBtn}>
-          <OCalendarIcon color={'black'} size={22} />
-          <Text style={styles.navigationText}>
-            {LIBRARY_STR.my_reservations}
-          </Text>
-        </Button>
-      </SafeAreaView>
-    ),
-    headerRight: (
-      <SafeAreaView>
-        <Button
-          transparent
-          onPress={() => navigation.navigate('BookFavoriteList')}
-          style={styles.navigationBtn}>
-          <HeartIcon
-            iconForm={IconForms.outline()}
-            color1={'black'}
-            size={22}
-          />
-          <Text style={styles.navigationText}>Favoris</Text>
-        </Button>
-      </SafeAreaView>
-    ),
-  };
-  return {
-    headerLeft: (
-      <SafeAreaView>
-        <Button
-          transparent
-          onPress={() => {
-            navigation.navigate('MyReservations');
-          }}
-          style={styles.navigationBtn}>
-          <OCalendarIcon color={'black'} size={22} />
-          <Text style={styles.navigationText}>
-            {LIBRARY_STR.my_reservations}
-          </Text>
-        </Button>
-      </SafeAreaView>
-    ),
-    headerRight: (
-      <SafeAreaView>
-        <Button
-          transparent
-          onPress={() => navigation.navigate('BookFavoriteList')}
-          style={styles.navigationBtn}>
-          <HeartIcon
-            iconForm={IconForms.outline()}
-            color1={'black'}
-            size={22}
-          />
-          <Text style={styles.navigationText}>Favoris</Text>
-        </Button>
-      </SafeAreaView>
-    ),
-  };
-};
-
 const styles = StyleSheet.create({
   topButtonContainer: {
     backgroundColor: 'white',
@@ -326,7 +74,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     opacity: 1,
     flex: 1,
-    backgroundColor: backgroundColor,
+    backgroundColor,
     paddingBottom: 75,
   },
   navigationBtn: {
@@ -334,5 +82,221 @@ const styles = StyleSheet.create({
   },
   navigationText: {fontSize: 16, marginLeft: 10},
 });
+const mapStateToProps = (state) => ({
+  books: state.bookStore.books,
+  loading: state.bookStore.loading,
+  refreshing: state.bookStore.refreshing,
+  handleMore: state.bookStore.handleMore,
+  page: state.bookStore.page,
+  lastPage: state.bookStore.lastPage,
+  errorMessage: state.errorMessageStore.errorMessage,
+  favoriteListIds: getFavoriteListIds(state),
+  account: state.accountStore,
+});
 
+const mapDispatchToProps = (dispatch) => ({
+  dispatchGetBooks: (...args) => dispatch(getBooks(...args)),
+  dispatchGetFavoriteList: (...args) => dispatch(getFavoriteList(...args)),
+  showErrorMessage: (...args) => dispatch(dispatchErrorMessage(...args)),
+  dispatchShowBook: (...args) => dispatch(showBook(...args)),
+});
+
+const LibraryScreen = ({
+  books,
+  page,
+  lastPage,
+  loading,
+  refreshing,
+  handleMore,
+  dispatchGetBooks,
+  dispatchShowBook,
+  errorMessage,
+  navigation,
+  showErrorMessage,
+  favoriteListIds,
+  dispatchGetFavoriteList,
+  account,
+}) => {
+  const [searchValue, setSearchValue] = useState(null);
+  const [filterValue, setFilterValue] = useState(null);
+  const [lanceSearch, setLanceSearch] = useState(false);
+
+  const {coloredButton, searchInputStyle} = styles;
+  const handleRefresh = () => {
+    if (!refreshing && !handleMore && !loading) {
+      dispatchGetBooks([], 1, searchValue, filterValue, true);
+    }
+  };
+
+  useEffect(() => {
+    dispatchGetFavoriteList();
+    handleRefresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (lanceSearch) {
+      handleRefresh();
+      setLanceSearch(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lanceSearch]);
+
+  const handleLoadMore = () => {
+    if (!refreshing && !handleMore && !loading && !lastPage) {
+      dispatchGetBooks(books, page + 1, searchValue, filterValue, false, true);
+    }
+  };
+
+  const handleShowBook = (item) => {
+    dispatchShowBook(item.id);
+    navigation.navigate('BookDetails', {
+      bookId: item.id,
+      bookTitle: item.title,
+    });
+  };
+
+  const renderItem = ({item}) => {
+    const isFavorited = () => {
+      return favoriteListIds.includes(item.id);
+    };
+
+    return (
+      <BookCard
+        data={{...item, isFavorited: isFavorited()}}
+        showBook={handleShowBook}
+      />
+    );
+  };
+
+  const search = () => {
+    if (!searchValue || searchValue.length > 2) {
+      handleRefresh();
+    } else {
+      showErrorMessage('Le mot recherché doit avoir au minimum 3 caractères');
+    }
+  };
+
+  const updaterFilterValue = (value) => {
+    setFilterValue(value);
+    setLanceSearch(true);
+  };
+
+  const getFilterLabel = () => {
+    if (!filterValue) {
+      return 'Sélectionner un genre...';
+    }
+    const bookGenre = BOOK_GENRES.find((element) => element.id === filterValue);
+    if (bookGenre) {
+      return bookGenre.label;
+    }
+    return '';
+  };
+
+  return (
+    <>
+      {canReserveBook(account.user) && (
+        <View
+          style={{
+            ...styles.topButtonContainer,
+          }}>
+          <Button
+            transparent
+            style={{...coloredButton}}
+            onPress={() => navigation.navigate('BookReservation')}>
+            <BookClosedIcon color="#fff" />
+            <Text style={styles.colorButtonText}>
+              {LIBRARY_STR.borrow_book}
+            </Text>
+          </Button>
+        </View>
+      )}
+      <SafeAreaView style={{...styles.filterContainer}}>
+        <View style={styles.upperContainer}>
+          <Item rounded style={searchInputStyle}>
+            <SearchIcon color={searchValue ? '#000' : '#C4C4C4'} />
+            <Input
+              onChangeText={setSearchValue}
+              onBlur={search}
+              style={styles.searchInputStyle_text}
+              keyboardType="default"
+              placeholder={LIBRARY_STR.search_book}
+              placeholderTextColor="#C4C4C4"
+              value={searchValue}
+            />
+          </Item>
+          <View style={{flexDirection: 'row-reverse', marginBottom: 3}}>
+            <FilterList
+              isEmpty={!filterValue}
+              selectedValue={getFilterLabel()}
+              updateValue={updaterFilterValue}
+            />
+          </View>
+        </View>
+        <View style={styles.listContainer}>
+          <FlatList
+            data={books}
+            renderItem={renderItem}
+            keyExtractor={(item) => `${item.id}`}
+            onRefresh={handleRefresh}
+            refreshing={false}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.5}
+          />
+        </View>
+      </SafeAreaView>
+
+      <Loader visible={!!loading} />
+      {errorMessage && <ErrorModal visible message={errorMessage} />}
+    </>
+  );
+};
+
+LibraryScreen.navigationOptions = ({navigation}) => {
+  return {
+    headerLeft: (
+      <SafeAreaView>
+        <Button
+          transparent
+          onPress={() => {
+            navigation.navigate('MyReservations');
+          }}
+          style={styles.navigationBtn}>
+          <OCalendarIcon color="black" size={22} />
+          <Text style={styles.navigationText}>
+            {LIBRARY_STR.my_reservations}
+          </Text>
+        </Button>
+      </SafeAreaView>
+    ),
+    headerRight: (
+      <SafeAreaView>
+        <Button
+          transparent
+          onPress={() => navigation.navigate('BookFavoriteList')}
+          style={styles.navigationBtn}>
+          <HeartIcon iconForm={IconForms.outline()} color1="black" size={22} />
+          <Text style={styles.navigationText}>Favoris</Text>
+        </Button>
+      </SafeAreaView>
+    ),
+  };
+};
+
+LibraryScreen.propTypes = {
+  books: PropTypes.array,
+  page: PropTypes.number,
+  errorMessage: PropTypes.string,
+  showErrorMessage: PropTypes.func,
+  loading: PropTypes.bool,
+  refreshing: PropTypes.bool,
+  handleMore: PropTypes.bool,
+  lastPage: PropTypes.bool,
+  dispatchGetBooks: PropTypes.func,
+  dispatchShowBook: PropTypes.func,
+  dispatchGetFavoriteList: PropTypes.func,
+  account: PropTypes.object,
+  favoriteListIds: PropTypes.array,
+  navigation: PropTypes.object,
+};
 export default connect(mapStateToProps, mapDispatchToProps)(LibraryScreen);

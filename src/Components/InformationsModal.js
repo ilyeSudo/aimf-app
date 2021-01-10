@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {Text, Modal, TouchableHighlight, View} from 'react-native';
 import {Icon} from 'native-base';
+import * as PropTypes from 'prop-types';
 
-export default class InformationsModal extends Component {
+class InformationsModal extends Component {
   render() {
     return (
       <Modal animationType="slide" transparent visible={this.props.visible}>
@@ -55,3 +56,12 @@ export default class InformationsModal extends Component {
     );
   }
 }
+
+InformationsModal.propTypes = {
+  visible: PropTypes.bool,
+  title: PropTypes.string,
+  setVisible: PropTypes.func,
+  children: PropTypes.array,
+};
+
+export default InformationsModal;

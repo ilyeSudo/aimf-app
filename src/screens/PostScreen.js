@@ -47,12 +47,13 @@ class PostScreen extends Component {
       this.setState({
         title,
         description,
-        expiredAt: expiredAt,
+        expiredAt,
         associationId: association.id,
       });
     }
   }
 
+  // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(nextProps): void {
     if (this.props.loading && !nextProps.loading && !nextProps.errorMessage) {
       let title = null;
@@ -69,19 +70,19 @@ class PostScreen extends Component {
       this.setState({
         title,
         description,
-        expiredAt: expiredAt,
+        expiredAt,
         associationId,
       });
     }
   }
 
-  disabledButtons = () => {
-    return !(this.state.title.trim() && this.state.description.trim());
-  };
-
   setDate(expiredAt) {
     this.setState({expiredAt});
   }
+
+  disabledButtons = () => {
+    return !(this.state.title.trim() && this.state.description.trim());
+  };
 
   savePost = (status) => {
     const {description, title, expiredAt} = this.state;

@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {View, FlatList, SafeAreaView, ActivityIndicator} from 'react-native';
-import BookReservationCard from '../LibraryScreen/BookReservationCard';
+import PropTypes from 'prop-types';
+import BookReservationCard from './BookReservationCard';
 import {getMyReservations} from '../../store/reducers/bookRedux';
 import {LIBRARY_STR} from '../../Utils/Constants';
 import {backgroundColor} from '../../Utils/colors';
@@ -10,10 +11,10 @@ const mapStateToProps = (state) => ({
   myReservations: state.bookStore.myReservations,
 });
 const mapDispatchToProps = (dispatch) => ({
-  getMyReservations: (...args) => dispatch(getMyReservations(...args)),
+  dispatchGetMyReservations: (...args) => dispatch(getMyReservations(...args)),
 });
 
-const MyReservations = ({myReservations, getMyReservations}) => {
+const MyReservations = ({myReservations, dispatchGetMyReservations}) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,8 +24,8 @@ const MyReservations = ({myReservations, getMyReservations}) => {
   }, [myReservations]);
 
   useEffect(() => {
-    getMyReservations();
-  }, []);
+    dispatchGetMyReservations();
+  });
 
   const renderItem = ({item}) => <BookReservationCard data={item} />;
 
@@ -34,23 +35,24 @@ const MyReservations = ({myReservations, getMyReservations}) => {
         <ActivityIndicator animating size="large" />
       </View>
     );
-  } else {
-    return (
-      <SafeAreaView
-        style={{marginTop: 0, backgroundColor, flex: 1, paddingTop: 5}}>
-        <FlatList
-          data={myReservations}
-          renderItem={renderItem}
-          keyExtractor={(item) => `${item.id}`}
-        />
-      </SafeAreaView>
-    );
   }
+  return (
+    <SafeAreaView
+      style={{marginTop: 0, backgroundColor, flex: 1, paddingTop: 5}}>
+      <FlatList
+        data={myReservations}
+        renderItem={renderItem}
+        keyExtractor={(item) => `${item.id}`}
+      />
+    </SafeAreaView>
+  );
 };
-MyReservations.navigationOptions = (navigationData) => {
-  return {
-    headerTitle: LIBRARY_STR.my_reservations,
-  };
+MyReservations.navigationOptions = {
+  headerTitle: LIBRARY_STR.my_reservations,
 };
 
+MyReservations.propTypes = {
+  myReservations: PropTypes.array,
+  dispatchGetMyReservations: PropTypes.func.isRequired,
+};
 export default connect(mapStateToProps, mapDispatchToProps)(MyReservations);

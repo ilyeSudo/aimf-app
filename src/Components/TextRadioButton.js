@@ -88,9 +88,9 @@ class TextRadioButton extends Component {
 }
 
 TextRadioButton.propTypes = {
-  obtions: PropTypes.array,
   value: PropTypes.string,
   onPress: PropTypes.func,
+  options: PropTypes.array,
 };
 
 export default TextRadioButton;

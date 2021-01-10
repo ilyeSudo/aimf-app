@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
@@ -35,7 +34,7 @@ YellowBox.ignoreWarnings([
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: backgroundColor,
+    backgroundColor,
     paddingTop: 0,
   },
   textHeader: {
@@ -57,13 +56,6 @@ class KoranScreen extends Component {
   static navigationOptions = {
     header: null,
   };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: false,
-    };
-  }
 
   onRefresh = () => {
     const {dispatch} = this.props;
@@ -113,6 +105,7 @@ class KoranScreen extends Component {
       if (takharoubt.isRead) {
         numberOfRead += 1;
       }
+      return null;
     });
 
     return (
@@ -146,7 +139,7 @@ class KoranScreen extends Component {
                 <View
                   style={{marginTop: 10, paddingHorizontal: 30, height: 200}}>
                   <Text style={styles.textDetails}>
-                    Aucune Khatma n'est ouverte à ce jour.
+                    Aucune Khatma n&apos;est ouverte à ce jour.
                   </Text>
                 </View>
               ) : (
@@ -185,7 +178,7 @@ class KoranScreen extends Component {
                     paddingHorizontal: 30,
                   }}>
                   <Text style={styles.textDetails}>
-                    Vous n'avez à ce jour partcipé à aucune Khatma
+                    Vous n&apos;avez à ce jour partcipé à aucune Khatma
                   </Text>
                 </View>
               ) : (
@@ -286,6 +279,7 @@ KoranScreen.propTypes = {
   navigation: PropTypes.object,
   dispatch: PropTypes.func,
   user: PropTypes.object,
+  errorMessage: PropTypes.string,
 };
 
 export default connect(mapStateToProps)(KoranScreen);

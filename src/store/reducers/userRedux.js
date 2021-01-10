@@ -81,7 +81,7 @@ export const getUsers = (
           with_security_questions: 1,
         },
       })
-      .then(function (response) {
+      .then((response) => {
         dispatch(
           getUserSuccess({
             users:
@@ -94,7 +94,7 @@ export const getUsers = (
           }),
         );
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), getUserError()],
@@ -110,10 +110,10 @@ export const updateUserRole = (id, roles) => {
     dispatch(patchUpdateRoleUserRequest());
     getAxiosInstance()
       .patch(`${PATCH_UPDATE_USER_URI + id}?with_roles=1`, {roles})
-      .then(function (response) {
+      .then((response) => {
         dispatch(patchUpdateRoleUserSuccess(response.data.data));
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), patchUpdateRoleUserError()],

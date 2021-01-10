@@ -8,11 +8,33 @@ import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import {receiveAssociationData} from '../store/reducers/associationRedux';
 import DropDownPicker from './DropDownPicker';
 
-class SelectAssociation extends Component {
-  constructor(props) {
-    super(props);
-  }
+const styles = StyleSheet.create({
+  label: {
+    fontWeight: 'bold',
+    fontSize: 14,
+    marginLeft: 30,
+    width: 300,
+  },
+  dropDownPickerContainerStyle: {
+    height: 45,
+    marginBottom: 15,
+    marginLeft: 30,
+    marginRight: 30,
+    borderRadius: 10,
+  },
+  activeLabelStyle: {
+    backgroundColor: '#e1e1e1',
+  },
+  logo: {
+    width: 44,
+    height: 44,
+    borderRadius: 35,
+  },
+  dropDownPicker: {backgroundColor: '#fafafa'},
+  itemStyle: {justifyContent: 'flex-start'},
+});
 
+class SelectAssociation extends Component {
   componentDidMount() {
     this.props.receiveAssociationData();
   }
@@ -55,12 +77,10 @@ class SelectAssociation extends Component {
 const mapStateToProps = (state) => {
   const {errorMessage} = state.errorMessageStore;
   const {loading, associationList} = state.associationStore;
-  const {user} = state.accountStore;
   return {
     errorMessage,
     loading,
     associationList,
-    user,
   };
 };
 
@@ -72,40 +92,11 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 SelectAssociation.propTypes = {
-  errorMessage: PropTypes.string,
   loading: PropTypes.bool,
-  activeLabelStyle: PropTypes.string,
   onChangeItem: PropTypes.func.isRequired,
   receiveAssociationData: PropTypes.func,
   associationList: PropTypes.array,
-  user: PropTypes.object,
   selectedAssociationId: PropTypes.number,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectAssociation);
-
-const styles = StyleSheet.create({
-  label: {
-    fontWeight: 'bold',
-    fontSize: 14,
-    marginLeft: 30,
-    width: 300,
-  },
-  dropDownPickerContainerStyle: {
-    height: 45,
-    marginBottom: 15,
-    marginLeft: 30,
-    marginRight: 30,
-    borderRadius: 10,
-  },
-  activeLabelStyle: {
-    backgroundColor: '#e1e1e1',
-  },
-  logo: {
-    width: 44,
-    height: 44,
-    borderRadius: 35,
-  },
-  dropDownPicker: {backgroundColor: '#fafafa'},
-  itemStyle: {justifyContent: 'flex-start'},
-});

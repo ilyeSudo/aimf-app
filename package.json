@@ -9,7 +9,7 @@
     "postinstall": "jetifier -r",
     "refresh:env": "rm -rf node_modules && rm -rf android/.gradle && rm -rf android/app/build && yarn install && npx jetify",
     "test": "jest",
-    "lint": "eslint --cache --fix -c .eslintrc.json src/api src/Components/AccountForm src/Components/icons src/Components/KoranScreen"
+    "lint": "eslint --cache --fix -c .eslintrc.json src"
   },
   "husky": {
     "hooks": {

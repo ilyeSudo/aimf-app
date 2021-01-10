@@ -33,6 +33,7 @@ class ShowUser extends Component {
     };
   }
 
+  // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(nextProps): void {
     this.setState({
       isAuthorized: isAuthorized(nextProps.data),
@@ -290,6 +291,7 @@ class ShowUser extends Component {
 
   renderUserStatus = () => {
     if (this.props.currentUserId !== this.props.data.id) {
+      const {isAdmin: userStatus} = this.state;
       return (
         <>
           <SettingsSwitch
@@ -298,7 +300,7 @@ class ShowUser extends Component {
             onValueChange={(value) => {
               this.setState({
                 isAuthorized: value,
-                isAdmin: this.state.isAdmin && value,
+                isAdmin: userStatus && value,
                 confirmMessage: UPDATE_USER_STATUS_CONFIRM_MESSAGE,
               });
               this.setConfirmModalVisible(true);

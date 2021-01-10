@@ -53,6 +53,13 @@ export const isMember = (user) => {
   return false;
 };
 
+const isLibrarian = (user) => {
+  if (user && user.roles) {
+    return !!user.roles.find((role) => role.name === LIBRARIAN_ROLE);
+  }
+  return false;
+};
+
 export const isAuthorized = (user) => {
   return (
     isSuperAdmin(user) ||
@@ -61,13 +68,6 @@ export const isAuthorized = (user) => {
     isMember(user) ||
     isAssociationAdmin(user)
   );
-};
-
-export const isLibrarian = (user) => {
-  if (user && user.roles) {
-    return !!user.roles.find((role) => role.name === LIBRARIAN_ROLE);
-  }
-  return false;
 };
 
 export const canReserveBook = (user) => {

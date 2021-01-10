@@ -33,7 +33,7 @@ class ImageRadioButton extends Component {
 }
 
 ImageRadioButton.propTypes = {
-  obtions: PropTypes.array,
+  options: PropTypes.array,
   value: PropTypes.string,
   onPress: PropTypes.func,
 };

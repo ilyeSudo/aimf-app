@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  Modal,
-  TouchableHighlight,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, Modal, View, TouchableOpacity} from 'react-native';
 import {Icon} from 'native-base';
 import * as PropTypes from 'prop-types';
 import QRCode from 'react-native-qrcode-svg';
@@ -73,7 +67,9 @@ const QrCodeModal = ({label, qrCodeString, visible, onClose}) => {
 };
 
 QrCodeModal.propTypes = {
-  qrCodeString: PropTypes.string,
+  label: PropTypes.string,
+  qrCodeString: PropTypes.string.isRequired,
   visible: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
 };
 export default QrCodeModal;

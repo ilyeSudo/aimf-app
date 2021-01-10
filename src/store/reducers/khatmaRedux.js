@@ -45,11 +45,6 @@ const PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR =
 //
 // Action creators
 //
-const cleanKhatmaStore = () => {
-  return {
-    type: CLEAN_KHATMA_STORE,
-  };
-};
 
 const loadingUserKhatmaData = () => {
   return {

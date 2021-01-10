@@ -1,16 +1,23 @@
 import React from 'react';
-import {CardItem, Text, Left, Right, Body, Thumbnail, Row} from 'native-base';
+import {CardItem, Text, Left, Body, Thumbnail} from 'native-base';
 import PropTypes from 'prop-types';
-import {isoDateToFr} from '../../Utils/Functions';
 import {API_BASE_URL} from 'react-native-dotenv';
-import {gray} from '../../Utils/colors';
-import {OCalendarIcon} from '../../Components/icons/CalendarIcon';
 import {View} from 'react-native';
+import {isoDateToFr} from '../../Utils/Functions';
+import {OCalendarIcon} from '../../Components/icons/CalendarIcon';
+
+const styles = {
+  thumbnail: {
+    borderRadius: 3,
+    height: 80,
+    width: 57,
+  },
+};
 
 const BookReservationCard = ({data}) => {
   const {book, returnDate} = data;
   const getUrlThumbnail = () => {
-    const image = book.images.filter((image) => image.type == 'thumbnail');
+    const image = book.images.filter((value) => value.type === 'thumbnail');
     return `${API_BASE_URL}/${image[0].media.path}`;
   };
   const getDateStr = (date) => {
@@ -38,7 +45,7 @@ const BookReservationCard = ({data}) => {
               justifyContent: 'flex-end',
               alignItems: 'center',
             }}>
-            <OCalendarIcon color={'gray'} size={20} />
+            <OCalendarIcon color="gray" size={20} />
             <Text note> le {getDateStr(returnDate)} </Text>
           </View>
         </Body>
@@ -47,15 +54,7 @@ const BookReservationCard = ({data}) => {
   );
 };
 BookReservationCard.propTypes = {
-  data: PropTypes.object,
-};
-
-const styles = {
-  thumbnail: {
-    borderRadius: 3,
-    height: 80,
-    width: 57,
-  },
+  data: PropTypes.object.isRequired,
 };
 
 export default BookReservationCard;
