@@ -8,8 +8,7 @@ import {
 } from 'react-native-dotenv';
 const getAxiosInstance = () => {
   return axios.create({
-   // baseURL: API_BASE_URL,
-      baseURL:"http://192.168.99.103:8080/",
+    baseURL: API_BASE_URL,
     timeout: parseInt(API_TIMEOUT, 10),
     headers: {
       Accept: API_REQUEST_TYPE,
