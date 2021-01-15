@@ -165,6 +165,7 @@ export const getBooks = (
   page,
   search = null,
   bookGenreId = null,
+  locationId = null,
   refreshing = false,
   handleMore = false,
 ) => {
@@ -177,6 +178,7 @@ export const getBooks = (
           page,
           search,
           bookGenreId,
+          locationId,
         },
       })
       .then(function (response) {

@@ -28,7 +28,7 @@ class FilterList extends React.PureComponent {
 
   rendetListMenu = () => {
     const list = [];
-    BOOK_GENRES.forEach((element) =>
+    this.props.list.forEach((element) =>
       list.push(
         <MenuItem key={element.id} onPress={() => this.hideMenu(element.id)}>
           {element.label}

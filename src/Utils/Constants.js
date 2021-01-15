@@ -54,6 +54,11 @@ export const BOOK_GENRES = [
   {id: 5, label: 'Education'},
   {id: 6, label: 'Santé'},
 ];
+export const BOOK_LOCATION = [
+  {id: 0, label: 'Tous'},
+  {id: 1, label: 'AIMF'},
+  {id: 2, label: 'MDM'},
+];
 export const UPDATE_USER_STATUS_CONFIRM_MESSAGE =
   'Etes vous sûr de vouloir activer/désactiver cet utilisateur ?';
 export const UPDATE_ADMIN_ROLE_CONFIRM_MESSAGE =

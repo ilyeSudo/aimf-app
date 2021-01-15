@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {Input, Item, Button} from 'native-base';
 import * as PropTypes from 'prop-types';
 import BookCard from './LibraryScreen/BookCard';
-import {BOOK_GENRES, LIBRARY_STR} from '../Utils/Constants';
+import {BOOK_GENRES, BOOK_LOCATION, LIBRARY_STR} from '../Utils/Constants';
 import {getBooks, getFavoriteList, showBook} from '../store/reducers/bookRedux';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import {getFavoriteListIds} from '../store/selectors/bookingSelector';
@@ -55,7 +55,8 @@ const LibraryScreen = ({
   account,
 }) => {
   const [searchValue, setSearchValue] = useState(null);
-  const [filterValue, setFilterValue] = useState(null);
+  const [filterGenreValue, setFilterGenreValue] = useState(null);
+  const [filterLocationValue, setFilterLocationValue] = useState(null);
   const [lanceSearch, setLanceSearch] = useState(false);
 
   const {coloredButton, searchInputStyle} = styles;
@@ -74,13 +75,13 @@ const LibraryScreen = ({
 
   const handleRefresh = () => {
     if (!refreshing && !handleMore && !loading) {
-      getBooks([], 1, searchValue, filterValue, true);
+      getBooks([], 1, searchValue, filterGenreValue,filterLocationValue, true);
     }
   };
 
   const handleLoadMore = () => {
     if (!refreshing && !handleMore && !loading && !lastPage) {
-      getBooks(books, page + 1, searchValue, filterValue, false, true);
+      getBooks(books, page + 1, searchValue, filterGenreValue,filterLocationValue, false, true);
     }
   };
 
@@ -115,18 +116,33 @@ const LibraryScreen = ({
     }
   };
 
-  const updaterFilterValue = (filterValue) => {
-    setFilterValue(filterValue);
+  const updaterGenreFilterValue = (filterValue) => {
+    setFilterGenreValue(filterValue);
+    setLanceSearch(true);
+  };
+  const updaterLocationFilterValue = (filterValue) => {
+    setFilterLocationValue(filterValue);
     setLanceSearch(true);
   };
 
-  const getFilterLabel = () => {
-    if (!filterValue) {
+
+  const getGenreFilterLabel = () => {
+    if (!filterGenreValue) {
       return 'Sélectionner un genre...';
     }
-    const bookGenre = BOOK_GENRES.find((element) => element.id === filterValue);
+    const bookGenre = BOOK_GENRES.find((element) => element.id === filterGenreValue);
     if (bookGenre) {
       return bookGenre.label;
+    }
+    return '';
+  };
+  const getLocationFilterLabel = () => {
+    if (!filterLocationValue) {
+      return 'Sélectionner la bibliothèque';
+    }
+    const bookLocation = BOOK_LOCATION.find((element) => element.id === filterLocationValue);
+    if (bookLocation) {
+      return bookLocation.label;
     }
     return '';
   };
@@ -165,11 +181,19 @@ const LibraryScreen = ({
           </Item>
           <View style={{flexDirection: 'row-reverse', marginBottom: 3}}>
             <FilterList
-              isEmpty={!filterValue}
-              selectedValue={getFilterLabel()}
-              updateValue={updaterFilterValue}
+              list={BOOK_GENRES}
+              isEmpty={!filterGenreValue}
+              selectedValue={getGenreFilterLabel()}
+              updateValue={updaterGenreFilterValue}
+            />
+             <FilterList
+             list={BOOK_LOCATION}
+              isEmpty={!filterLocationValue}
+              selectedValue={getLocationFilterLabel()}
+              updateValue={updaterLocationFilterValue}
             />
           </View>
+          
         </View>
         <View style={styles.listContainer}>
           <FlatList
