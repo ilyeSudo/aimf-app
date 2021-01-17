@@ -1,22 +1,22 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {Container, Icon, View, Content, Row, Col} from 'native-base';
+import {Col, Container, Content, Icon, Row, View} from 'native-base';
 import moment from 'moment';
-import {Text, ActivityIndicator} from 'react-native';
+import {ActivityIndicator, Text} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import PropTypes from 'prop-types';
 import {
+  cancelBooking,
   requestBooking,
   validateBooking,
-  cancelBooking,
 } from '../../store/reducers/bookRedux';
 import {dispatchErrorMessage} from '../../store/reducers/errorMessageRedux';
 import DatePicker from '../../Components/DatePicker';
 import RenderInput from '../../Components/RenderInput';
 import {
-  isCorrectPhoneNumber,
   isCorrectNumberCopie,
+  isCorrectPhoneNumber,
 } from '../../Utils/Functions';
 import {
   failColor,
@@ -57,6 +57,7 @@ const getQrCodeBooking = (qrCodeBooking) => {
         return objRequestBooking;
       }
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.log(e);
     }
   }
