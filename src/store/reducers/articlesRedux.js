@@ -132,7 +132,7 @@ export const savePost = (data) => {
   return (dispatch) => {
     dispatch(saveArticleRequest());
     getAxiosInstance()
-      .post(GET_ARTICLES_URI + '?with_association=1', data)
+      .post(`${GET_ARTICLES_URI}?with_association=1`, data)
       .then(function (response) {
         if (response.data.data.status === PUBLISHED_ARTICLE_STATUS) {
           dispatch(getArticles([], 1, true));

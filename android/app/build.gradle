@@ -130,6 +130,8 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true  // needed for firestore:
+        missingDimensionStrategy 'react-native-camera', 'mlkit' // <--- replace general with mlkit
+
     }
     signingConfigs {
         release {
@@ -205,6 +207,14 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
+
+  implementation 'com.google.android.gms:play-services-vision:20.1.1'
+  implementation 'com.google.android.gms:play-services-vision-common:19.1.1'
+  implementation 'com.google.android.gms:play-services-vision-face-contour-internal:16.0.3'
+  implementation 'com.google.android.gms:play-services-vision-image-labeling-internal:16.0.5'
+  implementation 'com.google.android.gms:play-services-vision-image-label:18.0.5'
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }

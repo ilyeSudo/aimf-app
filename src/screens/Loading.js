@@ -13,9 +13,10 @@ import {
   ACTIVE_USER_ALIAS,
   YOUTUBE_LIVE_FINISHED_ALIAS,
   YOUTUBE_LIVE_START_ALIAS,
-} from './../Utils/Constants/Notifications';
-import NotificationHandler from './../Utils/NotificationHandler';
+} from '../Utils/Constants/Notifications';
+import NotificationHandler from '../Utils/NotificationHandler';
 import LocalNotificationService from '../services/LocalNotificationService';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -33,7 +34,7 @@ class Loading extends React.Component {
   }
 
   componentDidMount() {
-    //this.notification = new Notifications(this.onRegister.bind(this), null);
+    // this.notification = new Notifications(this.onRegister.bind(this), null);
 
     if (this.props.account && this.props.account.access_token) {
       axios.defaults.headers.Authorization = `Bearer ${this.props.account.access_token}`;
@@ -52,7 +53,7 @@ class Loading extends React.Component {
     this.fcmService = new FCMService();
     this.localNotificationService = new LocalNotificationService();
 
-    //this.fcmService.registerAppWithFCM();
+    // this.fcmService.registerAppWithFCM();
     this.fcmService.register(
       this.onRegister,
       this.onNotification,

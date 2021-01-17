@@ -1,8 +1,8 @@
 import {Input, Item, Label} from 'native-base';
 import React, {useState} from 'react';
+import {Text} from 'react-native';
 import styles from './AccountForm/css';
 import {isCorrectPassword} from '../Utils/Functions';
-import {Text} from 'react-native';
 
 const RenderPassword = ({
   label,

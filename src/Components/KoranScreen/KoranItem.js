@@ -106,7 +106,7 @@ class KoranItem extends Component {
                   ? 'Cette Khatma est complète'
                   : numberofPartDispo === 1
                   ? 'Dernière Takharoubt disponible'
-                  : numberofPartDispo + 'Tikheroubines sont diponibles'}
+                  : `${numberofPartDispo}Tikheroubines sont diponibles`}
               </Text>
             </View>
           </View>

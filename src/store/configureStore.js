@@ -44,7 +44,7 @@ const appReducer = (state, action) => {
     action.type === POST_LOGOUT_SUCCESS
   ) {
     newState = {
-      accountStore: { tokenDevice: newState.accountStore.tokenDevice },
+      accountStore: {tokenDevice: newState.accountStore.tokenDevice},
     };
   }
 

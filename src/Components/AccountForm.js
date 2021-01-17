@@ -3,6 +3,8 @@ import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Item, Icon, Input, Label, Button} from 'native-base';
 import SpinnerButton from 'react-native-spinner-button';
 import * as PropTypes from 'prop-types';
+import {CheckBox} from 'react-native-elements';
+import moment from 'moment';
 import {
   isCorrectPhoneNumber,
   isCorrectName,
@@ -29,9 +31,7 @@ import RenderInput from './RenderInput';
 import ImageRadioButton from './ImageRadioButton';
 import TextRadioButton from './TextRadioButton';
 import DatePicker from './DatePicker';
-import {CheckBox} from 'react-native-elements';
-import moment from 'moment';
-import RenderPassword from "./RenderPassoword";
+import RenderPassword from './RenderPassoword';
 
 export default class AccountForm extends Component {
   constructor(props) {

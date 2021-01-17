@@ -5,10 +5,10 @@ import {Platform} from 'react-native';
 export default class LocalNotificationService {
   configure = (onOpenNotification) => {
     PushNotification.configure({
-      onRegister: function (token) {
+      onRegister(token) {
         console.log('[LocalNotificationService] onRegister:', token);
       },
-      onNotification: function (notification) {
+      onNotification(notification) {
         console.log('[LocalNotificationService] onNotification:', notification);
         if (!notification?.data) {
           return;
@@ -67,7 +67,7 @@ export default class LocalNotificationService {
 
   buildAndroidNotification = (id, title, message, data = {}, options = {}) => {
     return {
-      id: id,
+      id,
       autoCancel: true,
       largeIcon: options.largeIcon || 'ic_launcher',
       smallIcon: options.smallIcon || 'ic_notification',
@@ -77,7 +77,7 @@ export default class LocalNotificationService {
       vibration: options.vibration || 300,
       priority: options.priority || 'high',
       importance: options.importance || 'high', // (optional) set notification importance, default: high,
-      data: data,
+      data,
     };
   };
 
@@ -86,7 +86,7 @@ export default class LocalNotificationService {
       alertAction: options.alertAction || 'view',
       category: options.category || '',
       userInfo: {
-        id: id,
+        id,
         item: data,
       },
     };

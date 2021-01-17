@@ -7,8 +7,17 @@
     "android": "npx react-native run-android",
     "ios": "npx react-native run-ios",
     "postinstall": "jetifier -r",
-    "refresh:env": "rm -rf node_modules && rm -rf android/.gradle && rm -rf android/app/build && yarn install && npx jetify",
-    "test": "jest"
+    "refresh:env": "yarn modules:install && yarn build:delete",
+    "modules:install": "rm -rf node_modules && yarn install",
+    "build:delete": "rm -rf android/.gradle && rm -rf android/app/build && npx jetify",
+    "build:refresh": "rm -rf android/.gradle && rm -rf android/app/build && npx jetify && npx react-native run-android",
+    "test": "jest",
+    "lint": "eslint --cache --fix -c .eslintrc.json src"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint && git add ."
+    }
   },
   "rnpm": {
     "assets": [
@@ -17,9 +26,9 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.11.0",
-    "@react-native-community/datetimepicker": "^3.0.3",
+    "@react-native-community/datetimepicker": "^2.4.3",
     "@react-native-community/push-notification-ios": "^1.5.0",
-    "@react-native-community/toolbar-android": "react-native-community/toolbar-android",
+    "@react-native-community/toolbar-android": "^0.1.0-rc.2",
     "@react-native-firebase/app": "^8.4.2",
     "@react-native-firebase/messaging": "^7.8.6",
     "appcenter": "3.0.0",
@@ -32,6 +41,7 @@
     "prop-types": "^15.7.2",
     "react": "16.11.0",
     "react-native": "0.62.2",
+    "react-native-camera": "^3.31.1",
     "react-native-datepicker": "^1.7.2",
     "react-native-dropdownalert": "^3.11.0",
     "react-native-elements": "^1.2.7",
@@ -54,8 +64,7 @@
     "redux-batched-actions": "^0.5.0",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
-    "regenerator": "^0.14.7",
-    "regenerator-runtime": "^0.13.7",
+    "reselect": "^4.0.0",
     "rn-sliding-up-panel": "^2.4.3"
   },
   "devDependencies": {

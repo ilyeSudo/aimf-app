@@ -78,7 +78,7 @@ class HomeScreen extends Component {
         date={isoDateToFr(item.publishedAt)}
         description={item.description}
         backgroundColor={!item.isExpired ? '#ffffff' : '#dadada'}
-        associationName={'item.association.name'}
+        associationName="item.association.name"
       />
     );
   };

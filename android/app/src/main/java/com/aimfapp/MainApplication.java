@@ -5,6 +5,7 @@ import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
+import org.reactnative.camera.RNCameraPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.microsoft.appcenter.reactnative.crashes.AppCenterReactNativeCrashesPackage;

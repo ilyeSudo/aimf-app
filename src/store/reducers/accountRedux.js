@@ -1,6 +1,5 @@
 import {batchActions} from 'redux-batched-actions';
 import getAxiosInstance from '../../Utils/axios';
-export const STORE_ACCOUNT = 'STORE_ACCOUNT';
 import {
   PATCH_UPDATE_USER_URI,
   POST_REGISTER_USER_URI,
@@ -8,6 +7,8 @@ import {
 } from '../../Utils/ApiUrl';
 import {dispatchError} from './errorMessageRedux';
 import {SHOW_ACTION} from '../../Utils/Constants';
+
+export const STORE_ACCOUNT = 'STORE_ACCOUNT';
 
 export const PATCH_UPDATE_USER_REQUEST = 'PATCH_UPDATE_USER_REQUEST';
 export const PATCH_UPDATE_USER_SUCCESS = 'PATCH_UPDATE_USER_SUCCESS';

@@ -17,7 +17,7 @@ const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
-    //paddingTop: 50,
+    // paddingTop: 50,
     paddingHorizontal: 14,
     marginBottom: 10,
     justifyContent: 'center',
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   panelHandle: {
     height: 2,
-    width: width,
+    width,
     backgroundColor: orange2,
     borderRadius: 6,
     alignSelf: 'center',
