@@ -3,21 +3,21 @@ import {ScrollView, View} from 'react-native';
 import {Button, Icon, Text, Thumbnail} from 'native-base';
 import * as PropTypes from 'prop-types';
 import SpinnerButton from 'react-native-spinner-button';
-import InformationsModal from '../../Components/InformationsModal';
 import SettingsSwitch from '../../Components/switch';
 import {
+  ADMIN_ROLE,
+  FEMALE_GENDER,
   LIST_USER_ACTION,
   MARRIED,
-  FEMALE_GENDER,
-  UPDATE_ADMIN_ROLE_CONFIRM_MESSAGE,
-  ADMIN_ROLE,
-  SUPER_ADMIN_ROLE,
   MEMBER_ROLE,
   NEW_MEMBER_ROLE,
+  SUPER_ADMIN_ROLE,
+  UPDATE_ADMIN_ROLE_CONFIRM_MESSAGE,
   UPDATE_USER_STATUS_CONFIRM_MESSAGE,
 } from '../../Utils/Constants';
-import {isAdmin, isSuperAdmin, isAuthorized} from '../../Utils/Account';
+import {isAdmin, isAuthorized, isSuperAdmin} from '../../Utils/Account';
 import {isoDateToFr} from '../../Utils/Functions';
+import InformationModal from '../../Components/InformationModal';
 
 class ShowUser extends Component {
   constructor(props) {
@@ -387,7 +387,7 @@ class ShowUser extends Component {
         {this.renderUserStatus()}
 
         <View style={{marginBottom: 30}} />
-        <InformationsModal
+        <InformationModal
           visible={this.state.confirmUpdateVisible}
           setVisible={(visible) => this.setConfirmModalVisible(visible)}
           title="Confirmer la modification">
@@ -430,7 +430,7 @@ class ShowUser extends Component {
               <Text>Confirmer</Text>
             </SpinnerButton>
           </View>
-        </InformationsModal>
+        </InformationModal>
       </ScrollView>
     );
   }

@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
+  Body,
   Card,
   CardItem,
-  Thumbnail,
-  Text,
   Icon,
   Left,
   Right,
-  Body,
+  Text,
+  Thumbnail,
 } from 'native-base';
 import {View} from 'react-native';
 import * as PropTypes from 'prop-types';
@@ -15,62 +15,55 @@ import {FEMALE_GENDER} from '../../Utils/Constants';
 import {getFullName} from '../../Utils/Functions';
 import {isAdmin, isAuthorized, isSuperAdmin} from '../../Utils/Account';
 
-class UserCard extends Component {
-  render() {
-    let logo = require('../../../assets/images/male_unselected.png');
-    if (this.props.data.gender === FEMALE_GENDER) {
-      logo = require('../../../assets/images/female_unselected.png');
-    }
-    return (
-      <Card transparent>
-        <CardItem>
-          <Left>
-            <Thumbnail source={logo} />
-            <Body>
-              <Text style={{fontSize: 13}}>{getFullName(this.props.data)}</Text>
-              <Text style={{fontSize: 11}}>{this.props.data.phoneNumber}</Text>
-            </Body>
-          </Left>
-          <Right style={{height: 58}}>
+const UserCard = (props) => {
+  let logo = require('../../../assets/images/male_unselected.png');
+  if (props.data.gender === FEMALE_GENDER) {
+    logo = require('../../../assets/images/female_unselected.png');
+  }
+  return (
+    <Card transparent>
+      <CardItem>
+        <Left>
+          <Thumbnail source={logo} />
+          <Body>
+            <Text style={{fontSize: 13}}>{getFullName(props.data)}</Text>
+            <Text style={{fontSize: 11}}>{props.data.phoneNumber}</Text>
+          </Body>
+        </Left>
+        <Right style={{height: 58}}>
+          <View style={{flexDirection: 'row'}}>
             <View style={{flexDirection: 'row'}}>
-              <View style={{flexDirection: 'row'}}>
-                {isAuthorized(this.props.data) && (
+              {isAuthorized(props.data) && (
+                <Text style={{marginTop: 20, marginRight: 30}}>
+                  <Icon
+                    type="AntDesign"
+                    name="checkcircleo"
+                    style={{fontSize: 17, color: '#49bd78'}}
+                  />
+                </Text>
+              )}
+              {isSuperAdmin(props.data) ||
+                (isAdmin(props.data) && (
                   <Text style={{marginTop: 20, marginRight: 30}}>
                     <Icon
-                      type="AntDesign"
-                      name="checkcircleo"
-                      style={{fontSize: 17, color: '#49bd78'}}
+                      type="FontAwesome5"
+                      name="user-cog"
+                      style={{fontSize: 17, color: '#000'}}
                     />
                   </Text>
-                )}
-                {isSuperAdmin(this.props.data) ||
-                  (isAdmin(this.props.data) && (
-                    <Text style={{marginTop: 20, marginRight: 30}}>
-                      <Icon
-                        type="FontAwesome5"
-                        name="user-cog"
-                        style={{fontSize: 17, color: '#000'}}
-                      />
-                    </Text>
-                  ))}
-              </View>
-              <Text
-                onPress={() =>
-                  this.props.showUser(
-                    this.props.data,
-                    this.props.currentUserIndex,
-                  )
-                }
-                style={{fontSize: 17}}>
-                ...
-              </Text>
+                ))}
             </View>
-          </Right>
-        </CardItem>
-      </Card>
-    );
-  }
-}
+            <Text
+              onPress={() => props.showUser(props.data, props.currentUserIndex)}
+              style={{fontSize: 17}}>
+              ...
+            </Text>
+          </View>
+        </Right>
+      </CardItem>
+    </Card>
+  );
+};
 
 UserCard.propTypes = {
   data: PropTypes.object,
