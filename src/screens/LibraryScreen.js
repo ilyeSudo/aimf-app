@@ -109,6 +109,7 @@ const LibraryScreen = ({
   refreshing,
   handleMore,
   dispatchShowBook,
+  dispatchGetBooks,
   errorMessage,
   navigation,
   showErrorMessage,
@@ -125,7 +126,14 @@ const LibraryScreen = ({
 
   const handleRefresh = () => {
     if (!refreshing && !handleMore && !loading) {
-      getBooks([], 1, searchValue, filterGenreValue, filterLocationValue, true);
+      dispatchGetBooks(
+        [],
+        1,
+        searchValue,
+        filterGenreValue,
+        filterLocationValue,
+        true,
+      );
     }
   };
   useEffect(() => {
@@ -329,6 +337,7 @@ LibraryScreen.propTypes = {
   lastPage: PropTypes.bool,
   dispatchShowBook: PropTypes.func,
   dispatchGetFavoriteList: PropTypes.func,
+  dispatchGetBooks: PropTypes.func,
   account: PropTypes.object,
   favoriteListIds: PropTypes.array,
   navigation: PropTypes.object,
