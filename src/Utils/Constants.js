@@ -198,7 +198,11 @@ export const AIMF_ASSOCIATION_ID = 1;
 export const LIBRARY_STR = {
   search_book: 'Rechercher un livre',
   borrow_book: 'Réserver un livre',
+  return_book: 'Retour',
   my_reservations: 'Mes Réservations',
+  book_return_title:'Retour du livre ',
+  book_return_empty:'Aucun retour prévu pour ce livre',
+  confirm_return_book:'Confirmer le retour',
   category: 'Genre',
   author: 'Auteur',
   available: 'disponible',

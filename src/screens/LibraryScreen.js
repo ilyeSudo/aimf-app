@@ -5,13 +5,13 @@ import {Input, Item, Button} from 'native-base';
 import * as PropTypes from 'prop-types';
 import BookCard from './LibraryScreen/BookCard';
 import {BOOK_GENRES, LIBRARY_STR} from '../Utils/Constants';
-import {getBooks, getFavoriteList, showBook} from '../store/reducers/bookRedux';
+import {getBooks, getFavoriteList, showBook,getBookReservations} from '../store/reducers/bookRedux';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import {getFavoriteListIds} from '../store/selectors/bookingSelector';
 import FilterList from './LibraryScreen/FilterList';
 import ErrorModal from '../Components/ErrorModal';
 import Loader from '../Components/Loader';
-import {canReserveBook} from '../Utils/Account';
+import {canManageLibrary} from '../Utils/Account';
 import BookClosedIcon from '../Components/icons/book/BookClosedIcon';
 import SearchIcon from '../Components/icons/SearchIcon';
 import HeartIcon from '../Components/icons/HeartIcon';
@@ -99,6 +99,7 @@ const mapDispatchToProps = (dispatch) => ({
   dispatchGetFavoriteList: (...args) => dispatch(getFavoriteList(...args)),
   showErrorMessage: (...args) => dispatch(dispatchErrorMessage(...args)),
   dispatchShowBook: (...args) => dispatch(showBook(...args)),
+  dispatchReturnBook: (...args) => dispatch(getBookReservations(...args)),
 });
 
 const LibraryScreen = ({
@@ -110,6 +111,7 @@ const LibraryScreen = ({
   handleMore,
   dispatchGetBooks,
   dispatchShowBook,
+  dispatchReturnBook,
   errorMessage,
   navigation,
   showErrorMessage,
@@ -155,6 +157,13 @@ const LibraryScreen = ({
       bookTitle: item.title,
     });
   };
+  const handleReturnBook = (item) => {
+    dispatchReturnBook(item.id);
+    navigation.navigate('BookReturn', {
+      bookId: item.id,
+      bookTitle: item.title,
+    });
+  };
 
   const renderItem = ({item}) => {
     const isFavorited = () => {
@@ -163,8 +172,10 @@ const LibraryScreen = ({
 
     return (
       <BookCard
-        data={{...item, isFavorited: isFavorited()}}
+        data={{...item, isFavorited: isFavorited(), isManager:canManageLibrary(account.user)}}
         showBook={handleShowBook}
+        returnBook={handleReturnBook}
+
       />
     );
   };
@@ -195,7 +206,7 @@ const LibraryScreen = ({
 
   return (
     <>
-      {canReserveBook(account.user) && (
+      {canManageLibrary(account.user) && (
         <View
           style={{
             ...styles.topButtonContainer,

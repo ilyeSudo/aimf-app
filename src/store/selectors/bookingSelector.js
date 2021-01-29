@@ -9,12 +9,13 @@ const getfavoriteList = (state) => state.bookStore.favoriteList;
 export const getQrCodeString = createSelector(
   [getUserId, getSelectedBook, getUserAccessToken],
   (userId, selectedBook, accessToken) => {
-    if (getUserId && selectedBook && accessToken) {
+    console.log(userId,selectedBook,accessToken);
+    if (userId && selectedBook && accessToken) {
       const hash = CryptoJS.SHA256(
         `${userId}_${selectedBook.id}_${accessToken.slice(0, 9)}`,
       );
       return JSON.stringify({
-        userId: getUserId,
+        userId: userId,
         bookId: selectedBook.id,
         hash: hash.toString(CryptoJS.enc.Base64),
       });

@@ -18,7 +18,6 @@ import {
 import {
   removeFromFavoritesRequest,
   addToFavoritesRequest,
-  getBooks,
 } from '../../store/reducers/bookRedux';
 import {isoDateToFr} from '../../Utils/Functions';
 import {
@@ -93,7 +92,6 @@ const mapStateToProps = (state) => ({
   favoriteListIds: getFavoriteListIds(state),
 });
 const mapDispatchToProps = (dispatch) => ({
-  getBooks: (...args) => dispatch(getBooks(...args)),
   dispatchRemoveFromFavoritesRequest: (...args) =>
     dispatch(removeFromFavoritesRequest(...args)),
   dispatchAddToFavoritesRequest: (...args) =>

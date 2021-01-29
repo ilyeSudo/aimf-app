@@ -1,9 +1,10 @@
 import React from 'react';
-import {CardItem, Text, Left, Body, Thumbnail} from 'native-base';
-import {TouchableOpacity, View} from 'react-native';
+import { CardItem, Text, Left, Body, Thumbnail, Button } from 'native-base';
+import { TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
-import {API_BASE_URL} from 'react-native-dotenv';
-import {isoDateToFr} from '../../Utils/Functions';
+import { API_BASE_URL } from 'react-native-dotenv';
+import { isoDateToFr } from '../../Utils/Functions';
+import BookClosedIcon from '../../Components/icons/book/BookClosedIcon';
 
 import {
   black,
@@ -13,7 +14,7 @@ import {
   successColor,
   secondaryColor,
 } from '../../Utils/colors';
-import {LIBRARY_STR} from '../../Utils/Constants';
+import { LIBRARY_STR } from '../../Utils/Constants';
 import HeartIcon from '../../Components/icons/HeartIcon';
 import IconForms from '../../Components/icons/IconForms';
 
@@ -68,7 +69,7 @@ const styles = {
   },
 };
 
-const BookCard = ({data, showBook}) => {
+const BookCard = ({ data, showBook, returnBook }) => {
   const {
     title,
     author,
@@ -78,6 +79,7 @@ const BookCard = ({data, showBook}) => {
     isFavorited,
     isAvailable,
     availabilityDate,
+    isManager,
   } = data;
 
   const getUrlThumbnail = () => {
@@ -102,24 +104,39 @@ const BookCard = ({data, showBook}) => {
   return (
     <TouchableOpacity onPress={() => showBook(data)}>
       <CardItem style={styles.cardContainer}>
-        <Left style={{flex: 1}}>
+        <Left style={{ flex: 1 }}>
           <Thumbnail
-            style={{...styles.thumbnail}}
+            style={{ ...styles.thumbnail }}
             source={
               images && images.length
-                ? {uri: getUrlThumbnail()}
+                ? { uri: getUrlThumbnail() }
                 : require('../../../assets/images/book-cover-placeholder.png')
             }
           />
 
-          <Body style={{flex: 4}}>
+          <Body style={{ flex: 4 }}>
             <Text style={styles.category}>
               {`${LIBRARY_STR.category}: ${genre.name}`}
             </Text>
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.subtitle}>{author} </Text>
             <View style={styles.bottomContainer}>
+
+              {isManager && (
+                <View>
+                  <Button
+                    transparent
+                    onPress={() => returnBook(data)}>
+                    <BookClosedIcon color="#fff" />
+                    <Text style={styles.colorButtonText}>
+                      {LIBRARY_STR.return_book}
+                    </Text>
+                  </Button>
+                </View>
+              )}
+
               <Text style={styles.statusInfo}>{`${pages}p`}</Text>
+
               {renderStatusIndicator(isAvailable)}
               {isAvailable && (
                 <Text style={styles.statusInfo}>{LIBRARY_STR.available}</Text>
@@ -137,8 +154,8 @@ const BookCard = ({data, showBook}) => {
                   color2={secondaryColor}
                 />
               ) : (
-                <HeartIcon iconForm={IconForms.outline()} color1={black} />
-              )}
+                  <HeartIcon iconForm={IconForms.outline()} color1={black} />
+                )}
             </View>
           </Body>
         </Left>
