@@ -1,18 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {View, FlatList, SafeAreaView, ActivityIndicator} from 'react-native';
+import PropTypes from 'prop-types';
 import {showBook, getFavoriteList} from '../../store/reducers/bookRedux';
-import BookCard from '../LibraryScreen/BookCard';
+import BookCard from './BookCard';
 import {getFavoriteListIds} from '../../store/selectors/bookingSelector';
 import {backgroundColor} from '../../Utils/colors';
 
 const mapStateToProps = (state) => ({
   favoriteList: state.bookStore.favoriteList,
-  getFavoriteListIds: getFavoriteListIds(state),
+  favoriteListIds: getFavoriteListIds(state),
 });
 const mapDispatchToProps = (dispatch) => ({
   showBook: (...args) => dispatch(showBook(...args)),
-  getFavoriteList: (...args) => dispatch(getFavoriteList(...args)),
+  dipatchFavoriteList: (...args) => dispatch(getFavoriteList(...args)),
 });
 const renderSeparator = () => {
   return (
@@ -29,10 +30,9 @@ const renderSeparator = () => {
 
 const BookFavoriteList = ({
   favoriteList,
-  getFavoriteList,
-  showBook,
+  dipatchFavoriteList,
   navigation,
-  getFavoriteListIds,
+  favoriteListIds,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -40,9 +40,9 @@ const BookFavoriteList = ({
     if (favoriteList) {
       setIsLoading(false);
     } else {
-      getFavoriteList();
+      dipatchFavoriteList();
     }
-  }, [favoriteList]);
+  }, [dipatchFavoriteList, favoriteList]);
 
   const handleShowBook = (item) => {
     showBook(item.id);
@@ -54,7 +54,7 @@ const BookFavoriteList = ({
 
   const renderItem = ({item}) => {
     const isFavorited = () => {
-      return getFavoriteListIds.includes(item.id);
+      return favoriteListIds.includes(item.id);
     };
     return (
       <BookCard
@@ -70,24 +70,28 @@ const BookFavoriteList = ({
         <ActivityIndicator animating size="large" />
       </View>
     );
-  } else {
-    return (
-      <SafeAreaView style={{marginTop: 0, backgroundColor, flex: 1}}>
-        <FlatList
-          data={favoriteList}
-          renderItem={renderItem}
-          keyExtractor={(item) => `${item.id}`}
-          ItemSeparatorComponent={renderSeparator}
-          onEndReachedThreshold={0.5}
-        />
-      </SafeAreaView>
-    );
   }
+  return (
+    <SafeAreaView style={{marginTop: 0, backgroundColor, flex: 1}}>
+      <FlatList
+        data={favoriteList}
+        renderItem={renderItem}
+        keyExtractor={(item) => `${item.id}`}
+        ItemSeparatorComponent={renderSeparator}
+        onEndReachedThreshold={0.5}
+      />
+    </SafeAreaView>
+  );
 };
-BookFavoriteList.navigationOptions = (navigationData) => {
-  return {
-    headerTitle: 'Liste des favoris',
-  };
+BookFavoriteList.navigationOptions = {
+  headerTitle: 'Liste des favoris',
+};
+
+BookFavoriteList.propTypes = {
+  favoriteList: PropTypes.array,
+  dipatchFavoriteList: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired,
+  favoriteListIds: PropTypes.array,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookFavoriteList);

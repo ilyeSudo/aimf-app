@@ -4,6 +4,22 @@ import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 import {successColor} from '../Utils/colors';
 
+const styles = {
+  buttonStyle: {
+    color: successColor,
+    borderRadius: 4,
+    paddingVertical: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  linearGradient: {
+    borderRadius: 4,
+    marginHorizontal: 27,
+  },
+};
+
 const GradientButton = (props) => {
   const {bgColor1, bgColor2, callback, style} = props;
 
@@ -21,27 +37,12 @@ const GradientButton = (props) => {
   );
 };
 
-const styles = {
-  buttonStyle: {
-    color: successColor,
-    borderRadius: 4,
-    paddingVertical: 10,
-    alignItems: 'center',
-    flexDirection: 'row',
-    flex: 1,
-    justifyContent: 'center',
-  },
-  linearGradient: {
-    borderRadius: 4,
-    marginHorizontal: 27,
-  },
-};
-
 GradientButton.propTypes = {
   bgColor1: PropTypes.string,
   bgColor2: PropTypes.string,
-  callback: PropTypes.Function,
+  callback: PropTypes.func,
   style: PropTypes.object,
+  children: PropTypes.array,
 };
 
 export default GradientButton;

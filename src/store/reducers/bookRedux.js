@@ -82,13 +82,21 @@ const addToFavorites = (book) => {
     payload: book,
   };
 };
+
+const showBookError = (messageError) => {
+  return {
+    type: SHOW_BOOK_ERROR,
+    messageError,
+  };
+};
+
 export const removeFromFavoritesRequest = (book, bookIds) => (dispatch) => {
   dispatch(removeFromFavorites(book));
   getAxiosInstance()
     .post(`${POST_BOOK_FAVORITE_LIST_URI}`, {
       bookIds: bookIds.filter((id) => id !== book.id),
     })
-    .catch(function (error) {
+    .catch((error) => {
       dispatch(batchActions([dispatchError(error), showBookError()]));
       dispatch(addToFavorites(book));
     });
@@ -100,7 +108,7 @@ export const addToFavoritesRequest = (book, bookIds) => (dispatch) => {
     .post(`${POST_BOOK_FAVORITE_LIST_URI}`, {
       bookIds: [...bookIds, book.id],
     })
-    .catch(function (error) {
+    .catch((error) => {
       dispatch(batchActions([dispatchError(error), showBookError()]));
       dispatch(removeFromFavorites(book));
     });
@@ -125,14 +133,14 @@ export const getMyReservations = () => {
     dispatch(getMyReservationsRequest());
     getAxiosInstance()
       .get(GET_BOOK_RESERVATION_URI)
-      .then(function (response) {
+      .then((response) => {
         dispatch(
           getMyReservationsSuccess({
             myReservations: response.data.data,
           }),
         );
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions([dispatchError(error)], POST_BATCH_GET_BOOKS_ERROR),
         );
@@ -145,14 +153,14 @@ export const getFavoriteList = () => {
     dispatch(getFavoriteListRequest());
     getAxiosInstance()
       .get(GET_BOOK_FAVORITE_LIST_URI)
-      .then(function (response) {
+      .then((response) => {
         dispatch(
           getFavoriteListSuccess({
             favoriteList: response.data.data.map((item) => item.book),
           }),
         );
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions([dispatchError(error)], POST_BATCH_GET_BOOKS_ERROR),
         );
@@ -170,18 +178,17 @@ export const getBooks = (
   handleMore = false,
 ) => {
   return (dispatch) => {
-    search = search == '' ? null : search;
     dispatch(getBookRequest(refreshing, handleMore));
     getAxiosInstance()
       .get(GET_BOOK_LIST_URI, {
         params: {
           page,
-          search,
+          search: search === '' ? null : search,
           bookGenreId,
           locationId,
         },
       })
-      .then(function (response) {
+      .then((response) => {
         dispatch(
           getBookSuccess({
             books:
@@ -194,7 +201,7 @@ export const getBooks = (
           }),
         );
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), getBookError()],
@@ -221,25 +228,18 @@ const showBookSuccess = (data) => {
   };
 };
 
-const showBookError = (messageError) => {
-  return {
-    type: SHOW_BOOK_ERROR,
-    messageError,
-  };
-};
-
 export const showBook = (idBook) => (dispatch) => {
   dispatch(showBookRequest(idBook));
   getAxiosInstance()
     .get(`${GET_BOOK_URI}${idBook}?with_image=1`)
-    .then(function (response) {
+    .then((response) => {
       dispatch(
         showBookSuccess({
           selectedBook: response.data.data,
         }),
       );
     })
-    .catch(function (error) {
+    .catch((error) => {
       dispatch(batchActions([dispatchError(error), showBookError()]));
     });
 };
@@ -278,23 +278,23 @@ export const cancelBooking = () => (dispatch) => {
   dispatch(cancelBookingStore());
 };
 export const requestBooking = (objRequestBooking) => (dispatch) => {
-  //requete sur le serveur pour demander la reservation
-  //Si c'est OK recuprer l'objet booking avec les données pré rempli
-  //si non afficher l'erreur
+  // requete sur le serveur pour demander la reservation
+  // Si c'est OK recuprer l'objet booking avec les données pré rempli
+  // si non afficher l'erreur
   dispatch(requestBookingRequest(objRequestBooking));
   getAxiosInstance()
     //   .get(`${GET_BOOK_RESERVATION_REQUEST_URI}/${objRequestBooking.userId}/${objRequestBooking.bookId}/${objRequestBooking.hash}`)
     .get(
       `${GET_BOOK_RESERVATION_REQUEST_URI}/${objRequestBooking.userId}/${objRequestBooking.bookId}`,
     )
-    .then(function (response) {
+    .then((response) => {
       dispatch(
         requestBookingSuccess({
           booking: response.data.data,
         }),
       );
     })
-    .catch(function (error) {
+    .catch((error) => {
       dispatch(requestBookingError());
       dispatch(batchActions([dispatchError(error), showBookError()]));
     });
@@ -302,7 +302,7 @@ export const requestBooking = (objRequestBooking) => (dispatch) => {
 export const validateBooking = (booking, navigation) => (dispatch) => {
   getAxiosInstance()
     .post(`${POST_BOOK_RESERVATION_URI}`, booking)
-    .then(function (response) {
+    .then(() => {
       dispatch(
         validateBookingSuccess({
           booking: null,
@@ -310,7 +310,7 @@ export const validateBooking = (booking, navigation) => (dispatch) => {
       );
       navigation.goBack();
     })
-    .catch(function (error) {
+    .catch((error) => {
       dispatch(batchActions([dispatchError(error), showBookError()]));
     });
 };

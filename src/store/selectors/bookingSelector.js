@@ -8,14 +8,14 @@ const getfavoriteList = (state) => state.bookStore.favoriteList;
 
 export const getQrCodeString = createSelector(
   [getUserId, getSelectedBook, getUserAccessToken],
-  (getUserId, getSelectedBook, accessToken) => {
-    if (getUserId && getSelectedBook && accessToken) {
+  (userId, selectedBook, accessToken) => {
+    if (getUserId && selectedBook && accessToken) {
       const hash = CryptoJS.SHA256(
-        `${getUserId}_${getSelectedBook.id}_${accessToken.slice(0, 9)}`,
+        `${userId}_${selectedBook.id}_${accessToken.slice(0, 9)}`,
       );
       return JSON.stringify({
         userId: getUserId,
-        bookId: getSelectedBook.id,
+        bookId: selectedBook.id,
         hash: hash.toString(CryptoJS.enc.Base64),
       });
     }

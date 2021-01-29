@@ -1,6 +1,7 @@
 import {Input, Item, Label} from 'native-base';
 import React, {useState} from 'react';
 import {Text} from 'react-native';
+import * as PropTypes from 'prop-types';
 import styles from './AccountForm/css';
 import {isCorrectPassword} from '../Utils/Functions';
 
@@ -65,4 +66,17 @@ const RenderPassword = ({
   );
 };
 
+RenderPassword.propTypes = {
+  label: PropTypes.string,
+  value: PropTypes.string,
+  required: PropTypes.bool,
+  checkPassword: PropTypes.func,
+  onChange: PropTypes.func,
+  keyboardType: PropTypes.string,
+  maxLength: PropTypes.number,
+  disabled: PropTypes.bool,
+  itemStyle: PropTypes.object,
+  placeholder: PropTypes.string,
+  error: PropTypes.bool,
+};
 export default RenderPassword;

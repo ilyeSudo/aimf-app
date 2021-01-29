@@ -18,11 +18,7 @@ class YouTubeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isPlaying: true,
-      isFocused: false,
-      isLooping: true,
       playerWidth: Dimensions.get('window').width,
-      count: 1,
     };
   }
 
@@ -36,6 +32,7 @@ class YouTubeScreen extends Component {
   componentWillUnmount() {
     this.focusListener.remove();
   }
+
   render() {
     const logo = require('../../assets/images/tamejida_47.jpg');
     return (
@@ -105,6 +102,7 @@ YouTubeScreen.propTypes = {
   video: PropTypes.object,
   getLiveVideo: PropTypes.func,
   loading: PropTypes.bool,
+  navigation: PropTypes.object.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(YouTubeScreen);

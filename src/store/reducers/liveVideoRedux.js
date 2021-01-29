@@ -33,10 +33,10 @@ export const getLiveVideo = () => {
     dispatch(getLiveVideoRequest());
     getAxiosInstance()
       .get(GET_LIVE_VIDEO_URI)
-      .then(function (response) {
+      .then((response) => {
         dispatch(getLiveVideoSuccess(response.data.data));
       })
-      .catch(function (error) {
+      .catch(() => {
         dispatch(getLiveVideoError());
       });
   };

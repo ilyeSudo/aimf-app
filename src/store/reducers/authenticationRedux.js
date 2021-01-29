@@ -104,7 +104,7 @@ export const login = (email, password) => {
         email,
         password,
       })
-      .then(function (response) {
+      .then((response) => {
         dispatch(
           batchActions(
             [storeAccount(response.data), postLoginSuccess()],
@@ -114,7 +114,7 @@ export const login = (email, password) => {
         axios.defaults.headers.Authorization = `Bearer ${response.data.access_token}`;
         dispatch(getLiveVideo());
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), postLoginError()],
@@ -130,10 +130,10 @@ export const getQuestions = () => {
     dispatch(postRequest());
     getAxiosInstance()
       .get(GET_SECURITY_QUESTIONS_URI)
-      .then(function (response) {
+      .then((response) => {
         dispatch(getQuestionsSuccess(response.data));
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), getQuestionsError()],
@@ -149,10 +149,10 @@ export const getTermsOfUse = () => {
     dispatch(postRequest());
     getAxiosInstance()
       .get(TERMS_OF_USE_URI)
-      .then(function (response) {
+      .then((response) => {
         dispatch(getTermsOfUseSuccess(response.data.data));
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), getTermsOfUseError()],
@@ -168,10 +168,10 @@ export const logout = () => {
     dispatch(postRequest());
     getAxiosInstance()
       .post(POST_LOGOUT_URI, {})
-      .then(function () {
+      .then(() => {
         dispatch(postLogoutSuccess());
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), postLoginError()],

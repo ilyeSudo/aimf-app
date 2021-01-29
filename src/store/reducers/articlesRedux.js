@@ -24,8 +24,6 @@ const POST_ARTICLES_SUCCESS = 'POST_ARTICLES_SUCCESS';
 const POST_ARTICLES_ERROR = 'POST_ARTICLES_ERROR';
 
 const DELETE_ARTICLE_REQUEST = 'DELETE_ARTICLE_REQUEST';
-const DELETE_ARTICLE_SUCCESS = 'DELETE_ARTICLE_SUCCESS';
-const DELETE_ARTICLE_ERROR = 'DELETE_ARTICLE_ERROR';
 
 const BATCH_ARTICLES_ERROR = 'BATCH_ARTICLES_ERROR';
 
@@ -121,7 +119,7 @@ export const getArticles = (
           with_association: 1,
         },
       })
-      .then(function (response) {
+      .then((response) => {
         dispatch(
           getArticlesSuccess({
             articles:
@@ -134,7 +132,7 @@ export const getArticles = (
           }),
         );
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), getArticlesError()],
@@ -150,13 +148,13 @@ export const savePost = (data) => {
     dispatch(saveArticleRequest());
     getAxiosInstance()
       .post(`${GET_ARTICLES_URI}?with_association=1`, data)
-      .then(function (response) {
+      .then((response) => {
         if (response.data.data.status === PUBLISHED_ARTICLE_STATUS) {
           dispatch(getArticles([], 1, true));
         }
         dispatch(postArticleSuccess(response.data.data));
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), postArticleError()],
@@ -172,10 +170,10 @@ export const getDraftArticle = () => {
     dispatch(getDraftArticleRequest());
     getAxiosInstance()
       .get(GET_DRAFT_ARTICLE_URI, {params: {with_association: 1}})
-      .then(function (response) {
+      .then((response) => {
         dispatch(getDraftArticleSuccess(response.data.data));
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), getDraftArticleError()],
@@ -192,10 +190,10 @@ export const deleteArticle = (id) => {
     getAxiosInstance()
       .delete(`${DELETE_ARTICLE_URI}/${id}`)
       // eslint-disable-next-line no-unused-vars
-      .then(function (response) {
+      .then((response) => {
         dispatch(getArticles([], 1, true));
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), getDraftArticleError()],

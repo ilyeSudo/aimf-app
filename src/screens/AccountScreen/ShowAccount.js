@@ -1,18 +1,42 @@
 import React, {Component} from 'react';
-import {View, Image} from 'react-native';
+import {Image, TouchableOpacity, View} from 'react-native';
 import {Button, Icon, Text} from 'native-base';
 import * as PropTypes from 'prop-types';
+import Toast from 'react-native-simple-toast';
 import styles from './css';
 import {
+  DELETE_USER_ACCOUNT_CONFIRM_MESSAGE_BODY,
+  DELETE_USER_ACCOUNT_CONFIRM_MESSAGE_TITLE,
   FEMALE_GENDER,
   MALE_GENDER,
   UPDATE_ACCOUNT_ACTION,
 } from '../../Utils/Constants';
 import {isAuthorized} from '../../Utils/Account';
+import InformationModal from '../../Components/InformationModal';
 
 class ShowAccount extends Component {
   static navigationOptions = {
     header: null,
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      deleteAccModalVisible: false,
+    };
+  }
+
+  showDeleteConfirmation = (show: boolean) => {
+    this.setState({
+      deleteAccModalVisible: show,
+    });
+  };
+
+  onConfirmDeleteAccount = async () => {
+    await this.props.deleteCurrentUserAccount();
+    if (!this.props.errorMessage) {
+      Toast.show('Votre compte a été supprimé avec succès');
+    }
   };
 
   render() {
@@ -51,14 +75,41 @@ class ShowAccount extends Component {
           style={styles.logoutButton}>
           <Text>Déconnexion</Text>
         </Button>
+        <TouchableOpacity onPress={() => this.showDeleteConfirmation(true)}>
+          <Text
+            style={{
+              marginTop: 25,
+              textAlign: 'center',
+              color: '#6a0000',
+              opacity: 0.7,
+              textDecorationLine: 'underline',
+              fontSize: 13,
+            }}>
+            Supprimer mon compte
+          </Text>
+        </TouchableOpacity>
+        <InformationModal
+          visible={this.state.deleteAccModalVisible}
+          setVisible={this.showDeleteConfirmation}
+          onConfirm={this.onConfirmDeleteAccount}
+          title={DELETE_USER_ACCOUNT_CONFIRM_MESSAGE_TITLE}>
+          <View>
+            <Text>{DELETE_USER_ACCOUNT_CONFIRM_MESSAGE_BODY}</Text>
+          </View>
+        </InformationModal>
       </View>
     );
   }
 }
+
 ShowAccount.propTypes = {
-  updateAction: PropTypes.func,
-  gender: PropTypes.string,
-  fullName: PropTypes.string,
-  logout: PropTypes.func,
+  user: PropTypes.object.isRequired,
+  gender: PropTypes.string.isRequired,
+  fullName: PropTypes.string.isRequired,
+  updateAction: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
+  deleteCurrentUserAccount: PropTypes.func.isRequired,
+  errorMessage: PropTypes.string.isRequired,
 };
+
 export default ShowAccount;

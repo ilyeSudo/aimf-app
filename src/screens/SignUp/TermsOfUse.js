@@ -1,10 +1,10 @@
 import {ScrollView, Text, View} from 'react-native';
 import React, {Component} from 'react';
 import {Button, Icon} from 'native-base';
-import {CREATE_ACCOUNT_ACTION} from '../../Utils/Constants';
 import {Text as ElementText} from 'react-native-elements';
 import * as PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {CREATE_ACCOUNT_ACTION} from '../../Utils/Constants';
 import {register} from '../../store/reducers/accountRedux';
 import {getTermsOfUse} from '../../store/reducers/authenticationRedux';
 
@@ -59,5 +59,6 @@ const mapDispatchToProps = (dispatch) => {
 TermsOfUse.propTypes = {
   getTermsOfUse: PropTypes.func,
   termsOfUse: PropTypes.object,
+  updateAction: PropTypes.func.isRequired,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(TermsOfUse);

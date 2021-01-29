@@ -64,6 +64,12 @@ export const UPDATE_USER_STATUS_CONFIRM_MESSAGE =
 export const UPDATE_ADMIN_ROLE_CONFIRM_MESSAGE =
   "Etes vous sûr de vouloir changer les droits d'administration pour cet utilisateur ?";
 
+export const DELETE_USER_ACCOUNT_CONFIRM_MESSAGE_TITLE =
+  'Voulez-vous vraiment supprimer votre compte?';
+
+export const DELETE_USER_ACCOUNT_CONFIRM_MESSAGE_BODY =
+  'En confirmant cette action, votre compte ainsi que vos informations personnelles seront supprimées définitivement.';
+
 export const SUPER_ADMIN_ROLE = 'superadmin';
 export const ADMIN_ROLE = 'admin';
 export const ASSOCIATION_ADMIN_ROLE = 'admin_';
