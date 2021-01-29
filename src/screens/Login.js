@@ -128,7 +128,6 @@ Login.propTypes = {
   loading: PropTypes.bool,
   account: PropTypes.object,
   loadingLiveVideo: PropTypes.bool,
-  video: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

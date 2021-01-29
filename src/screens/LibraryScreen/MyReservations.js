@@ -28,6 +28,9 @@ const MyReservations = ({myReservations, dispatchGetMyReservations}) => {
   });
 
   const renderItem = ({item}) => <BookReservationCard data={item} />;
+  renderItem.propTypes = {
+    item: PropTypes.object,
+  };
 
   if (isLoading) {
     return (
@@ -39,11 +42,7 @@ const MyReservations = ({myReservations, dispatchGetMyReservations}) => {
   return (
     <SafeAreaView
       style={{marginTop: 0, backgroundColor, flex: 1, paddingTop: 5}}>
-      <FlatList
-        data={myReservations}
-        renderItem={renderItem}
-        keyExtractor={(item) => `${item.id}`}
-      />
+      <FlatList data={myReservations} renderItem={renderItem} />
     </SafeAreaView>
   );
 };

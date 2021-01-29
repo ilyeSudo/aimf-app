@@ -87,7 +87,7 @@ const BookCard = ({ data, showBook, returnBook }) => {
     return `${API_BASE_URL}/${image[0].media.path}`;
   };
 
-  const renderStatusIndicator = (value: boolean) => {
+  const renderStatusIndicator = (value) => {
     return (
       <View
         style={{

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {Card, CardItem, Container, Content, Body, Row, Col} from 'native-base';
 import {
@@ -98,7 +98,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(addToFavoritesRequest(...args)),
 });
 
-const renderButton: Component = (callback, title, {disabled, icon}) => {
+const renderButton = (callback, title, {disabled, icon}) => {
   const color = callback && !disabled ? 'black' : placeholderTextColor;
   return (
     <TouchableOpacity

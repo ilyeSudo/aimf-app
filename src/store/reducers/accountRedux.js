@@ -161,7 +161,46 @@ export const register = (data) => {
   };
 };
 
-const initialState = {action: SHOW_ACCOUNT_ACTION};
+export const deleteUserAccountRequest = () => {
+  return {
+    payload: {
+      loading: true,
+    },
+  };
+};
+
+export const deleteUserAccountSuccess = () => {
+  return {
+    payload: {loading: false, user: null},
+  };
+};
+
+export const deleteUserAccountError = () => {
+  return {
+    payload: {loading: false},
+  };
+};
+
+export const deleteUserAccount = (id) => {
+  return (dispatch) => {
+    dispatch(deleteUserAccountRequest);
+
+    getAxiosInstance()
+      .delete(`${PATCH_UPDATE_USER_URI + id}`)
+      .then(() => {
+        dispatch(deleteUserAccountSuccess());
+      })
+      .catch((error) => {
+        dispatch(
+          batchActions([dispatchError(error), deleteUserAccountError()]),
+        );
+      });
+  };
+};
+
+const initialState = {
+  action: SHOW_ACCOUNT_ACTION,
+};
 
 export const accountReducer = (state = initialState, action) => {
   switch (action.type) {

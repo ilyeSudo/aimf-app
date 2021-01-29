@@ -4,8 +4,13 @@ import {connect} from 'react-redux';
 import {Input, Item, Button} from 'native-base';
 import * as PropTypes from 'prop-types';
 import BookCard from './LibraryScreen/BookCard';
-import {BOOK_GENRES, LIBRARY_STR} from '../Utils/Constants';
-import {getBooks, getFavoriteList, showBook,getBookReservations} from '../store/reducers/bookRedux';
+import {
+  getBooks,
+  getFavoriteList,
+  showBook,
+  getBookReservations,
+} from '../store/reducers/bookRedux';
+import {BOOK_GENRES, BOOK_LOCATION, LIBRARY_STR} from '../Utils/Constants';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import {getFavoriteListIds} from '../store/selectors/bookingSelector';
 import FilterList from './LibraryScreen/FilterList';
@@ -109,9 +114,9 @@ const LibraryScreen = ({
   loading,
   refreshing,
   handleMore,
-  dispatchGetBooks,
   dispatchShowBook,
   dispatchReturnBook,
+  dispatchGetBooks,
   errorMessage,
   navigation,
   showErrorMessage,
@@ -120,16 +125,24 @@ const LibraryScreen = ({
   account,
 }) => {
   const [searchValue, setSearchValue] = useState(null);
-  const [filterValue, setFilterValue] = useState(null);
+  const [filterGenreValue, setFilterGenreValue] = useState(null);
+  const [filterLocationValue, setFilterLocationValue] = useState(null);
   const [lanceSearch, setLanceSearch] = useState(false);
 
   const {coloredButton, searchInputStyle} = styles;
+
   const handleRefresh = () => {
     if (!refreshing && !handleMore && !loading) {
-      dispatchGetBooks([], 1, searchValue, filterValue, true);
+      dispatchGetBooks(
+        [],
+        1,
+        searchValue,
+        filterGenreValue,
+        filterLocationValue,
+        true,
+      );
     }
   };
-
   useEffect(() => {
     dispatchGetFavoriteList();
     handleRefresh();
@@ -146,7 +159,15 @@ const LibraryScreen = ({
 
   const handleLoadMore = () => {
     if (!refreshing && !handleMore && !loading && !lastPage) {
-      dispatchGetBooks(books, page + 1, searchValue, filterValue, false, true);
+      getBooks(
+        books,
+        page + 1,
+        searchValue,
+        filterGenreValue,
+        filterLocationValue,
+        false,
+        true,
+      );
     }
   };
 
@@ -172,12 +193,19 @@ const LibraryScreen = ({
 
     return (
       <BookCard
-        data={{...item, isFavorited: isFavorited(), isManager:canManageLibrary(account.user)}}
+        data={{
+          ...item,
+          isFavorited: isFavorited(),
+          isManager: canManageLibrary(account.user),
+        }}
         showBook={handleShowBook}
         returnBook={handleReturnBook}
 
       />
     );
+  };
+  renderItem.propTypes = {
+    item: PropTypes.object,
   };
 
   const search = () => {
@@ -188,18 +216,36 @@ const LibraryScreen = ({
     }
   };
 
-  const updaterFilterValue = (value) => {
-    setFilterValue(value);
+  const updaterGenreFilterValue = (filterValue) => {
+    setFilterGenreValue(filterValue);
+    setLanceSearch(true);
+  };
+  const updaterLocationFilterValue = (filterValue) => {
+    setFilterLocationValue(filterValue);
     setLanceSearch(true);
   };
 
-  const getFilterLabel = () => {
-    if (!filterValue) {
+  const getGenreFilterLabel = () => {
+    if (!filterGenreValue) {
       return 'Sélectionner un genre...';
     }
-    const bookGenre = BOOK_GENRES.find((element) => element.id === filterValue);
+    const bookGenre = BOOK_GENRES.find(
+      (element) => element.id === filterGenreValue,
+    );
     if (bookGenre) {
       return bookGenre.label;
+    }
+    return '';
+  };
+  const getLocationFilterLabel = () => {
+    if (!filterLocationValue) {
+      return 'Sélectionner la bibliothèque';
+    }
+    const bookLocation = BOOK_LOCATION.find(
+      (element) => element.id === filterLocationValue,
+    );
+    if (bookLocation) {
+      return bookLocation.label;
     }
     return '';
   };
@@ -236,11 +282,23 @@ const LibraryScreen = ({
               value={searchValue}
             />
           </Item>
-          <View style={{flexDirection: 'row-reverse', marginBottom: 3}}>
+          <View
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{
+              flexDirection: 'row-reverse',
+              marginBottom: 3,
+            }}>
             <FilterList
-              isEmpty={!filterValue}
-              selectedValue={getFilterLabel()}
-              updateValue={updaterFilterValue}
+              list={BOOK_GENRES}
+              isEmpty={!filterGenreValue}
+              selectedValue={getGenreFilterLabel()}
+              updateValue={updaterGenreFilterValue}
+            />
+            <FilterList
+              list={BOOK_LOCATION}
+              isEmpty={!filterLocationValue}
+              selectedValue={getLocationFilterLabel()}
+              updateValue={updaterLocationFilterValue}
             />
           </View>
         </View>
@@ -248,7 +306,6 @@ const LibraryScreen = ({
           <FlatList
             data={books}
             renderItem={renderItem}
-            keyExtractor={(item) => `${item.id}`}
             onRefresh={handleRefresh}
             refreshing={false}
             onEndReached={handleLoadMore}
@@ -303,9 +360,9 @@ LibraryScreen.propTypes = {
   refreshing: PropTypes.bool,
   handleMore: PropTypes.bool,
   lastPage: PropTypes.bool,
-  dispatchGetBooks: PropTypes.func,
   dispatchShowBook: PropTypes.func,
   dispatchGetFavoriteList: PropTypes.func,
+  dispatchGetBooks: PropTypes.func,
   account: PropTypes.object,
   favoriteListIds: PropTypes.array,
   navigation: PropTypes.object,
