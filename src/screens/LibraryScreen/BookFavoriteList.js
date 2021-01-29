@@ -51,6 +51,9 @@ const BookFavoriteList = ({
       bookTitle: item.title,
     });
   };
+  handleShowBook.propTypes = {
+    item: PropTypes.object,
+  };
 
   const renderItem = ({item}) => {
     const isFavorited = () => {
@@ -62,6 +65,9 @@ const BookFavoriteList = ({
         showBook={handleShowBook}
       />
     );
+  };
+  renderItem.propTypes = {
+    item: PropTypes.object,
   };
 
   if (isLoading) {
@@ -76,7 +82,6 @@ const BookFavoriteList = ({
       <FlatList
         data={favoriteList}
         renderItem={renderItem}
-        keyExtractor={(item) => `${item.id}`}
         ItemSeparatorComponent={renderSeparator}
         onEndReachedThreshold={0.5}
       />

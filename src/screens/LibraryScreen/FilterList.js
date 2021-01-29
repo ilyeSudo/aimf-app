@@ -4,7 +4,6 @@ import {View, Text} from 'react-native';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import {Icon} from 'native-base';
 import PropTypes from 'prop-types';
-import {BOOK_GENRES} from '../../Utils/Constants';
 import {black, gray} from '../../Utils/colors';
 
 const styles = {
@@ -92,6 +91,7 @@ FilterList.propTypes = {
   isEmpty: PropTypes.bool,
   updateValue: PropTypes.func,
   selectedValue: PropTypes.string.isRequired,
+  list: PropTypes.array,
 };
 
 export default FilterList;

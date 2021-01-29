@@ -163,7 +163,6 @@ export const register = (data) => {
 
 export const deleteUserAccountRequest = () => {
   return {
-    type: DELETE_USER_ACCOUNT_REQUEST,
     payload: {
       loading: true,
     },
@@ -172,14 +171,12 @@ export const deleteUserAccountRequest = () => {
 
 export const deleteUserAccountSuccess = () => {
   return {
-    type: DELETE_USER_ACCOUNT_SUCCESS,
     payload: {loading: false, user: null},
   };
 };
 
 export const deleteUserAccountError = () => {
   return {
-    type: DELETE_USER_ACCOUNT_ERROR,
     payload: {loading: false},
   };
 };
@@ -195,10 +192,7 @@ export const deleteUserAccount = (id) => {
       })
       .catch((error) => {
         dispatch(
-          batchActions(
-            [dispatchError(error), deleteUserAccountError()],
-            BATCH_DELETE_USER_ACCOUNT_ERROR,
-          ),
+          batchActions([dispatchError(error), deleteUserAccountError()]),
         );
       });
   };

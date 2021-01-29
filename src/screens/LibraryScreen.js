@@ -108,7 +108,6 @@ const LibraryScreen = ({
   loading,
   refreshing,
   handleMore,
-  dispatchGetBooks,
   dispatchShowBook,
   errorMessage,
   navigation,
@@ -123,12 +122,12 @@ const LibraryScreen = ({
   const [lanceSearch, setLanceSearch] = useState(false);
 
   const {coloredButton, searchInputStyle} = styles;
+
   const handleRefresh = () => {
     if (!refreshing && !handleMore && !loading) {
-      dispatchGetBooks([], 1, searchValue, filterValue, true);
+      getBooks([], 1, searchValue, filterGenreValue, filterLocationValue, true);
     }
   };
-
   useEffect(() => {
     dispatchGetFavoriteList();
     handleRefresh();
@@ -143,15 +142,17 @@ const LibraryScreen = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lanceSearch]);
 
-  const handleRefresh = () => {
-    if (!refreshing && !handleMore && !loading) {
-      getBooks([], 1, searchValue, filterGenreValue,filterLocationValue, true);
-    }
-  };
-
   const handleLoadMore = () => {
     if (!refreshing && !handleMore && !loading && !lastPage) {
-      getBooks(books, page + 1, searchValue, filterGenreValue,filterLocationValue, false, true);
+      getBooks(
+        books,
+        page + 1,
+        searchValue,
+        filterGenreValue,
+        filterLocationValue,
+        false,
+        true,
+      );
     }
   };
 
@@ -175,6 +176,9 @@ const LibraryScreen = ({
       />
     );
   };
+  renderItem.propTypes = {
+    item: PropTypes.object,
+  };
 
   const search = () => {
     if (!searchValue || searchValue.length > 2) {
@@ -193,12 +197,13 @@ const LibraryScreen = ({
     setLanceSearch(true);
   };
 
-
   const getGenreFilterLabel = () => {
     if (!filterGenreValue) {
       return 'Sélectionner un genre...';
     }
-    const bookGenre = BOOK_GENRES.find((element) => element.id === filterGenreValue);
+    const bookGenre = BOOK_GENRES.find(
+      (element) => element.id === filterGenreValue,
+    );
     if (bookGenre) {
       return bookGenre.label;
     }
@@ -208,7 +213,9 @@ const LibraryScreen = ({
     if (!filterLocationValue) {
       return 'Sélectionner la bibliothèque';
     }
-    const bookLocation = BOOK_LOCATION.find((element) => element.id === filterLocationValue);
+    const bookLocation = BOOK_LOCATION.find(
+      (element) => element.id === filterLocationValue,
+    );
     if (bookLocation) {
       return bookLocation.label;
     }
@@ -254,20 +261,18 @@ const LibraryScreen = ({
               selectedValue={getGenreFilterLabel()}
               updateValue={updaterGenreFilterValue}
             />
-             <FilterList
-             list={BOOK_LOCATION}
+            <FilterList
+              list={BOOK_LOCATION}
               isEmpty={!filterLocationValue}
               selectedValue={getLocationFilterLabel()}
               updateValue={updaterLocationFilterValue}
             />
           </View>
-          
         </View>
         <View style={styles.listContainer}>
           <FlatList
             data={books}
             renderItem={renderItem}
-            keyExtractor={(item) => `${item.id}`}
             onRefresh={handleRefresh}
             refreshing={false}
             onEndReached={handleLoadMore}
@@ -322,7 +327,6 @@ LibraryScreen.propTypes = {
   refreshing: PropTypes.bool,
   handleMore: PropTypes.bool,
   lastPage: PropTypes.bool,
-  dispatchGetBooks: PropTypes.func,
   dispatchShowBook: PropTypes.func,
   dispatchGetFavoriteList: PropTypes.func,
   account: PropTypes.object,
