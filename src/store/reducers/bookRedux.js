@@ -111,19 +111,19 @@ const showBookError = (messageError) => {
   };
 };
 
-export const returnBookRequest= (bookId,bookingId) =>(dispatch)=>{
-  console.log("Book id: "+bookId+" --------booking id: "+bookingId);
+export const returnBookRequest = (bookId, bookingId) => (dispatch) => {
+  console.log(`Book id: ${bookId} --------booking id: ${bookingId}`);
   getAxiosInstance()
     .patch(`${POST_BOOK_RESERVATION_URI}/${bookingId}`, {
       isReturned: true,
-    }).then(() => {
+    })
+    .then(() => {
       dispatch(getBookReservations(bookId));
-    }
-    )
+    })
     .catch((error) => {
       dispatch(batchActions([dispatchError(error), showBookError()]));
     });
-}
+};
 
 export const removeFromFavoritesRequest = (book, bookIds) => (dispatch) => {
   dispatch(removeFromFavorites(book));
@@ -169,7 +169,11 @@ export const getMyReservations = () => {
     getAxiosInstance()
       .get(GET_BOOK_RESERVATION_URI)
       .then((response) => {
-        console.log("Success response myReservations :"+JSON.stringify(response.data.data));
+        console.log(
+          `Success response myReservations :${JSON.stringify(
+            response.data.data,
+          )}`,
+        );
 
         dispatch(
           getMyReservationsSuccess({
@@ -188,11 +192,15 @@ export const getMyReservations = () => {
 export const getBookReservations = (bookId) => {
   return (dispatch) => {
     dispatch(getBookReservationsRequest());
-    console.log(GET_BOOK_RESERVATION_RETURN_URI.replace("{bookId}",bookId));
+    console.log(GET_BOOK_RESERVATION_RETURN_URI.replace('{bookId}', bookId));
     getAxiosInstance()
-      .get(GET_BOOK_RESERVATION_RETURN_URI.replace("{bookId}",bookId))
+      .get(GET_BOOK_RESERVATION_RETURN_URI.replace('{bookId}', bookId))
       .then((response) => {
-        console.log("Success response GET_BOOK_RESERVATION_RETURN_URI :"+JSON.stringify(response.data.data));
+        console.log(
+          `Success response GET_BOOK_RESERVATION_RETURN_URI :${JSON.stringify(
+            response.data.data,
+          )}`,
+        );
 
         dispatch(
           getBookReservationsSuccess({
@@ -201,7 +209,7 @@ export const getBookReservations = (bookId) => {
         );
       })
       .catch((error) => {
-        console.log("error response GET_BOOK_RESERVATION_RETURN_URI :"+error);
+        console.log(`error response GET_BOOK_RESERVATION_RETURN_URI :${error}`);
 
         dispatch(
           batchActions([dispatchError(error)], POST_BATCH_GET_BOOKS_ERROR),

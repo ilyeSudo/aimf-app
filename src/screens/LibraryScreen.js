@@ -200,7 +200,6 @@ const LibraryScreen = ({
         }}
         showBook={handleShowBook}
         returnBook={handleReturnBook}
-
       />
     );
   };
