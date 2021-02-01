@@ -212,7 +212,7 @@ export const LIBRARY_STR = {
   return_book: 'Retour',
   my_reservations: 'Mes Réservations',
   book_return_title: 'Retour du livre ',
-  book_return_empty: 'Aucun retour prévu pour ce livre',
+  book_return_empty: 'Pas de réservations en cours pour ce livre',
   confirm_return_book: 'Confirmer le retour',
   category: 'Genre',
   author: 'Auteur',

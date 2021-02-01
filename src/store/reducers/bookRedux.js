@@ -86,11 +86,6 @@ const getBookReservationsSuccess = (data) => {
   };
 };
 
-const postReturnBook = () => {
-  return {
-    type: RETURN_BOOK,
-  };
-};
 const removeFromFavorites = (book) => {
   return {
     type: REMOVE_FROM_FAVORITES,
@@ -112,7 +107,6 @@ const showBookError = (messageError) => {
 };
 
 export const returnBookRequest = (bookId, bookingId) => (dispatch) => {
-  console.log(`Book id: ${bookId} --------booking id: ${bookingId}`);
   getAxiosInstance()
     .patch(`${POST_BOOK_RESERVATION_URI}/${bookingId}`, {
       isReturned: true,
@@ -169,12 +163,6 @@ export const getMyReservations = () => {
     getAxiosInstance()
       .get(GET_BOOK_RESERVATION_URI)
       .then((response) => {
-        console.log(
-          `Success response myReservations :${JSON.stringify(
-            response.data.data,
-          )}`,
-        );
-
         dispatch(
           getMyReservationsSuccess({
             myReservations: response.data.data,
@@ -192,16 +180,9 @@ export const getMyReservations = () => {
 export const getBookReservations = (bookId) => {
   return (dispatch) => {
     dispatch(getBookReservationsRequest());
-    console.log(GET_BOOK_RESERVATION_RETURN_URI.replace('{bookId}', bookId));
     getAxiosInstance()
       .get(GET_BOOK_RESERVATION_RETURN_URI.replace('{bookId}', bookId))
       .then((response) => {
-        console.log(
-          `Success response GET_BOOK_RESERVATION_RETURN_URI :${JSON.stringify(
-            response.data.data,
-          )}`,
-        );
-
         dispatch(
           getBookReservationsSuccess({
             bookReservations: response.data.data,
@@ -209,8 +190,6 @@ export const getBookReservations = (bookId) => {
         );
       })
       .catch((error) => {
-        console.log(`error response GET_BOOK_RESERVATION_RETURN_URI :${error}`);
-
         dispatch(
           batchActions([dispatchError(error)], POST_BATCH_GET_BOOKS_ERROR),
         );
@@ -483,13 +462,18 @@ export const bookReducer = (state = initialState, action) => {
     case MY_RESERVATIONS_REQUEST: {
       return {
         ...state,
-        ...action.payload,
+        myReservations: {
+          isLoading: true,
+        },
       };
     }
     case MY_RESERVATIONS_SUCCESS: {
       return {
         ...state,
-        ...action.payload,
+        myReservations: {
+          list: action.payload.myReservations,
+          isLoading: false,
+        },
       };
     }
     case BOOK_RESERVATIONS_REQUEST:

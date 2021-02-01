@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {FlatList, SafeAreaView, ActivityIndicator} from 'react-native';
-import {Text, View} from 'native-base';
+import {Text, View, Button} from 'native-base';
 
 import PropTypes from 'prop-types';
 import BookReturnCard from './BookReturnCard';
@@ -18,7 +18,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 const BookReturn = ({bookReservations, dispatchReturnBookRequest}) => {
   useEffect(() => {}, [bookReservations]);
-  console.log(`start component: ${bookReservations}`);
 
   const handleConfirmReturnBook = (item) => {
     dispatchReturnBookRequest(item.book.id, item.id);
@@ -37,9 +36,9 @@ const BookReturn = ({bookReservations, dispatchReturnBookRequest}) => {
       {bookReservations &&
         bookReservations.list &&
         bookReservations.list.length == 0 && (
-          <View style={{flex: 1, justifyContent: 'center'}}>
+          <Button block info>
             <Text>{LIBRARY_STR.book_return_empty}</Text>
-          </View>
+          </Button>
         )}
       {bookReservations.list && (
         <SafeAreaView

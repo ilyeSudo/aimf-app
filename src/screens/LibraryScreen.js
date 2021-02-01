@@ -17,7 +17,7 @@ import FilterList from './LibraryScreen/FilterList';
 import ErrorModal from '../Components/ErrorModal';
 import Loader from '../Components/Loader';
 import {canManageLibrary} from '../Utils/Account';
-import BookClosedIcon from '../Components/icons/book/BookClosedIcon';
+import AdminButton from '../Components/buttons/AdminButton';
 import SearchIcon from '../Components/icons/SearchIcon';
 import HeartIcon from '../Components/icons/HeartIcon';
 import IconForms from '../Components/icons/IconForms';
@@ -25,11 +25,6 @@ import {OCalendarIcon} from '../Components/icons/CalendarIcon';
 import {backgroundColor} from '../Utils/colors';
 
 const styles = StyleSheet.create({
-  topButtonContainer: {
-    backgroundColor: 'white',
-    padding: 10,
-    flexDirection: 'row-reverse',
-  },
   upperContainer: {
     paddingHorizontal: 10,
     backgroundColor: 'white',
@@ -43,23 +38,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: 0,
-  },
-  coloredButton: {
-    backgroundColor: '#CB8347',
-    shadowOffset: {width: 4, height: 4},
-    shadowColor: 'rgba(0, 0, 0, 1)',
-    shadowOpacity: 5,
-    borderRadius: 3,
-    elevation: 7,
-    paddingVertical: 3,
-    paddingHorizontal: 7,
-  },
-  colorButtonText: {
-    marginHorizontal: 5,
-    color: 'white',
-    fontFamily: 'Roboto',
-    fontWeight: '600',
-    fontSize: 13,
   },
   searchInputStyle: {
     marginTop: 0,
@@ -129,7 +107,7 @@ const LibraryScreen = ({
   const [filterLocationValue, setFilterLocationValue] = useState(null);
   const [lanceSearch, setLanceSearch] = useState(false);
 
-  const {coloredButton, searchInputStyle} = styles;
+  const {searchInputStyle} = styles;
 
   const handleRefresh = () => {
     if (!refreshing && !handleMore && !loading) {
@@ -252,20 +230,10 @@ const LibraryScreen = ({
   return (
     <>
       {canManageLibrary(account.user) && (
-        <View
-          style={{
-            ...styles.topButtonContainer,
-          }}>
-          <Button
-            transparent
-            style={{...coloredButton}}
-            onPress={() => navigation.navigate('BookReservation')}>
-            <BookClosedIcon color="#fff" />
-            <Text style={styles.colorButtonText}>
-              {LIBRARY_STR.borrow_book}
-            </Text>
-          </Button>
-        </View>
+        <AdminButton
+          textButton={LIBRARY_STR.borrow_book}
+          onPress={() => navigation.navigate('BookReservation')}
+        />
       )}
       <SafeAreaView style={{...styles.filterContainer}}>
         <View style={styles.upperContainer}>

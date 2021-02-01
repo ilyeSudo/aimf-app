@@ -1,10 +1,10 @@
 import React from 'react';
-import {CardItem, Text, Left, Body, Thumbnail, Button} from 'native-base';
+import {CardItem, Text, Left, Body, Thumbnail} from 'native-base';
 import {TouchableOpacity, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {API_BASE_URL} from 'react-native-dotenv';
 import {isoDateToFr} from '../../Utils/Functions';
-import BookClosedIcon from '../../Components/icons/book/BookClosedIcon';
+import AdminButton from '../../Components/buttons/AdminButton';
 
 import {
   black,
@@ -122,14 +122,10 @@ const BookCard = ({data, showBook, returnBook}) => {
             <Text style={styles.subtitle}>{author} </Text>
             <View style={styles.bottomContainer}>
               {isManager && (
-                <View>
-                  <Button transparent onPress={() => returnBook(data)}>
-                    <BookClosedIcon color="#fff" />
-                    <Text style={styles.colorButtonText}>
-                      {LIBRARY_STR.return_book}
-                    </Text>
-                  </Button>
-                </View>
+                <AdminButton
+                  textButton={LIBRARY_STR.return_book}
+                  onPress={() => returnBook(data)}
+                />
               )}
 
               <Text style={styles.statusInfo}>{`${pages}p`}</Text>
