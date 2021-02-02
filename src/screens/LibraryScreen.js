@@ -250,7 +250,6 @@ const LibraryScreen = ({
             />
           </Item>
           <View
-            // eslint-disable-next-line react-native/no-inline-styles
             style={{
               flexDirection: 'row-reverse',
               marginBottom: 3,
@@ -330,6 +329,7 @@ LibraryScreen.propTypes = {
   dispatchShowBook: PropTypes.func,
   dispatchGetFavoriteList: PropTypes.func,
   dispatchGetBooks: PropTypes.func,
+  dispatchReturnBook: PropTypes.func,
   account: PropTypes.object,
   favoriteListIds: PropTypes.array,
   navigation: PropTypes.object,

@@ -158,7 +158,8 @@ const BookCard = ({data, showBook, returnBook}) => {
 };
 BookCard.propTypes = {
   data: PropTypes.object.isRequired,
-  showBook: PropTypes.func,
+  showBook: PropTypes.func.isRequired,
+  returnBook: PropTypes.func.isRequired,
 };
 
 export default BookCard;

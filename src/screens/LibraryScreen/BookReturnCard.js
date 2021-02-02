@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {CardItem, Text, Left, Body, Thumbnail, Button} from 'native-base';
-import {Alert, View} from 'react-native';
+import {View} from 'react-native';
 
 import PropTypes from 'prop-types';
 import {API_BASE_URL} from 'react-native-dotenv';
@@ -19,7 +19,6 @@ const styles = {
 };
 
 const BookReturnCard = ({data, confirmReturnBook}) => {
-  console.log(`start BookReturnCard: ${JSON.stringify(data)}`);
   const [showReturnConfirmtionModal, setShowReturnConfirmtionModal] = useState(
     false,
   );
@@ -72,10 +71,10 @@ const BookReturnCard = ({data, confirmReturnBook}) => {
         visible={showReturnConfirmtionModal}
         setVisible={setShowReturnConfirmtionModal}
         onConfirm={() => confirmReturnBook(data)}
-        title={'Confirmation de retour du livre '}>
+        title="Confirmation de retour du livre ">
         <View>
-          <Text>{'Titre : ' + book.title}</Text>
-          <Text>{'Copy : ' + copyNumber}</Text>
+          <Text>{`Titre : ${book.title}`}</Text>
+          <Text>{`Copy : ${copyNumber}`}</Text>
         </View>
       </InformationModal>
     </View>
@@ -83,6 +82,7 @@ const BookReturnCard = ({data, confirmReturnBook}) => {
 };
 BookReturnCard.propTypes = {
   data: PropTypes.object.isRequired,
+  confirmReturnBook: PropTypes.func.isRequired,
 };
 
 export default BookReturnCard;

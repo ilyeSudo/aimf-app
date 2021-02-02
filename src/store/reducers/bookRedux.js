@@ -105,6 +105,25 @@ const showBookError = (messageError) => {
     messageError,
   };
 };
+export const getBookReservations = (bookId) => {
+  return (dispatch) => {
+    dispatch(getBookReservationsRequest());
+    getAxiosInstance()
+      .get(GET_BOOK_RESERVATION_RETURN_URI.replace('{bookId}', bookId))
+      .then((response) => {
+        dispatch(
+          getBookReservationsSuccess({
+            bookReservations: response.data.data,
+          }),
+        );
+      })
+      .catch((error) => {
+        dispatch(
+          batchActions([dispatchError(error)], POST_BATCH_GET_BOOKS_ERROR),
+        );
+      });
+  };
+};
 
 export const returnBookRequest = (bookId, bookingId) => (dispatch) => {
   getAxiosInstance()
@@ -166,26 +185,6 @@ export const getMyReservations = () => {
         dispatch(
           getMyReservationsSuccess({
             myReservations: response.data.data,
-          }),
-        );
-      })
-      .catch((error) => {
-        dispatch(
-          batchActions([dispatchError(error)], POST_BATCH_GET_BOOKS_ERROR),
-        );
-      });
-  };
-};
-
-export const getBookReservations = (bookId) => {
-  return (dispatch) => {
-    dispatch(getBookReservationsRequest());
-    getAxiosInstance()
-      .get(GET_BOOK_RESERVATION_RETURN_URI.replace('{bookId}', bookId))
-      .then((response) => {
-        dispatch(
-          getBookReservationsSuccess({
-            bookReservations: response.data.data,
           }),
         );
       })

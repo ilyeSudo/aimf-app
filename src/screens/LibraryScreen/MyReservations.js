@@ -35,7 +35,7 @@ const MyReservations = ({myReservations, dispatchGetMyReservations}) => {
       )}
       {myReservations &&
         myReservations.list &&
-        myReservations.list.length == 0 && (
+        myReservations.list.length === 0 && (
           <Button block info>
             <Text>{LIBRARY_STR.book_return_empty}</Text>{' '}
           </Button>
@@ -43,11 +43,7 @@ const MyReservations = ({myReservations, dispatchGetMyReservations}) => {
       {myReservations && myReservations.list && (
         <SafeAreaView
           style={{marginTop: 0, backgroundColor, flex: 1, paddingTop: 5}}>
-          <FlatList
-            data={myReservations.list}
-            renderItem={renderItem}
-            keyExtractor={(item) => `${item.id}`}
-          />
+          <FlatList data={myReservations.list} renderItem={renderItem} />
         </SafeAreaView>
       )}
     </>

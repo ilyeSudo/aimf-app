@@ -22,9 +22,15 @@ const BookReturn = ({bookReservations, dispatchReturnBookRequest}) => {
   const handleConfirmReturnBook = (item) => {
     dispatchReturnBookRequest(item.book.id, item.id);
   };
+  handleConfirmReturnBook.propTypes = {
+    item: PropTypes.object.isRequired,
+  };
   const renderItem = ({item}) => (
     <BookReturnCard data={item} confirmReturnBook={handleConfirmReturnBook} />
   );
+  renderItem.propTypes = {
+    item: PropTypes.object.isRequired,
+  };
 
   return (
     <>
@@ -35,7 +41,7 @@ const BookReturn = ({bookReservations, dispatchReturnBookRequest}) => {
       )}
       {bookReservations &&
         bookReservations.list &&
-        bookReservations.list.length == 0 && (
+        bookReservations.list.length === 0 && (
           <Button block info>
             <Text>{LIBRARY_STR.book_return_empty}</Text>
           </Button>
@@ -43,11 +49,7 @@ const BookReturn = ({bookReservations, dispatchReturnBookRequest}) => {
       {bookReservations.list && (
         <SafeAreaView
           style={{marginTop: 0, backgroundColor, flex: 1, paddingTop: 5}}>
-          <FlatList
-            data={bookReservations.list}
-            renderItem={renderItem}
-            keyExtractor={(item) => `${item.id}`}
-          />
+          <FlatList data={bookReservations.list} renderItem={renderItem} />
         </SafeAreaView>
       )}
     </>
@@ -67,6 +69,6 @@ BookReturn.navigationOptions = (navigationData) => {
 
 BookReturn.propTypes = {
   bookReservations: PropTypes.object,
-  dispatchGetBookReservations: PropTypes.func.isRequired,
+  dispatchReturnBookRequest: PropTypes.func.isRequired,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(BookReturn);
