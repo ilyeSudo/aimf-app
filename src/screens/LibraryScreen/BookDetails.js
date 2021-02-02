@@ -1,4 +1,4 @@
-import React, {useState, useEffect, Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {Card, CardItem, Container, Content, Body, Row, Col} from 'native-base';
 import {
@@ -18,7 +18,6 @@ import {
 import {
   removeFromFavoritesRequest,
   addToFavoritesRequest,
-  getBooks,
 } from '../../store/reducers/bookRedux';
 import {isoDateToFr} from '../../Utils/Functions';
 import {
@@ -93,14 +92,13 @@ const mapStateToProps = (state) => ({
   favoriteListIds: getFavoriteListIds(state),
 });
 const mapDispatchToProps = (dispatch) => ({
-  getBooks: (...args) => dispatch(getBooks(...args)),
   dispatchRemoveFromFavoritesRequest: (...args) =>
     dispatch(removeFromFavoritesRequest(...args)),
   dispatchAddToFavoritesRequest: (...args) =>
     dispatch(addToFavoritesRequest(...args)),
 });
 
-const renderButton: Component = (callback, title, {disabled, icon}) => {
+const renderButton = (callback, title, {disabled, icon}) => {
   const color = callback && !disabled ? 'black' : placeholderTextColor;
   return (
     <TouchableOpacity

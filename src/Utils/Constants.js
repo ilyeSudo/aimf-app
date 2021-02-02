@@ -54,6 +54,11 @@ export const BOOK_GENRES = [
   {id: 5, label: 'Education'},
   {id: 6, label: 'Santé'},
 ];
+export const BOOK_LOCATION = [
+  {id: 0, label: 'Tous'},
+  {id: 1, label: 'AIMF'},
+  {id: 2, label: 'MDM'},
+];
 export const UPDATE_USER_STATUS_CONFIRM_MESSAGE =
   'Etes vous sûr de vouloir activer/désactiver cet utilisateur ?';
 export const UPDATE_ADMIN_ROLE_CONFIRM_MESSAGE =
@@ -204,7 +209,11 @@ export const AIMF_ASSOCIATION_ID = 1;
 export const LIBRARY_STR = {
   search_book: 'Rechercher un livre',
   borrow_book: 'Réserver un livre',
+  return_book: 'Retour',
   my_reservations: 'Mes Réservations',
+  book_return_title: 'Retour du livre ',
+  book_return_empty: 'Pas de réservations en cours pour ce livre',
+  confirm_return_book: 'Confirmer le retour',
   category: 'Genre',
   author: 'Auteur',
   available: 'disponible',

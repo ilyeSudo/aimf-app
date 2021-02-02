@@ -16,6 +16,7 @@ import UnaccessibleScreen from './screens/UnaccessibleScreen';
 import YouTubeScreen from './screens/YouTubeSceen';
 import LibraryScreen from './screens/LibraryScreen';
 import BookDetails from './screens/LibraryScreen/BookDetails';
+import BookReturn from './screens/LibraryScreen/BookReturn';
 import BookReservation from './screens/LibraryScreen/BookReservation';
 import MyReservations from './screens/LibraryScreen/MyReservations';
 import BookFavoriteList from './screens/LibraryScreen/BookFavoriteList';
@@ -116,6 +117,9 @@ const libraryStack = createStackNavigator({
   },
   MyReservations: {
     screen: MyReservations,
+  },
+  BookReturn: {
+    screen: BookReturn,
   },
 });
 

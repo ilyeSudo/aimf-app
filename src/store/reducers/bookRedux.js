@@ -7,6 +7,7 @@ import {
   GET_BOOK_RESERVATION_URI,
   GET_BOOK_FAVORITE_LIST_URI,
   POST_BOOK_FAVORITE_LIST_URI,
+  GET_BOOK_RESERVATION_RETURN_URI,
 } from '../../Utils/ApiUrl';
 import {dispatchError} from './errorMessageRedux';
 import getAxiosInstance from '../../Utils/axios';
@@ -28,6 +29,9 @@ const FAVORITE_LIST_SUCCESS = 'FAVORITE_LIST_SUCCESS';
 
 const MY_RESERVATIONS_REQUEST = 'MY_RESERVATIONS_REQUEST';
 const MY_RESERVATIONS_SUCCESS = 'MY_RESERVATIONS_SUCCESS';
+
+const BOOK_RESERVATIONS_REQUEST = 'BOOK_RESERVATIONS_REQUEST';
+const BOOK_RESERVATIONS_SUCCESS = 'BOOK_RESERVATIONS_SUCCESS';
 
 const REMOVE_FROM_FAVORITES = 'REMOVE_FROM_FAVORITES';
 const ADD_TO_FAVORITES = 'ADD_TO_FAVORITES';
@@ -70,6 +74,18 @@ const getMyReservationsSuccess = (data) => {
     payload: data,
   };
 };
+const getBookReservationsRequest = () => {
+  return {
+    type: BOOK_RESERVATIONS_REQUEST,
+  };
+};
+const getBookReservationsSuccess = (data) => {
+  return {
+    type: BOOK_RESERVATIONS_SUCCESS,
+    payload: data,
+  };
+};
+
 const removeFromFavorites = (book) => {
   return {
     type: REMOVE_FROM_FAVORITES,
@@ -88,6 +104,38 @@ const showBookError = (messageError) => {
     type: SHOW_BOOK_ERROR,
     messageError,
   };
+};
+export const getBookReservations = (bookId) => {
+  return (dispatch) => {
+    dispatch(getBookReservationsRequest());
+    getAxiosInstance()
+      .get(GET_BOOK_RESERVATION_RETURN_URI.replace('{bookId}', bookId))
+      .then((response) => {
+        dispatch(
+          getBookReservationsSuccess({
+            bookReservations: response.data.data,
+          }),
+        );
+      })
+      .catch((error) => {
+        dispatch(
+          batchActions([dispatchError(error)], POST_BATCH_GET_BOOKS_ERROR),
+        );
+      });
+  };
+};
+
+export const returnBookRequest = (bookId, bookingId) => (dispatch) => {
+  getAxiosInstance()
+    .patch(`${POST_BOOK_RESERVATION_URI}/${bookingId}`, {
+      isReturned: true,
+    })
+    .then(() => {
+      dispatch(getBookReservations(bookId));
+    })
+    .catch((error) => {
+      dispatch(batchActions([dispatchError(error), showBookError()]));
+    });
 };
 
 export const removeFromFavoritesRequest = (book, bookIds) => (dispatch) => {
@@ -173,6 +221,7 @@ export const getBooks = (
   page,
   search = null,
   bookGenreId = null,
+  locationId = null,
   refreshing = false,
   handleMore = false,
 ) => {
@@ -184,6 +233,7 @@ export const getBooks = (
           page,
           search: search === '' ? null : search,
           bookGenreId,
+          locationId,
         },
       })
       .then((response) => {
@@ -411,13 +461,34 @@ export const bookReducer = (state = initialState, action) => {
     case MY_RESERVATIONS_REQUEST: {
       return {
         ...state,
-        ...action.payload,
+        myReservations: {
+          isLoading: true,
+        },
       };
     }
     case MY_RESERVATIONS_SUCCESS: {
       return {
         ...state,
-        ...action.payload,
+        myReservations: {
+          list: action.payload.myReservations,
+          isLoading: false,
+        },
+      };
+    }
+    case BOOK_RESERVATIONS_REQUEST:
+      return {
+        ...state,
+        bookReservations: {
+          isLoading: true,
+        },
+      };
+    case BOOK_RESERVATIONS_SUCCESS: {
+      return {
+        ...state,
+        bookReservations: {
+          list: action.payload.bookReservations,
+          isLoading: false,
+        },
       };
     }
     case REMOVE_FROM_FAVORITES: {

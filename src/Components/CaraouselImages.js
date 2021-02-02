@@ -34,16 +34,8 @@ class CarouselImages extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      currentIndex: 0,
-      totalIndex: 0,
       showImageModel: false,
     };
-  }
-
-  componentDidMount() {
-    this.setState({
-      totalIndex: this.props.images.length || 0,
-    });
   }
 
   renderItem = ({item}) => {
@@ -61,13 +53,7 @@ class CarouselImages extends React.PureComponent {
     );
   };
 
-  updateIndex = (index) => {
-    this.setState({
-      currentIndex: index,
-    });
-  };
-
-  numericPagination = (currentIndex: number, lastIndex: number) => {
+  numericPagination = (currentIndex, lastIndex) => {
     return (
       <View
         style={{
@@ -118,7 +104,6 @@ class CarouselImages extends React.PureComponent {
                 ? this.props.images
                 : [require('../../assets/images/book-cover-placeholder.png')]
             }
-            onSnapToItem={this.updateIndex}
           />
           {this.numericPagination(
             this.state?.currentIndex,

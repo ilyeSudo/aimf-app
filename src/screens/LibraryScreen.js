@@ -4,15 +4,20 @@ import {connect} from 'react-redux';
 import {Input, Item, Button} from 'native-base';
 import * as PropTypes from 'prop-types';
 import BookCard from './LibraryScreen/BookCard';
-import {BOOK_GENRES, LIBRARY_STR} from '../Utils/Constants';
-import {getBooks, getFavoriteList, showBook} from '../store/reducers/bookRedux';
+import {
+  getBooks,
+  getFavoriteList,
+  showBook,
+  getBookReservations,
+} from '../store/reducers/bookRedux';
+import {BOOK_GENRES, BOOK_LOCATION, LIBRARY_STR} from '../Utils/Constants';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import {getFavoriteListIds} from '../store/selectors/bookingSelector';
 import FilterList from './LibraryScreen/FilterList';
 import ErrorModal from '../Components/ErrorModal';
 import Loader from '../Components/Loader';
-import {canReserveBook} from '../Utils/Account';
-import BookClosedIcon from '../Components/icons/book/BookClosedIcon';
+import {canManageLibrary} from '../Utils/Account';
+import AdminButton from '../Components/buttons/AdminButton';
 import SearchIcon from '../Components/icons/SearchIcon';
 import HeartIcon from '../Components/icons/HeartIcon';
 import IconForms from '../Components/icons/IconForms';
@@ -20,11 +25,6 @@ import {OCalendarIcon} from '../Components/icons/CalendarIcon';
 import {backgroundColor} from '../Utils/colors';
 
 const styles = StyleSheet.create({
-  topButtonContainer: {
-    backgroundColor: 'white',
-    padding: 10,
-    flexDirection: 'row-reverse',
-  },
   upperContainer: {
     paddingHorizontal: 10,
     backgroundColor: 'white',
@@ -38,23 +38,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: 0,
-  },
-  coloredButton: {
-    backgroundColor: '#CB8347',
-    shadowOffset: {width: 4, height: 4},
-    shadowColor: 'rgba(0, 0, 0, 1)',
-    shadowOpacity: 5,
-    borderRadius: 3,
-    elevation: 7,
-    paddingVertical: 3,
-    paddingHorizontal: 7,
-  },
-  colorButtonText: {
-    marginHorizontal: 5,
-    color: 'white',
-    fontFamily: 'Roboto',
-    fontWeight: '600',
-    fontSize: 13,
   },
   searchInputStyle: {
     marginTop: 0,
@@ -99,6 +82,7 @@ const mapDispatchToProps = (dispatch) => ({
   dispatchGetFavoriteList: (...args) => dispatch(getFavoriteList(...args)),
   showErrorMessage: (...args) => dispatch(dispatchErrorMessage(...args)),
   dispatchShowBook: (...args) => dispatch(showBook(...args)),
+  dispatchReturnBook: (...args) => dispatch(getBookReservations(...args)),
 });
 
 const LibraryScreen = ({
@@ -108,8 +92,9 @@ const LibraryScreen = ({
   loading,
   refreshing,
   handleMore,
-  dispatchGetBooks,
   dispatchShowBook,
+  dispatchReturnBook,
+  dispatchGetBooks,
   errorMessage,
   navigation,
   showErrorMessage,
@@ -118,16 +103,24 @@ const LibraryScreen = ({
   account,
 }) => {
   const [searchValue, setSearchValue] = useState(null);
-  const [filterValue, setFilterValue] = useState(null);
+  const [filterGenreValue, setFilterGenreValue] = useState(null);
+  const [filterLocationValue, setFilterLocationValue] = useState(null);
   const [lanceSearch, setLanceSearch] = useState(false);
 
-  const {coloredButton, searchInputStyle} = styles;
+  const {searchInputStyle} = styles;
+
   const handleRefresh = () => {
     if (!refreshing && !handleMore && !loading) {
-      dispatchGetBooks([], 1, searchValue, filterValue, true);
+      dispatchGetBooks(
+        [],
+        1,
+        searchValue,
+        filterGenreValue,
+        filterLocationValue,
+        true,
+      );
     }
   };
-
   useEffect(() => {
     dispatchGetFavoriteList();
     handleRefresh();
@@ -144,13 +137,28 @@ const LibraryScreen = ({
 
   const handleLoadMore = () => {
     if (!refreshing && !handleMore && !loading && !lastPage) {
-      dispatchGetBooks(books, page + 1, searchValue, filterValue, false, true);
+      getBooks(
+        books,
+        page + 1,
+        searchValue,
+        filterGenreValue,
+        filterLocationValue,
+        false,
+        true,
+      );
     }
   };
 
   const handleShowBook = (item) => {
     dispatchShowBook(item.id);
     navigation.navigate('BookDetails', {
+      bookId: item.id,
+      bookTitle: item.title,
+    });
+  };
+  const handleReturnBook = (item) => {
+    dispatchReturnBook(item.id);
+    navigation.navigate('BookReturn', {
       bookId: item.id,
       bookTitle: item.title,
     });
@@ -163,10 +171,18 @@ const LibraryScreen = ({
 
     return (
       <BookCard
-        data={{...item, isFavorited: isFavorited()}}
+        data={{
+          ...item,
+          isFavorited: isFavorited(),
+          isManager: canManageLibrary(account.user),
+        }}
         showBook={handleShowBook}
+        returnBook={handleReturnBook}
       />
     );
+  };
+  renderItem.propTypes = {
+    item: PropTypes.object,
   };
 
   const search = () => {
@@ -177,39 +193,47 @@ const LibraryScreen = ({
     }
   };
 
-  const updaterFilterValue = (value) => {
-    setFilterValue(value);
+  const updaterGenreFilterValue = (filterValue) => {
+    setFilterGenreValue(filterValue);
+    setLanceSearch(true);
+  };
+  const updaterLocationFilterValue = (filterValue) => {
+    setFilterLocationValue(filterValue);
     setLanceSearch(true);
   };
 
-  const getFilterLabel = () => {
-    if (!filterValue) {
+  const getGenreFilterLabel = () => {
+    if (!filterGenreValue) {
       return 'Sélectionner un genre...';
     }
-    const bookGenre = BOOK_GENRES.find((element) => element.id === filterValue);
+    const bookGenre = BOOK_GENRES.find(
+      (element) => element.id === filterGenreValue,
+    );
     if (bookGenre) {
       return bookGenre.label;
+    }
+    return '';
+  };
+  const getLocationFilterLabel = () => {
+    if (!filterLocationValue) {
+      return 'Sélectionner la bibliothèque';
+    }
+    const bookLocation = BOOK_LOCATION.find(
+      (element) => element.id === filterLocationValue,
+    );
+    if (bookLocation) {
+      return bookLocation.label;
     }
     return '';
   };
 
   return (
     <>
-      {canReserveBook(account.user) && (
-        <View
-          style={{
-            ...styles.topButtonContainer,
-          }}>
-          <Button
-            transparent
-            style={{...coloredButton}}
-            onPress={() => navigation.navigate('BookReservation')}>
-            <BookClosedIcon color="#fff" />
-            <Text style={styles.colorButtonText}>
-              {LIBRARY_STR.borrow_book}
-            </Text>
-          </Button>
-        </View>
+      {canManageLibrary(account.user) && (
+        <AdminButton
+          textButton={LIBRARY_STR.borrow_book}
+          onPress={() => navigation.navigate('BookReservation')}
+        />
       )}
       <SafeAreaView style={{...styles.filterContainer}}>
         <View style={styles.upperContainer}>
@@ -225,11 +249,22 @@ const LibraryScreen = ({
               value={searchValue}
             />
           </Item>
-          <View style={{flexDirection: 'row-reverse', marginBottom: 3}}>
+          <View
+            style={{
+              flexDirection: 'row-reverse',
+              marginBottom: 3,
+            }}>
             <FilterList
-              isEmpty={!filterValue}
-              selectedValue={getFilterLabel()}
-              updateValue={updaterFilterValue}
+              list={BOOK_GENRES}
+              isEmpty={!filterGenreValue}
+              selectedValue={getGenreFilterLabel()}
+              updateValue={updaterGenreFilterValue}
+            />
+            <FilterList
+              list={BOOK_LOCATION}
+              isEmpty={!filterLocationValue}
+              selectedValue={getLocationFilterLabel()}
+              updateValue={updaterLocationFilterValue}
             />
           </View>
         </View>
@@ -237,7 +272,6 @@ const LibraryScreen = ({
           <FlatList
             data={books}
             renderItem={renderItem}
-            keyExtractor={(item) => `${item.id}`}
             onRefresh={handleRefresh}
             refreshing={false}
             onEndReached={handleLoadMore}
@@ -292,9 +326,10 @@ LibraryScreen.propTypes = {
   refreshing: PropTypes.bool,
   handleMore: PropTypes.bool,
   lastPage: PropTypes.bool,
-  dispatchGetBooks: PropTypes.func,
   dispatchShowBook: PropTypes.func,
   dispatchGetFavoriteList: PropTypes.func,
+  dispatchGetBooks: PropTypes.func,
+  dispatchReturnBook: PropTypes.func,
   account: PropTypes.object,
   favoriteListIds: PropTypes.array,
   navigation: PropTypes.object,

@@ -70,9 +70,10 @@ export const isAuthorized = (user) => {
   );
 };
 
-export const canReserveBook = (user) => {
+export const canManageLibrary = (user) => {
   return isSuperAdmin(user) || isAdmin(user) || isLibrarian(user);
 };
+
 export const navigate = (
   account,
   navigation,

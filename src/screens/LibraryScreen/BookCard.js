@@ -4,6 +4,7 @@ import {TouchableOpacity, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {API_BASE_URL} from 'react-native-dotenv';
 import {isoDateToFr} from '../../Utils/Functions';
+import AdminButton from '../../Components/buttons/AdminButton';
 
 import {
   black,
@@ -68,7 +69,7 @@ const styles = {
   },
 };
 
-const BookCard = ({data, showBook}) => {
+const BookCard = ({data, showBook, returnBook}) => {
   const {
     title,
     author,
@@ -78,6 +79,7 @@ const BookCard = ({data, showBook}) => {
     isFavorited,
     isAvailable,
     availabilityDate,
+    isManager,
   } = data;
 
   const getUrlThumbnail = () => {
@@ -85,7 +87,7 @@ const BookCard = ({data, showBook}) => {
     return `${API_BASE_URL}/${image[0].media.path}`;
   };
 
-  const renderStatusIndicator = (value: boolean) => {
+  const renderStatusIndicator = (value) => {
     return (
       <View
         style={{
@@ -119,7 +121,15 @@ const BookCard = ({data, showBook}) => {
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.subtitle}>{author} </Text>
             <View style={styles.bottomContainer}>
+              {isManager && (
+                <AdminButton
+                  textButton={LIBRARY_STR.return_book}
+                  onPress={() => returnBook(data)}
+                />
+              )}
+
               <Text style={styles.statusInfo}>{`${pages}p`}</Text>
+
               {renderStatusIndicator(isAvailable)}
               {isAvailable && (
                 <Text style={styles.statusInfo}>{LIBRARY_STR.available}</Text>
@@ -148,7 +158,8 @@ const BookCard = ({data, showBook}) => {
 };
 BookCard.propTypes = {
   data: PropTypes.object.isRequired,
-  showBook: PropTypes.func,
+  showBook: PropTypes.func.isRequired,
+  returnBook: PropTypes.func.isRequired,
 };
 
 export default BookCard;
