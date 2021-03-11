@@ -1,6 +1,10 @@
 import {batchActions} from 'redux-batched-actions';
 import getAxiosInstance from '../../Utils/axios';
-import {GET_ARTICLES_URI, GET_DRAFT_ARTICLE_URI} from '../../Utils/ApiUrl';
+import {
+  DELETE_ARTICLE_URI,
+  GET_ARTICLES_URI,
+  GET_DRAFT_ARTICLE_URI,
+} from '../../Utils/ApiUrl';
 import {dispatchError} from './errorMessageRedux';
 import {
   DRAFT_ARTICLE_STATUS,
@@ -18,6 +22,8 @@ const GET_DRAFT_ARTICLE_ERROR = 'GET_DRAFT_ARTICLE_ERROR';
 const POST_ARTICLES_REQUEST = 'POST_ARTICLES_REQUEST';
 const POST_ARTICLES_SUCCESS = 'POST_ARTICLES_SUCCESS';
 const POST_ARTICLES_ERROR = 'POST_ARTICLES_ERROR';
+
+const DELETE_ARTICLE_REQUEST = 'DELETE_ARTICLE_REQUEST';
 
 const BATCH_ARTICLES_ERROR = 'BATCH_ARTICLES_ERROR';
 
@@ -89,6 +95,15 @@ const postArticleError = () => {
   };
 };
 
+const deleteArticleRequest = () => {
+  return {
+    type: DELETE_ARTICLE_REQUEST,
+    data: {
+      loading: true,
+    },
+  };
+};
+
 export const getArticles = (
   currentArticles,
   page,
@@ -104,7 +119,7 @@ export const getArticles = (
           with_association: 1,
         },
       })
-      .then(function (response) {
+      .then((response) => {
         dispatch(
           getArticlesSuccess({
             articles:
@@ -117,7 +132,7 @@ export const getArticles = (
           }),
         );
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), getArticlesError()],
@@ -132,14 +147,14 @@ export const savePost = (data) => {
   return (dispatch) => {
     dispatch(saveArticleRequest());
     getAxiosInstance()
-      .post(GET_ARTICLES_URI + '?with_association=1', data)
-      .then(function (response) {
+      .post(`${GET_ARTICLES_URI}?with_association=1`, data)
+      .then((response) => {
         if (response.data.data.status === PUBLISHED_ARTICLE_STATUS) {
           dispatch(getArticles([], 1, true));
         }
         dispatch(postArticleSuccess(response.data.data));
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), postArticleError()],
@@ -155,10 +170,30 @@ export const getDraftArticle = () => {
     dispatch(getDraftArticleRequest());
     getAxiosInstance()
       .get(GET_DRAFT_ARTICLE_URI, {params: {with_association: 1}})
-      .then(function (response) {
+      .then((response) => {
         dispatch(getDraftArticleSuccess(response.data.data));
       })
-      .catch(function (error) {
+      .catch((error) => {
+        dispatch(
+          batchActions(
+            [dispatchError(error), getDraftArticleError()],
+            BATCH_ARTICLES_ERROR,
+          ),
+        );
+      });
+  };
+};
+
+export const deleteArticle = (id) => {
+  return (dispatch) => {
+    dispatch(deleteArticleRequest());
+    getAxiosInstance()
+      .delete(`${DELETE_ARTICLE_URI}/${id}`)
+      // eslint-disable-next-line no-unused-vars
+      .then((response) => {
+        dispatch(getArticles([], 1, true));
+      })
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), getDraftArticleError()],
@@ -176,6 +211,7 @@ export const articleReducer = (state = initialState, action) => {
     case GET_ARTICLES_REQUEST:
     case GET_DRAFT_ARTICLE_REQUEST:
     case POST_ARTICLES_REQUEST:
+    case DELETE_ARTICLE_REQUEST:
       return {...state, ...action.data};
     case GET_ARTICLES_SUCCESS: {
       return {

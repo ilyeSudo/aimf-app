@@ -9,6 +9,7 @@ export const isCorrectName = (name) => {
 };
 
 export const isCorrectEmailAddress = (email) => {
+  // eslint-disable-next-line no-useless-escape
   const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return reg.test(String(email.trim()).toLowerCase());
 };
@@ -19,6 +20,10 @@ export const isCorrectPassword = (password) => {
 
 export const isCorrectZipCode = (zipCode) => {
   return !!zipCode.match(/^[0-9]{5}$/);
+};
+
+export const isCorrectNumberCopie = (nbCopie) => {
+  return !!nbCopie.match(/^\d+$/);
 };
 
 export const isCorrectPhoneNumber = (phone) => {
@@ -36,10 +41,13 @@ export const getFrDate = (date, time = false) => {
   return date;
 };
 
-export const isoDateToFr = (isoDate: string) => {
+export const isoDateToFr = (isoDate: string, withTime = true) => {
   const fullDate = isoDate.split(' ');
   const date = fullDate[0].split('-');
-  const time = fullDate.length === 2 ? fullDate[1] : '';
+  let time = '';
+  if (withTime) {
+    time = fullDate.length === 2 ? fullDate[1] : '';
+  }
   return `${date[2]}/${date[1]}/${date[0]} ${time}`;
 };
 

@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
@@ -19,7 +18,7 @@ import {
   receiveUserAssociationData,
   receiveAssociationData,
 } from '../store/reducers/associationRedux';
-import {white, black} from '../Utils/colors';
+import {white, black, backgroundColor} from '../Utils/colors';
 
 const styles = StyleSheet.create({
   activeAssociation: {
@@ -27,7 +26,7 @@ const styles = StyleSheet.create({
     width: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#cb8347', //'#57a1bf',
+    backgroundColor: '#cb8347',
     borderRadius: 10,
     marginRight: 14,
     borderWidth: 0.5,
@@ -133,7 +132,7 @@ class AssociationMenu extends Component {
     const {screenerTitle, associationList, userAssociationList} = this.props;
     const {hideMenu} = this.state;
     return (
-      <View>
+      <View style={{backgroundColor}}>
         <View style={{flexDirection: 'row', paddingHorizontal: 14}}>
           <View>
             <Text style={{fontSize: 26, fontWeight: '700'}}>Bienvenue, </Text>
@@ -210,14 +209,9 @@ class AssociationMenu extends Component {
 }
 
 function mapStateToProps(state) {
-  const {
-    loading,
-    associationList,
-    userAssociationList,
-  } = state.associationStore;
+  const {associationList, userAssociationList} = state.associationStore;
 
   return {
-    loading,
     associationList: associationList === undefined ? [] : associationList,
     userAssociationList:
       userAssociationList === undefined ? [] : userAssociationList,
@@ -225,10 +219,10 @@ function mapStateToProps(state) {
 }
 
 AssociationMenu.propTypes = {
-  loading: PropTypes.bool,
   associationList: PropTypes.array,
   dispatch: PropTypes.func,
   screenerTitle: PropTypes.string,
+  userAssociationList: PropTypes.array,
 };
 
 export default connect(mapStateToProps)(AssociationMenu);

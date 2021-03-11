@@ -7,7 +7,6 @@ import {
   API_REQUEST_DEFAULT_ENCODING,
 } from 'react-native-dotenv';
 
-console.log('########### ', API_BASE_URL);
 const getAxiosInstance = () => {
   return axios.create({
     baseURL: 'http://aimf.siroukane.tech/',

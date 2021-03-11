@@ -46,7 +46,7 @@ class Loading extends React.Component {
       this.props.account,
       this.props.navigation,
       'Login',
-      this.props.video && this.props.video.youtube_id,
+      this.props?.video?.isLive,
     );
 
     this.fcmService = new FCMService();

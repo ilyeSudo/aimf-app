@@ -38,7 +38,7 @@ export const getLiveVideo = (account) => {
     dispatch(getLiveVideoRequest());
     getAxiosInstance()
       .get(GET_LIVE_VIDEO_URI)
-      .then(function (response) {
+      .then((response) => {
         dispatch(getLiveVideoSuccess(response.data.data));
         const youtube = response.data.data && response.data.data.isLive;
         navigate(
@@ -52,14 +52,8 @@ export const getLiveVideo = (account) => {
           NavigationService.getInstance().navigate('YouTubeStack');
         }
       })
-      .catch(function (error) {
-        console.log(error);
-        dispatch(
-          batchActions(
-            [dispatchError(error), getLiveVideoError()],
-            BATCH_GET_LIVE_VIDEO_ERROR,
-          ),
-        );
+      .catch(() => {
+        dispatch(getLiveVideoError());
       });
   };
 };

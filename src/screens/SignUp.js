@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {getIsoDate} from '../Utils/Functions';
 import Loader from '../Components/Loader';
 import ErrorModal from '../Components/ErrorModal';
-import {CREATE_ACTION, SHOW_CONDITION_ACTION} from '../Utils/Constants';
+import {CREATE_ACCOUNT_ACTION, SHOW_CONDITION_ACTION} from '../Utils/Constants';
 import AccountForm from '../Components/AccountForm';
 import {register} from '../store/reducers/accountRedux';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
@@ -35,7 +35,7 @@ class SignUp extends Component {
       question2: null,
       acceptTermsOfUse: false,
       readTermsOfUse: false,
-      action: CREATE_ACTION,
+      action: CREATE_ACCOUNT_ACTION,
     };
   }
 
@@ -92,7 +92,10 @@ class SignUp extends Component {
   };
 
   onSubmit = () => {
-    const data = {...this.getDataFromState(true), action: CREATE_ACTION};
+    const data = {
+      ...this.getDataFromState(true),
+      action: CREATE_ACCOUNT_ACTION,
+    };
     const error = checkFormValues(data);
     if (error) {
       this.props.dispatchErrorMessage(error);
@@ -127,7 +130,7 @@ class SignUp extends Component {
     }
     return (
       <>
-        {this.state.action === CREATE_ACTION && question1 && question2 && (
+        {this.state.action === CREATE_ACCOUNT_ACTION && question1 && question2 && (
           <AccountForm
             scrollViewOpacity={
               this.props.loadingQuestion ||
@@ -136,7 +139,7 @@ class SignUp extends Component {
                 ? 0.6
                 : 1
             }
-            action={CREATE_ACTION}
+            action={CREATE_ACCOUNT_ACTION}
             data={{
               ...this.getDataFromState(),
               questions1,

@@ -5,12 +5,16 @@ import * as PropTypes from 'prop-types';
 import ShowAccount from './AccountScreen/ShowAccount';
 import AccountForm from '../Components/AccountForm';
 import {getFullName, getIsoDate} from '../Utils/Functions';
-import {SHOW_ACTION, UPDATE_ACTION} from '../Utils/Constants';
+import {SHOW_ACCOUNT_ACTION, UPDATE_ACCOUNT_ACTION} from '../Utils/Constants';
 import ErrorModal from '../Components/ErrorModal';
 import {logout} from '../store/reducers/authenticationRedux';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import checkFormValues from '../Components/AccountForm/Validate';
-import {updateCurrentUser, updateAction} from '../store/reducers/accountRedux';
+import {
+  deleteUserAccount,
+  updateAction,
+  updateCurrentUser,
+} from '../store/reducers/accountRedux';
 import Loader from '../Components/Loader';
 
 class AccountScreen extends Component {
@@ -97,7 +101,10 @@ class AccountScreen extends Component {
   };
 
   onSubmit = () => {
-    const data = {...this.getDataFromState(true), action: UPDATE_ACTION};
+    const data = {
+      ...this.getDataFromState(true),
+      action: UPDATE_ACCOUNT_ACTION,
+    };
     const error = checkFormValues(data);
     if (error) {
       this.props.dispatchErrorMessage(error);
@@ -144,20 +151,24 @@ class AccountScreen extends Component {
     if (this.state.email) {
       return (
         <>
-          {this.props.action === SHOW_ACTION ? (
+          {this.props.action === SHOW_ACCOUNT_ACTION ? (
             <ShowAccount
-              user={this.props.account && this.props.account.user}
+              user={this.props.account ? this.props.account.user : null}
               gender={this.state.gender}
               fullName={getFullName(this.state)}
               updateAction={(value) => this.props.updateAction(value)}
               logout={() => this.props.logout()}
+              deleteCurrentUserAccount={async () => {
+                await this.props.deleteUserAccount(this.props.account.user.id);
+              }}
+              errorMessage={this.props.errorMessage}
             />
           ) : (
             <AccountForm
               scrollViewOpacity={
                 this.props.loading || this.props.errorMessage ? 0.6 : 1
               }
-              action={UPDATE_ACTION}
+              action={UPDATE_ACCOUNT_ACTION}
               data={data}
               initData={this.state.initData}
               navigation={this.props.navigation}
@@ -203,6 +214,7 @@ const mapDispatchToProps = (dispatch) => {
     updateAction: (action) => dispatch(updateAction(action)),
     dispatchErrorMessage: (errorMessage) =>
       dispatch(dispatchErrorMessage(errorMessage)),
+    deleteUserAccount: (id) => dispatch(deleteUserAccount(id)),
   };
 };
 
@@ -214,6 +226,7 @@ AccountScreen.propTypes = {
   dispatchErrorMessage: PropTypes.func,
   updateCurrentUser: PropTypes.func,
   updateAction: PropTypes.func,
+  deleteUserAccount: PropTypes.func,
   loading: PropTypes.bool,
   action: PropTypes.string,
 };

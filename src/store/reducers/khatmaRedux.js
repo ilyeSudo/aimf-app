@@ -45,11 +45,6 @@ const PATCH_BATCH_SAVE_USER_PICKS_READS_ERROR =
 //
 // Action creators
 //
-const cleanKhatmaStore = () => {
-  return {
-    type: CLEAN_KHATMA_STORE,
-  };
-};
 
 const loadingUserKhatmaData = () => {
   return {
@@ -344,10 +339,13 @@ export const updateKhatma = (khatmaId, status) => {
   return (dispatch) => {
     dispatch(loadingKhatmaData());
     getAxiosInstance()
-      .patch(`${PATCH_KHATMA_URI + khatmaId}`, {
-        isOpen: status,
-        endAt: status ? MAX_DATE : formatDateAsApiDate(Date.now()),
-      })
+      .patch(
+        `${PATCH_KHATMA_URI}/${khatmaId}?with_takharoubts=1&with_association=1`,
+        {
+          isOpen: status,
+          endAt: status ? MAX_DATE : formatDateAsApiDate(Date.now()),
+        },
+      )
       .then((response) => {
         getAxiosInstance()
           .get(

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {View, FlatList, SafeAreaView} from 'react-native';
+import {View, Animated, FlatList} from 'react-native';
 import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
 import {isoDateToFr} from '../Utils/Functions';
-import FeedCard from './HomeScreen/FeedCard';
+import FeedCardOld from './HomeScreen/FeedCard';
 import {getArticles} from '../store/reducers/articlesRedux';
 import {
   receiveAssociationData,
@@ -16,11 +16,19 @@ import {
   ayncReceiveKhatma,
   asyncReceiveUserKhatma,
 } from '../store/reducers/khatmaRedux';
+import styles from './HomeScreen/css';
 
 class HomeScreen extends Component {
   static navigationOptions = {
     header: null,
   };
+
+  constructor() {
+    super();
+    this.state = {
+      x: new Animated.Value(0),
+    };
+  }
 
   componentDidMount() {
     this.props.getArticles([], 1, true);
@@ -29,6 +37,13 @@ class HomeScreen extends Component {
     this.props.ayncReceiveKhatma();
     this.props.asyncReceiveUserKhatma();
   }
+
+  slide = (val) => {
+    Animated.spring(this.state.x, {
+      toValue: val,
+      useNativeDriver: true,
+    }).start();
+  };
 
   handleRefresh = () => {
     if (
@@ -58,52 +73,40 @@ class HomeScreen extends Component {
     }
   };
 
-  renderSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 1,
-          width: '86%',
-          backgroundColor: '#CED0CE',
-          marginLeft: '14%',
-        }}
-      />
-    );
-  };
-
   renderItem = (item) => {
     return (
-      <FeedCard
-        title={item.title}
-        date={isoDateToFr(item.publishedAt)}
-        description={item.description}
-        backgroundColor={!item.isExpired ? '#ffffff' : '#dadada'}
-        associationName={'item.association.name'}
-      />
+      <View style={styles.articleView}>
+        <FeedCardOld
+          id={item.id}
+          title={item.title}
+          date={isoDateToFr(item.publishedAt)}
+          description={item.description}
+          backgroundColor={!item.isExpired ? '#ffffff' : '#dadada'}
+          associationName={item?.association?.name}
+          logo={item?.association?.logo}
+        />
+      </View>
     );
   };
 
   render() {
     return (
       <>
-        <SafeAreaView
+        <AssociationMenu screenerTitle="Actualités" />
+        <FlatList
           style={{
-            paddingTop: 0,
-            backgroundColor: '#fce3ba',
+            ...styles.swipeListView,
             opacity: this.props.loading || this.props.errorMessage ? 0.6 : 1,
-          }}>
-          <AssociationMenu screenerTitle="Actualités" />
-          <FlatList
-            data={this.props.articles}
-            renderItem={({item}) => this.renderItem(item)}
-            keyExtractor={(item) => `${item.id}`}
-            ItemSeparatorComponent={this.renderSeparator}
-            onRefresh={this.handleRefresh}
-            refreshing={false}
-            onEndReached={this.handleLoadMore}
-            onEndReachedThreshold={0.5}
-          />
-        </SafeAreaView>
+          }}
+          data={this.props.articles}
+          renderItem={({item}) => this.renderItem(item)}
+          keyExtractor={(item) => `${item.id}`}
+          ItemSeparatorComponent={this.renderSeparator}
+          onRefresh={this.handleRefresh}
+          refreshing={false}
+          onEndReached={this.handleLoadMore}
+          onEndReachedThreshold={0.5}
+        />
         <Loader visible={!!this.props.loading} />
         {this.props.errorMessage && (
           <ErrorModal visible message={this.props.errorMessage} />
@@ -154,5 +157,9 @@ HomeScreen.propTypes = {
   handleMore: PropTypes.bool,
   lastPage: PropTypes.bool,
   errorMessage: PropTypes.string,
+  receiveAssociationData: PropTypes.func.isRequired,
+  receiveUserAssociationData: PropTypes.func.isRequired,
+  ayncReceiveKhatma: PropTypes.func.isRequired,
+  asyncReceiveUserKhatma: PropTypes.func.isRequired,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

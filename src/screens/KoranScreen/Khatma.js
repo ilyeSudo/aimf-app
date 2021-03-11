@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable react/no-unescaped-entities */
 import React, {Component} from 'react';
 import {
   ScrollView,
@@ -23,8 +21,12 @@ import {
   updateKhatma,
 } from '../../store/reducers/khatmaRedux';
 import {formatDateWithDayAndMonthName} from '../../Utils/Functions';
-import {black, orangeBackgroud, orange2} from '../../Utils/colors';
-import {isAdmin} from '../../Utils/Account';
+import {black, orange2, backgroundColor} from '../../Utils/colors';
+import {
+  isAdmin,
+  isSpecifiedAssociationAdmin,
+  isSuperAdmin,
+} from '../../Utils/Account';
 import CostumHeader from '../../Components/KoranScreen/CostumHeader';
 
 const {width} = Dimensions.get('window');
@@ -32,7 +34,7 @@ const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: orangeBackgroud,
+    backgroundColor,
     paddingTop: 0,
   },
   header: {
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
   },
   panelHandle: {
     height: 2,
-    width: width,
+    width,
     backgroundColor: orange2,
     borderRadius: 6,
     alignSelf: 'center',
@@ -94,6 +96,7 @@ class Khatma extends Component {
   static navigationOptions = {
     header: null,
   };
+
   constructor(props) {
     super(props);
 
@@ -221,11 +224,11 @@ class Khatma extends Component {
 
   render() {
     const {toggleUserToReadList, toggleUserReadList, isOpen} = this.state;
-    const {koranStore, khatma, userToReadList, account} = this.props;
+    const {koranStore, khatma, userToReadList, user, loading} = this.props;
     const numberOfToRead = userToReadList.length;
     const koranListe = koranStore.koranListe.data;
 
-    if (koranStore.loading) {
+    if (loading) {
       return (
         <View style={{flex: 1, justifyContent: 'center'}}>
           <ActivityIndicator animating size="large" />
@@ -243,10 +246,12 @@ class Khatma extends Component {
           navigation={this.props.navigation}
           validate={this.validateUserChoise}
           rightIcon="send"
-          renderLogo={true}
+          renderLogo
         />
         <ScrollView scrollEventThrottle={16}>
-          {isAdmin(account.user) &&
+          {(isSuperAdmin(user) ||
+            isAdmin(user) ||
+            isSpecifiedAssociationAdmin(user, khatma.association.name)) &&
             (isOpen ? (
               <TextButton
                 style={{marginTop: 10}}
@@ -306,11 +311,12 @@ class Khatma extends Component {
                 {!numberOfToRead && (
                   <View>
                     <Text style={styles.textDetails}>
-                      Vous n'avez encore choisi aucune Takheroubt dans cette
-                      Khatma.
+                      Vous n&apos;avez encore choisi aucune Takheroubt dans
+                      cette Khatma.
                     </Text>
                     <Text style={styles.textDetails}>
-                      Privilégier une Takheroubte qui n'a pas encore été prise.
+                      Privilégier une Takheroubte qui n&apos;a pas encore été
+                      prise.
                     </Text>
                   </View>
                 )}
@@ -351,6 +357,7 @@ class Khatma extends Component {
 
 const mapStateToProps = (state, {navigation}) => {
   const {khatmaIdParam} = navigation.state.params;
+  const {user} = state.accountStore;
   const currentKhatma = Object.values(state.khatmaStore.khatma).filter(
     (khatma) => {
       return khatma.id === khatmaIdParam;
@@ -388,9 +395,10 @@ const mapStateToProps = (state, {navigation}) => {
     koranStore: state.koranStore,
     khatma: currentKhatma[0],
     isOpen: currentKhatma[0].isOpen,
+    loading: state.koranStore.loading || state.khatmaStore.loading,
     userReadList,
     userToReadList,
-    account: state.accountStore,
+    user,
     errorMessage,
   };
 };
@@ -399,11 +407,13 @@ Khatma.propTypes = {
   koranStore: PropTypes.object,
   khatma: PropTypes.object,
   isOpen: PropTypes.bool,
+  loading: PropTypes.bool,
   userReadList: PropTypes.array,
   userToReadList: PropTypes.array,
   navigation: PropTypes.object,
   dispatch: PropTypes.func,
-  account: PropTypes.object,
+  user: PropTypes.object,
+  errorMessage: PropTypes.string,
 };
 
 export default connect(mapStateToProps)(Khatma);

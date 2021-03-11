@@ -1,10 +1,14 @@
 export const CREDENTIALS_EMPTY_ERROR =
   'Merci de saisir votre login et mot de passse';
-export const LIST_ACTION = 'list';
-export const SHOW_ACTION = 'show';
-export const CREATE_ACTION = 'create';
-export const UPDATE_ACTION = 'update';
+export const LIST_USER_ACTION = 'list_user';
+export const SHOW_USER_ACTION = 'show_user';
+export const CREATE_ACCOUNT_ACTION = 'create_account';
+export const SHOW_ACCOUNT_ACTION = 'show_account';
+export const UPDATE_ACCOUNT_ACTION = 'update_account';
 export const SHOW_CONDITION_ACTION = 'show_condition';
+export const LIST_BOOK_ACTION = 'list_book';
+export const APP_NAME = 'Tawat Connect';
+
 export const MARRIED = 'married';
 export const SINGLE = 'single';
 
@@ -41,14 +45,31 @@ export const FEMALE_GENDER = 'female';
 export const SERVER_ERROR_MESSAGE =
   'Une erreur est survenue, merci de réessayer ultérieurement';
 
+export const BOOK_GENRES = [
+  {id: 0, label: 'Tous'},
+  {id: 1, label: 'Roman & Fiction'},
+  {id: 2, label: 'BD & Mangas'},
+  {id: 3, label: 'Religion'},
+  {id: 4, label: 'Art & Culture'},
+  {id: 5, label: 'Education'},
+  {id: 6, label: 'Santé'},
+];
 export const UPDATE_USER_STATUS_CONFIRM_MESSAGE =
   'Etes vous sûr de vouloir activer/désactiver cet utilisateur ?';
 export const UPDATE_ADMIN_ROLE_CONFIRM_MESSAGE =
   "Etes vous sûr de vouloir changer les droits d'administration pour cet utilisateur ?";
 
-export const SUPER_ADMIN_ROLE = 'admin';
-export const ADMIN_ROLE = 'admin_';
+export const DELETE_USER_ACCOUNT_CONFIRM_MESSAGE_TITLE =
+  'Voulez-vous vraiment supprimer votre compte?';
+
+export const DELETE_USER_ACCOUNT_CONFIRM_MESSAGE_BODY =
+  'En confirmant cette action, votre compte ainsi que vos informations personnelles seront supprimées définitivement.';
+
+export const SUPER_ADMIN_ROLE = 'superadmin';
+export const ADMIN_ROLE = 'admin';
+export const ASSOCIATION_ADMIN_ROLE = 'admin_';
 export const MEMBER_ROLE = 'member';
+export const LIBRARIAN_ROLE = 'librarian';
 export const NEW_MEMBER_ROLE = 'new_member';
 
 export const DRAFT_ARTICLE_STATUS = 'draft';
@@ -179,3 +200,19 @@ export const THAKHAROUBTS = [
 ];
 
 export const AIMF_ASSOCIATION_ID = 1;
+
+export const LIBRARY_STR = {
+  search_book: 'Rechercher un livre',
+  borrow_book: 'Réserver un livre',
+  my_reservations: 'Mes Réservations',
+  category: 'Genre',
+  author: 'Auteur',
+  available: 'disponible',
+  available_at: 'disponible le',
+  available_starting_from: 'disponible à partir de',
+  add_to_bookmarked: 'Ajouter aux favoris',
+  remove_from_bookmarked: 'Supprimer des favoris',
+  i_want_to_borrow: 'Je veux réserver',
+  please_show_the_qrcode_at_the_library:
+    'Veuillez présenter ce QrCode à la bibliothèque',
+};

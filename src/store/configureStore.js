@@ -19,6 +19,7 @@ import NavigationService from '../Utils/NavigationService';
 import {articleReducer} from './reducers/articlesRedux';
 import {liveVideoReducer} from './reducers/liveVideoRedux';
 import {associationReducer} from './reducers/associationRedux';
+import {bookReducer} from './reducers/bookRedux';
 
 const persistConfig = {
   key: 'root',
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   errorMessageStore: errorMessageReducer,
   authenticationStore: authenticationReducer,
   accountStore: accountReducer,
+  bookStore: bookReducer,
   articleStore: articleReducer,
   liveVideoStore: liveVideoReducer,
   associationStore: associationReducer,

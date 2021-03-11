@@ -1,10 +1,11 @@
 import {StyleSheet} from 'react-native';
+import {backgroundColor} from '../../Utils/colors';
 
 const styles = StyleSheet.create({
   view: {
     paddingTop: 60,
     textAlign: 'center',
-    backgroundColor: '#fce3ba',
+    backgroundColor,
   },
   inputItem: {
     marginBottom: 15,

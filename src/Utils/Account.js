@@ -1,5 +1,11 @@
 import axios from 'axios';
-import {ADMIN_ROLE, MEMBER_ROLE, SUPER_ADMIN_ROLE} from './Constants';
+import {
+  ADMIN_ROLE,
+  LIBRARIAN_ROLE,
+  MEMBER_ROLE,
+  SUPER_ADMIN_ROLE,
+  ASSOCIATION_ADMIN_ROLE,
+} from './Constants';
 
 export const isSuperAdmin = (user) => {
   if (user && user.roles) {
@@ -11,7 +17,9 @@ export const isSuperAdmin = (user) => {
 export const isAdmin = (user) => {
   if (user && user.roles) {
     return !!user.roles.find(
-      (role) => role.name.substring(0, 6) === ADMIN_ROLE,
+      (role) =>
+        role.name.substring(0, 6) === ADMIN_ROLE ||
+        role.name === SUPER_ADMIN_ROLE,
     );
   }
   return false;
@@ -19,7 +27,21 @@ export const isAdmin = (user) => {
 
 export const isAssociationAdmin = (user) => {
   if (user && user.roles) {
-    return !!user.roles.find((role) => role.name.substring(0, 6) === 'admin_');
+    return !!user.roles.find(
+      (role) => role.name.substring(0, 6) === ASSOCIATION_ADMIN_ROLE,
+    );
+  }
+  return false;
+};
+
+export const isSpecifiedAssociationAdmin = (user, associationName) => {
+  if (user && user.roles) {
+    return !!user.roles.find(
+      (role) =>
+        role.name.substring(0, 6) === ASSOCIATION_ADMIN_ROLE &&
+        role.name.toUpperCase() ===
+          `${ASSOCIATION_ADMIN_ROLE}${associationName}`.toUpperCase(),
+    );
   }
   return false;
 };
@@ -31,46 +53,49 @@ export const isMember = (user) => {
   return false;
 };
 
+const isLibrarian = (user) => {
+  if (user && user.roles) {
+    return !!user.roles.find((role) => role.name === LIBRARIAN_ROLE);
+  }
+  return false;
+};
+
 export const isAuthorized = (user) => {
   return (
     isSuperAdmin(user) ||
     isAdmin(user) ||
+    isLibrarian(user) ||
     isMember(user) ||
     isAssociationAdmin(user)
   );
 };
 
+export const canReserveBook = (user) => {
+  return isSuperAdmin(user) || isAdmin(user) || isLibrarian(user);
+};
 export const navigate = (
   account,
   navigation,
   defaultNavigation = 'Login',
   youtube = false,
 ) => {
+  let screen = defaultNavigation;
+  let live = !!youtube;
   if (account.user && account.access_token) {
     axios.defaults.headers.Authorization = `Bearer ${account.access_token}`;
 
     if (isAdmin(account.user) || isSuperAdmin(account.user)) {
-      navigation.navigate(
-        youtube
-          ? 'adminUserWithYoutubeLiveTabNavigator'
-          : 'adminUserTabNavigator',
-      );
+      screen = 'adminUser';
     } else if (isAssociationAdmin(account.user)) {
-      navigation.navigate(
-        youtube
-          ? 'adminAssociationTabNavigator'
-          : 'adminAssociationWithYoutubeLiveTabNavigator',
-      );
-    } else if (isMember(account.user)) {
-      navigation.navigate(
-        youtube
-          ? 'activeUserWithYoutubeLiveTabNavigator'
-          : 'activeUserTabNavigator',
-      );
+      screen = 'adminAssociation';
+    } else if (isMember(account.user) || isLibrarian(account.user)) {
+      screen = 'activeUser';
     } else {
+      screen = 'unActiveUser';
+      live = false;
       navigation.navigate('unActiveUserTabNavigator');
     }
-    return;
+    screen = `${screen + (live ? 'WithYoutubeLive' : '')}TabNavigator`;
   }
-  navigation.navigate(defaultNavigation);
+  navigation.navigate(screen);
 };

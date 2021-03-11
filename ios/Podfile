@@ -43,6 +43,14 @@ target 'AIMF_APP' do
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
   use_native_modules!
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
+  pod 'Permission-Camera', :path => "../node_modules/react-native-permissions/ios/Camera.podspec"
+  pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
+
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
 end
 
 target 'AIMF_APP-tvOS' do

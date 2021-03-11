@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {ScrollView, Text, View} from 'react-native';
 import {Item, Icon, Input, Label, Button} from 'native-base';
 import SpinnerButton from 'react-native-spinner-button';
 import * as PropTypes from 'prop-types';
+import {CheckBox} from 'react-native-elements';
+import moment from 'moment';
 import {
   isCorrectPhoneNumber,
   isCorrectName,
@@ -13,12 +15,12 @@ import {
 import styles from './AccountForm/css';
 
 import {
-  CREATE_ACTION,
+  CREATE_ACCOUNT_ACTION,
   MARRIED,
   MALE_GENDER,
-  SHOW_ACTION,
+  SHOW_ACCOUNT_ACTION,
   SINGLE,
-  UPDATE_ACTION,
+  UPDATE_ACCOUNT_ACTION,
   FEMALE_GENDER,
   SHOW_CONDITION_ACTION,
 } from '../Utils/Constants';
@@ -29,9 +31,7 @@ import RenderInput from './RenderInput';
 import ImageRadioButton from './ImageRadioButton';
 import TextRadioButton from './TextRadioButton';
 import DatePicker from './DatePicker';
-import {CheckBox} from 'react-native-elements';
-import moment from 'moment';
-import RenderPassword from "./RenderPassoword";
+import RenderPassword from './RenderPassoword';
 
 export default class AccountForm extends Component {
   constructor(props) {
@@ -219,11 +219,11 @@ export default class AccountForm extends Component {
             <Button
               transparent
               onPress={() => {
-                if (this.props.action === UPDATE_ACTION) {
+                if (this.props.action === UPDATE_ACCOUNT_ACTION) {
                   this.props.updateState({
                     ...this.props.initData,
                   });
-                  this.props.updateAction(SHOW_ACTION);
+                  this.props.updateAction(SHOW_ACCOUNT_ACTION);
                 } else {
                   this.props.navigation.navigate('Login');
                 }
@@ -287,7 +287,7 @@ export default class AccountForm extends Component {
             onCustomChange={(date) => this.setDate(date)}
           />
 
-          {this.props.action === UPDATE_ACTION ? (
+          {this.props.action === UPDATE_ACCOUNT_ACTION ? (
             <>
               <ChildrenInformation
                 maritalStatus={maritalStatus}
@@ -317,17 +317,19 @@ export default class AccountForm extends Component {
           />
           <RenderInput
             checkFunction={
-              this.props.action === CREATE_ACTION && isCorrectEmailAddress
+              this.props.action === CREATE_ACCOUNT_ACTION
+                ? isCorrectEmailAddress
+                : undefined
             }
             label="Email"
             keyboardType="email-address"
             onChange={(value) => this.props.updateState({email: value})}
             required
-            disabled={this.props.action === UPDATE_ACTION}
+            disabled={this.props.action === UPDATE_ACCOUNT_ACTION}
             value={email}
             itemStyle={{
               ...styles.inputItem,
-              opacity: this.props.action === CREATE_ACTION ? 1 : 0.5,
+              opacity: this.props.action === CREATE_ACCOUNT_ACTION ? 1 : 0.5,
             }}
           />
           <RenderInput
@@ -339,27 +341,27 @@ export default class AccountForm extends Component {
             required
             value={phoneNumber}
           />
-          {this.props.action === CREATE_ACTION
+          {this.props.action === CREATE_ACCOUNT_ACTION
             ? this.renderQuestionsBloc()
             : null}
 
-          {this.props.action === UPDATE_ACTION ? (
+          {this.props.action === UPDATE_ACCOUNT_ACTION ? (
             <RenderPassword
               label="Ancien mot de passe"
               onChange={(value) => this.props.updateState({oldPassword: value})}
-              required={this.props.action === CREATE_ACTION}
+              required={this.props.action === CREATE_ACCOUNT_ACTION}
               value={oldPassword}
             />
           ) : null}
 
           <RenderPassword
             label={
-              this.props.action === UPDATE_ACTION
+              this.props.action === UPDATE_ACCOUNT_ACTION
                 ? 'Nouveau mot de passe'
                 : 'Mot de passe'
             }
             onChange={(value) => this.props.updateState({password: value})}
-            required={this.props.action === CREATE_ACTION}
+            required={this.props.action === CREATE_ACCOUNT_ACTION}
             value={password}
           />
           <RenderPassword
@@ -372,11 +374,11 @@ export default class AccountForm extends Component {
             onChange={(value) =>
               this.props.updateState({confirmPassword: value})
             }
-            required={this.props.action === CREATE_ACTION}
+            required={this.props.action === CREATE_ACCOUNT_ACTION}
             value={confirmPassword}
           />
 
-          {this.props.action === CREATE_ACTION ? (
+          {this.props.action === CREATE_ACCOUNT_ACTION ? (
             <View
               style={{marginLeft: 10, marginRight: 30, flexDirection: 'row'}}>
               <CheckBox
@@ -389,7 +391,7 @@ export default class AccountForm extends Component {
                 }
               />
               <Text style={{marginRight: 40}}>
-                En s'inscrivant, vous acceptez les{' '}
+                En s&apos;inscrivant, vous acceptez les{' '}
                 <Text
                   style={{
                     color: '#cb8347',
@@ -409,7 +411,7 @@ export default class AccountForm extends Component {
           <ActionsButton
             action={this.props.action}
             onValidate={() => this.props.onSubmit()}
-            onCancel={() => this.props.updateAction(SHOW_ACTION)}
+            onCancel={() => this.props.updateAction(SHOW_ACCOUNT_ACTION)}
             data={this.state}
             navigation={this.props.navigation}
           />

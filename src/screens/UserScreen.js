@@ -3,7 +3,7 @@ import {View, FlatList, SafeAreaView} from 'react-native';
 import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
 import UserCard from './UserScreen/UserCard';
-import {SHOW_ACTION} from '../Utils/Constants';
+import {SHOW_USER_ACTION} from '../Utils/Constants';
 import ShowUser from './UserScreen/ShowUser';
 import {
   getUsers,
@@ -19,14 +19,6 @@ class UserScreen extends Component {
   static navigationOptions = {
     header: null,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      users: [],
-    };
-  }
 
   componentDidMount() {
     this.props.getUsers([], 1, true);
@@ -80,7 +72,7 @@ class UserScreen extends Component {
   render() {
     return (
       <>
-        {this.props.action === SHOW_ACTION ? (
+        {this.props.action === SHOW_USER_ACTION ? (
           <ShowUser
             style={{
               opacity: this.props.loading || this.props.errorMessage ? 0.6 : 1,

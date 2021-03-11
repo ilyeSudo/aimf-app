@@ -4,6 +4,7 @@ import {Icon, Item, Label} from 'native-base';
 import SpinnerButton from 'react-native-spinner-button';
 import {connect} from 'react-redux';
 import * as PropTypes from 'prop-types';
+import moment from 'moment';
 import styles from './PostScreen/css';
 import ErrorModal from '../Components/ErrorModal';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
@@ -16,7 +17,6 @@ import {
 } from '../Utils/Constants';
 import RenderInput from '../Components/RenderInput';
 import DatePicker from '../Components/DatePicker';
-import moment from 'moment';
 import SelectAssociation from '../Components/SelectAssociation';
 import {isAdmin, isSuperAdmin} from '../Utils/Account';
 
@@ -47,12 +47,13 @@ class PostScreen extends Component {
       this.setState({
         title,
         description,
-        expiredAt: expiredAt,
+        expiredAt,
         associationId: association.id,
       });
     }
   }
 
+  // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(nextProps): void {
     if (this.props.loading && !nextProps.loading && !nextProps.errorMessage) {
       let title = null;
@@ -69,19 +70,19 @@ class PostScreen extends Component {
       this.setState({
         title,
         description,
-        expiredAt: expiredAt,
+        expiredAt,
         associationId,
       });
     }
   }
 
-  disabledButtons = () => {
-    return !(this.state.title.trim() && this.state.description.trim());
-  };
-
   setDate(expiredAt) {
     this.setState({expiredAt});
   }
+
+  disabledButtons = () => {
+    return !(this.state.title.trim() && this.state.description.trim());
+  };
 
   savePost = (status) => {
     const {description, title, expiredAt} = this.state;

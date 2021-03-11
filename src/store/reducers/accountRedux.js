@@ -1,13 +1,14 @@
 import {batchActions} from 'redux-batched-actions';
 import getAxiosInstance from '../../Utils/axios';
-export const STORE_ACCOUNT = 'STORE_ACCOUNT';
 import {
   PATCH_UPDATE_USER_URI,
   POST_REGISTER_USER_URI,
   POST_RESET_PASSWORD_URI,
 } from '../../Utils/ApiUrl';
 import {dispatchError} from './errorMessageRedux';
-import {SHOW_ACTION} from '../../Utils/Constants';
+import {SHOW_ACCOUNT_ACTION} from '../../Utils/Constants';
+
+export const STORE_ACCOUNT = 'STORE_ACCOUNT';
 
 export const PATCH_UPDATE_USER_REQUEST = 'PATCH_UPDATE_USER_REQUEST';
 export const PATCH_UPDATE_USER_SUCCESS = 'PATCH_UPDATE_USER_SUCCESS';
@@ -43,7 +44,7 @@ const patchUpdateError = () => {
 const patchUpdateSuccess = (data) => {
   return {
     type: PATCH_UPDATE_USER_SUCCESS,
-    payload: {loading: false, action: SHOW_ACTION, ...data},
+    payload: {loading: false, action: SHOW_ACCOUNT_ACTION, ...data},
   };
 };
 
@@ -76,10 +77,10 @@ const updateUser = (id, data, dispatch) => {
       with_roles: 1,
       with_children: 1,
     })
-    .then(function (response) {
+    .then((response) => {
       dispatch(patchUpdateSuccess({user: response.data.data}));
     })
-    .catch(function (error) {
+    .catch((error) => {
       dispatch(
         batchActions(
           [dispatchError(error), patchUpdateError()],
@@ -104,10 +105,10 @@ const resetPassword = (id, data, dispatch) => {
       newPassword,
       passwordConfirmation,
     })
-    .then(function (response) {
+    .then(() => {
       updateUser(id, data, dispatch);
     })
-    .catch(function (error) {
+    .catch((error) => {
       setTimeout(() => {
         dispatch(
           batchActions(
@@ -130,13 +131,20 @@ export const updateCurrentUser = (id, data) => {
   };
 };
 
+export const storeAccount = (data) => {
+  return {
+    type: STORE_ACCOUNT,
+    payload: data,
+  };
+};
+
 export const register = (data) => {
   return (dispatch) => {
     dispatch(postRegisterRequest());
 
     getAxiosInstance()
       .post(POST_REGISTER_USER_URI, data)
-      .then(function (response) {
+      .then((response) => {
         dispatch(
           batchActions(
             [storeAccount(response.data), postRegisterSuccess()],
@@ -144,7 +152,7 @@ export const register = (data) => {
           ),
         );
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch(
           batchActions(
             [dispatchError(error), postRegisterError()],
@@ -155,10 +163,26 @@ export const register = (data) => {
   };
 };
 
-export const storeAccount = (data) => {
+export const deleteUserAccountRequest = () => {
   return {
-    type: STORE_ACCOUNT,
-    payload: data,
+    type: DELETE_USER_ACCOUNT_REQUEST,
+    payload: {
+      loading: true,
+    },
+  };
+};
+
+export const deleteUserAccountSuccess = () => {
+  return {
+    type: DELETE_USER_ACCOUNT_SUCCESS,
+    payload: {loading: false, user: null},
+  };
+};
+
+export const deleteUserAccountError = () => {
+  return {
+    type: DELETE_USER_ACCOUNT_ERROR,
+    payload: {loading: false},
   };
 };
 
@@ -169,7 +193,29 @@ export const storeTokenDevice = (tokenDevice) => {
   };
 };
 
-const initialState = {action: SHOW_ACTION};
+export const deleteUserAccount = (id) => {
+  return (dispatch) => {
+    dispatch(deleteUserAccountRequest);
+
+    getAxiosInstance()
+      .delete(`${PATCH_UPDATE_USER_URI + id}`)
+      .then(() => {
+        dispatch(deleteUserAccountSuccess());
+      })
+      .catch((error) => {
+        dispatch(
+          batchActions(
+            [dispatchError(error), deleteUserAccountError()],
+            BATCH_DELETE_USER_ACCOUNT_ERROR,
+          ),
+        );
+      });
+  };
+};
+
+const initialState = {
+  action: SHOW_ACCOUNT_ACTION,
+};
 
 export const accountReducer = (state = initialState, action) => {
   switch (action.type) {

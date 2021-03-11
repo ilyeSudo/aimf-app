@@ -1,3 +1,4 @@
+//
 import React from 'react';
 import {
   StyleSheet,
@@ -12,6 +13,7 @@ import PropTypes from 'prop-types';
 
 // Icon
 import Feather from 'react-native-vector-icons/Feather';
+
 Feather.loadFont();
 
 class DropDownPicker extends React.Component {
@@ -36,27 +38,25 @@ class DropDownPicker extends React.Component {
       } else {
         choice = this.null();
       }
-    } else {
-      if (
-        props.defaultValue &&
-        Array.isArray(props.defaultValue) &&
-        props.defaultValue.length > 0
-      ) {
-        props.defaultValue.forEach((value, index) => {
-          items.push(
-            props.items.find((item) => item[props.valueField] === value),
-          );
-        });
-      } else if (
-        props.items.filter(
-          (item) => item.hasOwnProperty('selected') && item.selected === true,
-        ).length > 0
-      ) {
-        items = props.items.filter(
-          (item, index) =>
-            item.hasOwnProperty('selected') && item.selected === true,
+    } else if (
+      props.defaultValue &&
+      Array.isArray(props.defaultValue) &&
+      props.defaultValue.length > 0
+    ) {
+      props.defaultValue.forEach((value, index) => {
+        items.push(
+          props.items.find((item) => item[props.valueField] === value),
         );
-      }
+      });
+    } else if (
+      props.items.filter(
+        (item) => item.hasOwnProperty('selected') && item.selected === true,
+      ).length > 0
+    ) {
+      items = props.items.filter(
+        (item, index) =>
+          item.hasOwnProperty('selected') && item.selected === true,
+      );
     }
 
     this.state = {
@@ -103,7 +103,7 @@ class DropDownPicker extends React.Component {
       JSON.stringify(props.defaultValue) !==
         JSON.stringify(state.props.defaultValue)
     ) {
-      let items = [];
+      const items = [];
       if (
         props.defaultValue &&
         Array.isArray(props.defaultValue) &&
@@ -163,7 +163,7 @@ class DropDownPicker extends React.Component {
         isVisible: !this.state.isVisible,
       },
       () => {
-        const isVisible = this.state.isVisible;
+        const {isVisible} = this.state;
 
         if (isVisible) {
           this.props.onOpen();
@@ -352,7 +352,7 @@ class DropDownPicker extends React.Component {
               </View>
             )}
 
-            <ScrollView style={{width: '100%'}} nestedScrollEnabled={true}>
+            <ScrollView style={{width: '100%'}} nestedScrollEnabled>
               {items.length > 0 ? (
                 items.map((item, index) => (
                   <TouchableOpacity

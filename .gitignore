@@ -28,6 +28,7 @@ project.xcworkspace
 android/*.hprof
 build/
 .idea
+.vscode
 .gradle
 local.properties
 *.iml
@@ -64,3 +65,6 @@ buck-out/
 # Personal working files
 admin@aimf-api.fr
 commun build faills
+
+# Eslint
+.eslintcache

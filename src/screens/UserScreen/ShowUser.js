@@ -3,20 +3,21 @@ import {ScrollView, View} from 'react-native';
 import {Button, Icon, Text, Thumbnail} from 'native-base';
 import * as PropTypes from 'prop-types';
 import SpinnerButton from 'react-native-spinner-button';
-import InformationsModal from '../../Components/InformationsModal';
 import SettingsSwitch from '../../Components/switch';
 import {
-  LIST_ACTION,
-  MARRIED,
-  FEMALE_GENDER,
-  UPDATE_ADMIN_ROLE_CONFIRM_MESSAGE,
   ADMIN_ROLE,
-  SUPER_ADMIN_ROLE,
+  FEMALE_GENDER,
+  LIST_USER_ACTION,
+  MARRIED,
   MEMBER_ROLE,
   NEW_MEMBER_ROLE,
+  SUPER_ADMIN_ROLE,
+  UPDATE_ADMIN_ROLE_CONFIRM_MESSAGE,
   UPDATE_USER_STATUS_CONFIRM_MESSAGE,
 } from '../../Utils/Constants';
-import {isAdmin, isSuperAdmin, isAuthorized} from '../../Utils/Account';
+import {isAdmin, isAuthorized, isSuperAdmin} from '../../Utils/Account';
+import {isoDateToFr} from '../../Utils/Functions';
+import InformationModal from '../../Components/InformationModal';
 
 class ShowUser extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class ShowUser extends Component {
     };
   }
 
+  // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(nextProps): void {
     this.setState({
       isAuthorized: isAuthorized(nextProps.data),
@@ -43,7 +45,7 @@ class ShowUser extends Component {
   setConfirmModalVisible = (visible) => {
     if (!visible) {
       this.setState({
-        isAuthorized: isAuthorized(),
+        isAuthorized: isAuthorized(this.props.data),
         isSuperAdmin: isSuperAdmin(this.props.data),
         isAdmin: isAdmin(this.props.data),
       });
@@ -96,7 +98,10 @@ class ShowUser extends Component {
 
   getSecurityQuestionBlock = () => {
     const rows = [];
-    if (this.props.data.securityQuestions.length > 0) {
+    if (
+      this.props?.data?.securityQuestions &&
+      this.props.data.securityQuestions.length > 0
+    ) {
       rows.push(
         <View
           key="securityQuestions"
@@ -175,7 +180,7 @@ class ShowUser extends Component {
 
   getChildrenBlock = () => {
     const rows = [];
-    if (this.props.data.children.length > 0) {
+    if (this.props?.data?.children && this.props.data.children.length > 0) {
       rows.push(
         <View
           key="childrens"
@@ -268,7 +273,9 @@ class ShowUser extends Component {
             {row.label}
           </Text>
           <Text style={{color: '#3E3E3E', fontSize: 15}}>
-            {this.props.data[row.field]}
+            {row.field === 'birthday'
+              ? isoDateToFr(this.props.data[row.field])
+              : this.props.data[row.field]}
           </Text>
         </View>,
       );
@@ -284,6 +291,7 @@ class ShowUser extends Component {
 
   renderUserStatus = () => {
     if (this.props.currentUserId !== this.props.data.id) {
+      const {isAdmin: userStatus} = this.state;
       return (
         <>
           <SettingsSwitch
@@ -292,6 +300,7 @@ class ShowUser extends Component {
             onValueChange={(value) => {
               this.setState({
                 isAuthorized: value,
+                isAdmin: userStatus && value,
                 confirmMessage: UPDATE_USER_STATUS_CONFIRM_MESSAGE,
               });
               this.setConfirmModalVisible(true);
@@ -363,7 +372,7 @@ class ShowUser extends Component {
           <Button
             transparent
             onPress={() => {
-              this.props.updateAction(LIST_ACTION);
+              this.props.updateAction(LIST_USER_ACTION);
             }}
             style={{borderRadius: 30, marginLeft: 20, marginBottom: 20}}>
             <Icon
@@ -378,7 +387,7 @@ class ShowUser extends Component {
         {this.renderUserStatus()}
 
         <View style={{marginBottom: 30}} />
-        <InformationsModal
+        <InformationModal
           visible={this.state.confirmUpdateVisible}
           setVisible={(visible) => this.setConfirmModalVisible(visible)}
           title="Confirmer la modification">
@@ -421,7 +430,7 @@ class ShowUser extends Component {
               <Text>Confirmer</Text>
             </SpinnerButton>
           </View>
-        </InformationsModal>
+        </InformationModal>
       </ScrollView>
     );
   }

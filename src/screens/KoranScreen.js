@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
@@ -22,9 +21,9 @@ import {
   asyncReceiveUserKhatma,
 } from '../store/reducers/khatmaRedux';
 import {receiveKoran} from '../store/reducers/koranRedux';
-import {white, black, orange2, orangeBackgroud} from '../Utils/colors';
+import {white, black, orange2, backgroundColor} from '../Utils/colors';
 import HistoryItem from '../Components/KoranScreen/HistoryItem';
-import {isAdmin, isSuperAdmin} from '../Utils/Account';
+import {isAdmin, isSuperAdmin, isAssociationAdmin} from '../Utils/Account';
 import ErrorModal from '../Components/ErrorModal';
 import Loader from '../Components/Loader';
 
@@ -35,7 +34,7 @@ YellowBox.ignoreWarnings([
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: orangeBackgroud,
+    backgroundColor,
     paddingTop: 0,
   },
   textHeader: {
@@ -57,13 +56,6 @@ class KoranScreen extends Component {
   static navigationOptions = {
     header: null,
   };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: false,
-    };
-  }
 
   onRefresh = () => {
     const {dispatch} = this.props;
@@ -113,6 +105,7 @@ class KoranScreen extends Component {
       if (takharoubt.isRead) {
         numberOfRead += 1;
       }
+      return null;
     });
 
     return (
@@ -130,7 +123,7 @@ class KoranScreen extends Component {
   };
 
   render() {
-    const {khatmaHistory, openKhatma, loading, account} = this.props;
+    const {khatmaHistory, openKhatma, loading, user} = this.props;
 
     return (
       <SafeAreaView style={styles.container}>
@@ -146,7 +139,7 @@ class KoranScreen extends Component {
                 <View
                   style={{marginTop: 10, paddingHorizontal: 30, height: 200}}>
                   <Text style={styles.textDetails}>
-                    Aucune Khatma n'est ouverte à ce jour.
+                    Aucune Khatma n&apos;est ouverte à ce jour.
                   </Text>
                 </View>
               ) : (
@@ -185,7 +178,7 @@ class KoranScreen extends Component {
                     paddingHorizontal: 30,
                   }}>
                   <Text style={styles.textDetails}>
-                    Vous n'avez à ce jour partcipé à aucune Khatma
+                    Vous n&apos;avez à ce jour partcipé à aucune Khatma
                   </Text>
                 </View>
               ) : (
@@ -213,7 +206,7 @@ class KoranScreen extends Component {
             </View>
           </View>
         </ScrollView>
-        {(isAdmin(account.user) || isSuperAdmin(account.user)) && (
+        {(isSuperAdmin(user) || isAdmin(user) || isAssociationAdmin(user)) && (
           <View
             style={{
               flexDirection: 'row-reverse',
@@ -249,7 +242,7 @@ class KoranScreen extends Component {
 
 function mapStateToProps(state) {
   const {userAssociationList} = state.associationStore;
-
+  const {user} = state.accountStore;
   const openKhatma = Object.values(state.khatmaStore.khatma).filter(
     (khatma) => {
       return (
@@ -270,12 +263,11 @@ function mapStateToProps(state) {
   );
 
   const {errorMessage} = state.errorMessageStore;
-
   return {
     khatmaHistory,
     openKhatma,
     loading: state.khatmaStore.loading || state.associationStore.loading,
-    account: state.accountStore,
+    user,
     errorMessage,
   };
 }
@@ -286,7 +278,8 @@ KoranScreen.propTypes = {
   loading: PropTypes.bool,
   navigation: PropTypes.object,
   dispatch: PropTypes.func,
-  account: PropTypes.object,
+  user: PropTypes.object,
+  errorMessage: PropTypes.string,
 };
 
 export default connect(mapStateToProps)(KoranScreen);

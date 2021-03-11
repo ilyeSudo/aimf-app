@@ -1,5 +1,6 @@
 import {Icon, Input, Item, Label} from 'native-base';
 import React from 'react';
+import * as PropTypes from 'prop-types';
 import styles from './AccountForm/css';
 
 const RenderInput = ({
@@ -24,16 +25,16 @@ const RenderInput = ({
       )}
       <Item
         rounded
-        style={itemStyle || styles.inputItem}
+        style={{...(itemStyle || styles.inputItem), borderRadius: 4}}
         success={
           value !== null &&
-          checkFunction &&
+          checkFunction !== undefined &&
           value.length > 0 &&
           checkFunction(value)
         }
         error={
           value !== null &&
-          checkFunction &&
+          checkFunction !== undefined &&
           value.length > 0 &&
           !checkFunction(value)
         }>
@@ -46,7 +47,7 @@ const RenderInput = ({
           disabled={disabled}
           placeholder={placeholder}
         />
-        {value && checkFunction && value.length > 0 ? (
+        {value && checkFunction !== undefined && value.length > 0 ? (
           <Icon
             name={checkFunction(value) ? 'checkmark-circle' : 'close-circle'}
             style={checkFunction(value) ? styles.green : styles.red}
@@ -55,6 +56,19 @@ const RenderInput = ({
       </Item>
     </>
   );
+};
+
+RenderInput.propTypes = {
+  label: PropTypes.string,
+  value: PropTypes.string,
+  required: PropTypes.bool,
+  checkFunction: PropTypes.func,
+  onChange: PropTypes.func,
+  keyboardType: PropTypes.string,
+  maxLength: PropTypes.number,
+  disabled: PropTypes.bool,
+  itemStyle: PropTypes.object,
+  placeholder: PropTypes.string,
 };
 
 export default RenderInput;

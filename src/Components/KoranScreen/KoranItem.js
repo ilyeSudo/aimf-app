@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
 import {API_BASE_URL} from 'react-native-dotenv';
@@ -69,10 +68,20 @@ const styles = StyleSheet.create({
 });
 
 class KoranItem extends Component {
+  khatmatext = () => {
+    const {numberofPartDispo} = this.props;
+    if (numberofPartDispo === 0) {
+      return 'Cette Khatma est complète';
+    }
+    if (numberofPartDispo === 1) {
+      return 'Dernière Takharoubt disponible';
+    }
+    return `${numberofPartDispo}Tikheroubines sont diponibles`;
+  };
+
   render() {
     const {
       title,
-      numberofPartDispo,
       associationName,
       associationLogo,
       navigate,
@@ -101,13 +110,7 @@ class KoranItem extends Component {
             <View style={{marginLeft: 10}}>
               <Text style={styles.title}>{title}</Text>
               <Text style={styles.textInfo}>Votre Khatma est ouverte</Text>
-              <Text style={styles.textInfo}>
-                {numberofPartDispo === 0
-                  ? 'Cette Khatma est complète'
-                  : numberofPartDispo === 1
-                  ? 'Dernière Takharoubt disponible'
-                  : numberofPartDispo + 'Tikheroubines sont diponibles'}
-              </Text>
+              <Text style={styles.textInfo}>{this.khatmatext()}</Text>
             </View>
           </View>
         </View>
@@ -121,6 +124,8 @@ KoranItem.propTypes = {
   numberofPartDispo: PropTypes.number,
   loading: PropTypes.bool,
   navigate: PropTypes.func,
+  associationName: PropTypes.string,
+  associationLogo: PropTypes.string,
 };
 
 export default KoranItem;

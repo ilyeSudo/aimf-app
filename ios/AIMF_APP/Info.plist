@@ -23,7 +23,7 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSApplicationCategoryType</key>
-	<string></string>
+	<string/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -43,6 +43,8 @@
 	<string>Nous souhaitons avoir votre persmission pour avoir accès à votre localisation</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Nous souhaitons avoir votre persmission pour avoir accès à votre localisation</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Nous souhaitons avoir votre persmission pour avoir accès à votre camera</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -65,12 +67,6 @@
 		<string>rubicon-icon-font.ttf</string>
 		<string>icomoon.ttf</string>
 		<string>Fontisto.ttf</string>
-	</array>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>processing</string>
-		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

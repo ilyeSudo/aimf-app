@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
   View,
@@ -8,6 +7,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import * as PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {API_BASE_URL} from 'react-native-dotenv';
 import {black, orange2} from '../../Utils/colors';
@@ -17,7 +17,6 @@ const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
-    //paddingTop: 50,
     paddingHorizontal: 14,
     marginBottom: 10,
     justifyContent: 'center',
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
   },
   panelHandle: {
     height: 2,
-    width: width,
+    width,
     backgroundColor: orange2,
     borderRadius: 6,
     alignSelf: 'center',
@@ -142,5 +141,15 @@ class CostumHeader extends Component {
     );
   }
 }
+CostumHeader.propTypes = {
+  title: PropTypes.string,
+  subtitle: PropTypes.string,
+  associationName: PropTypes.string,
+  associationLogo: PropTypes.string,
+  validate: PropTypes.func,
+  navigation: PropTypes.object,
+  rightIcon: PropTypes.string,
+  renderLogo: PropTypes.bool,
+};
 
 export default CostumHeader;
