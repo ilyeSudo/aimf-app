@@ -1,14 +1,11 @@
-import {batchActions} from 'redux-batched-actions';
 import getAxiosInstance from '../../Utils/axios';
 import {GET_LIVE_VIDEO_URI} from '../../Utils/ApiUrl';
-import {dispatchError} from './errorMessageRedux';
 import {navigate} from '../../Utils/Account';
 import NavigationService from '../../Utils/NavigationService';
 
 const GET_LIVE_VIDEO_REQUEST = 'GET_LIVE_VIDEO_REQUEST';
 const GET_LIVE_VIDEO_SUCCESS = 'GET_LIVE_VIDEO_SUCCESS';
 const GET_LIVE_VIDEO_ERROR = 'GET_LIVE_VIDEO_ERROR';
-const BATCH_GET_LIVE_VIDEO_ERROR = 'BATCH_GET_LIVE_VIDEO_ERROR';
 
 const getLiveVideoRequest = () => {
   return {

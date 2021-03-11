@@ -6,7 +6,6 @@ import axios from 'axios';
 import NavigationService from '../Utils/NavigationService';
 import {navigate} from '../Utils/Account';
 import {getLiveVideo} from '../store/reducers/liveVideoRedux';
-import Notifications from '../services/Notifications';
 import FCMService from '../services/FCMService';
 import {storeTokenDevice} from '../store/reducers/accountRedux';
 import {
@@ -63,14 +62,14 @@ class Loading extends React.Component {
   }
 
   onRegister = (token) => {
-    console.log('[App] token : ', token);
+    // console.log('[App] token : ', token);
     if (!this.props.tokenDevice) {
       this.props.storeTokenDevice(token);
     }
   };
 
   onNotification = (notification) => {
-    console.log('[App] onNotification: ', notification);
+    // console.log('[App] onNotification: ', notification);
     const options = {
       soundName: 'default',
       playSound: true,
@@ -101,7 +100,7 @@ class Loading extends React.Component {
   };
 
   onOpenNotification = (notification) => {
-    console.log('[App] onOpenNotification: ', notification);
+    // console.log('[App] onOpenNotification: ', notification);
     if (
       notification?.notification_alias ||
       notification?.data?.notification_alias
@@ -110,7 +109,7 @@ class Loading extends React.Component {
         ? notification.notification_alias
         : notification.data.notification_alias;
 
-      console.log('Action: ', action);
+      // console.log('Action: ', action);
 
       if (action === ACTIVE_USER_ALIAS) {
         this.props.logout();
@@ -161,6 +160,7 @@ Loading.propTypes = {
   getLiveVideo: PropTypes.func,
   storeTokenDevice: PropTypes.func,
   tokenDevice: PropTypes.object,
+  logout: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Loading);

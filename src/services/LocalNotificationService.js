@@ -9,14 +9,15 @@ export default class LocalNotificationService {
         console.log('[LocalNotificationService] onRegister:', token);
       },
       onNotification(notification) {
-        console.log('[LocalNotificationService] onNotification:', notification);
+        // console.log('[LocalNotificationService] onNotification:', notification);
         if (!notification?.data) {
           return;
         }
-        notification.userInteraction &&
+        if (notification.userInteraction) {
           onOpenNotification(
             Platform.OS === 'ios' ? notification.data.item : notification.data,
           );
+        }
 
         if (Platform.OS === 'ios') {
           // (required) Called when a remote is received or opened, or local notification is opened
@@ -101,10 +102,10 @@ export default class LocalNotificationService {
   };
 
   removeDeliveredNotificationByID = (notificationId) => {
-    console.log(
-      '[LocalNotificationService] removeDeliveredNotificationByID: ',
-      notificationId,
-    );
+    // console.log(
+    //   '[LocalNotificationService] removeDeliveredNotificationByID: ',
+    //   notificationId,
+    // );
     PushNotification.cancelLocalNotifications({id: `${notificationId}`});
   };
 }

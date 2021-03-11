@@ -9,7 +9,7 @@ import {
 
 const getAxiosInstance = () => {
   return axios.create({
-    baseURL: 'http://aimf.siroukane.tech/',
+    baseURL: API_BASE_URL,
     timeout: parseInt(API_TIMEOUT, 10),
     headers: {
       Accept: API_REQUEST_TYPE,
