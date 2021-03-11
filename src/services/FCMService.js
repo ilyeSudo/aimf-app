@@ -83,7 +83,7 @@ export default class FCMService {
           remoteMessage,
         );
         if (remoteMessage) {
-          const notification = remoteMessage.notification;
+          const {notification} = remoteMessage;
           onOpenNotification(notification);
           // this.removeDeliveredNotification(notification.notificationId)
         }

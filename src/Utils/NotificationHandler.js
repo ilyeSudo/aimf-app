@@ -21,7 +21,7 @@ const NotificationHandler = (navigationHandler, action) => {
       navigationHandler.navigate('HomeStack');
       break;
     case YOUTUBE_LIVE_START_ALIAS:
-      //todo correct youtube notification bug
+      // todo correct youtube notification bug
       navigationHandler.navigate('adminUserWithYoutubeLiveTabNavigator');
       break;
     default:

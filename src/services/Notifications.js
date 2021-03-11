@@ -8,14 +8,14 @@ export default class Notifications {
     PushNotification.configure({
       // (optional) Called when Token is generated (iOS and Android)
       // (required) Called when a remote or local notification is opened or received,
-      onRegister: function (token) {
+      onRegister(token) {
         onRegister(token);
         console.log('####################loading');
         console.log('[Notification] onRegister: ', token);
       },
       // (required) Called when a remote or local notification is opened or received
       // onNotification, // this._onNotification,
-      onNotification: function (notification) {
+      onNotification(notification) {
         // process the notification
         // required on iOS only
         onNotification(notification);
