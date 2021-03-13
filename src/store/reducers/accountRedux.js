@@ -20,8 +20,15 @@ export const POST_REGISTER_USER_REQUEST = 'POST_REGISTER_USER_REQUEST';
 export const POST_REGISTER_USER_SUCCESS = 'POST_REGISTER_USER_SUCCESS';
 export const POST_REGISTER_USER_ERROR = 'POST_REGISTER_USER_ERROR';
 export const POST_BATCH_REGISTER_USER_ERROR = 'POST_BATCH_REGISTER_USER_ERROR';
+export const DELETE_USER_ACCOUNT_REQUEST = 'DELETE_USER_ACCOUNT_REQUEST';
+export const DELETE_USER_ACCOUNT_SUCCESS = 'DELETE_USER_ACCOUNT_SUCCESS';
+export const DELETE_USER_ACCOUNT_ERROR = 'DELETE_USER_ACCOUNT_ERROR';
+export const BATCH_DELETE_USER_ACCOUNT_ERROR =
+  'BATCH_DELETE_USER_ACCOUNT_ERROR';
 
-const POST_BATCH_REGISTER_SUCCESS = 'POST_BATCH_REGISTER_SUCCESS';
+export const POST_BATCH_REGISTER_SUCCESS = 'POST_BATCH_REGISTER_SUCCESS';
+
+export const STORE_TOKEN_DEVICE = 'STORE_TOKEN_DEVICE';
 
 const patchUpdateRequest = () => {
   return {
@@ -184,6 +191,13 @@ export const deleteUserAccountError = () => {
   };
 };
 
+export const storeTokenDevice = (tokenDevice) => {
+  return {
+    type: STORE_TOKEN_DEVICE,
+    payload: {tokenDevice},
+  };
+};
+
 export const deleteUserAccount = (id) => {
   return (dispatch) => {
     dispatch(deleteUserAccountRequest);
@@ -216,6 +230,7 @@ export const accountReducer = (state = initialState, action) => {
     case POST_REGISTER_USER_REQUEST:
     case POST_REGISTER_USER_SUCCESS:
     case POST_REGISTER_USER_ERROR:
+    case STORE_TOKEN_DEVICE:
     case STORE_ACCOUNT:
       return {...state, ...action.payload};
     case CHANGE_ACTION: {

@@ -39,7 +39,7 @@ class Login extends React.Component {
       return;
     }
 
-    this.props.login(email, password);
+    this.props.login(email, password, this.props.tokenDevice);
   };
 
   render() {
@@ -100,12 +100,14 @@ const mapStateToProps = (state) => {
   const {errorMessage} = state.errorMessageStore;
   const {loading} = state.authenticationStore;
   const {loading: loadingLiveVideo, video} = state.liveVideoStore;
+  const {tokenDevice} = state.accountStore;
   return {
     errorMessage,
     loading,
     loadingLiveVideo,
     video,
     account: state.accountStore,
+    tokenDevice,
   };
 };
 
@@ -129,6 +131,7 @@ Login.propTypes = {
   account: PropTypes.object,
   loadingLiveVideo: PropTypes.bool,
   video: PropTypes.object,
+  tokenDevice: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
