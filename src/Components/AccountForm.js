@@ -225,7 +225,7 @@ export default class AccountForm extends Component {
                   });
                   this.props.updateAction(SHOW_ACCOUNT_ACTION);
                 } else {
-                  this.props.navigation.navigate('Login');
+                  this.props.navigation.navigate('LoginScreen');
                 }
               }}
               style={{borderRadius: 30, width: 50}}>

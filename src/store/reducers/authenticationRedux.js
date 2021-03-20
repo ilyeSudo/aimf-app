@@ -10,7 +10,6 @@ import getAxiosInstance from '../../Utils/axios';
 import {dispatchError} from './errorMessageRedux';
 import {storeAccount} from './accountRedux';
 import getRandomQuestionIndex from '../../Components/AccountForm/Functions';
-import {getLiveVideo} from './liveVideoRedux';
 
 const POST_REQUEST = 'POST_REQUEST';
 const POST_LOGIN_SUCCESS = 'POST_LOGIN_SUCCESS';
@@ -95,7 +94,7 @@ const getTermsOfUseError = () => {
   };
 };
 
-export const login = (email, password, deviceToken) => {
+export const login = (email, password, fcmToken) => {
   return (dispatch) => {
     dispatch(postRequest());
 
@@ -103,7 +102,7 @@ export const login = (email, password, deviceToken) => {
       .post(POST_LOGIN_URI, {
         email,
         password,
-        deviceToken,
+        fcmToken,
       })
       .then((response) => {
         dispatch(
@@ -113,7 +112,6 @@ export const login = (email, password, deviceToken) => {
           ),
         );
         axios.defaults.headers.Authorization = `Bearer ${response.data.access_token}`;
-        dispatch(getLiveVideo(response.data));
       })
       .catch((error) => {
         dispatch(

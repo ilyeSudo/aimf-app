@@ -114,6 +114,7 @@ class SignUp extends Component {
           answer: data.response2,
         },
       ],
+      fcmToken: this.props.fcmToken,
     });
   };
 
@@ -170,7 +171,7 @@ class SignUp extends Component {
 
 const mapStateToProps = (state) => {
   const {errorMessage} = state.errorMessageStore;
-  const {action, loading: loadingRegister} = state.accountStore;
+  const {action, loading: loadingRegister, fcmToken} = state.accountStore;
   const {
     questions1,
     questions2,
@@ -188,6 +189,7 @@ const mapStateToProps = (state) => {
     question2,
     loadingQuestion,
     loadingRegister,
+    fcmToken,
   };
 };
 
@@ -213,5 +215,6 @@ SignUp.propTypes = {
   questions2: PropTypes.array,
   question1: PropTypes.object,
   question2: PropTypes.object,
+  fcmToken: PropTypes.string,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

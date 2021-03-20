@@ -264,7 +264,7 @@ export const unActiveUserTabNavigator = createBottomTabNavigator(
   },
 );
 
-export const activeUserWithYoutubeLiveTabNavigator = createBottomTabNavigator({
+export const activeUserTabNavigator = createBottomTabNavigator({
   HomeStack,
   KoranStack,
   libraryStack,
@@ -272,53 +272,7 @@ export const activeUserWithYoutubeLiveTabNavigator = createBottomTabNavigator({
   AccountStack,
 });
 
-export const activeUserTabNavigator = createBottomTabNavigator(
-  {
-    HomeStack,
-    KoranStack,
-    libraryStack,
-    disableYouTubeStack,
-    AccountStack,
-  },
-  {
-    defaultNavigationOptions: {
-      tabBarOnPress: ({navigation, defaultHandler}) => {
-        if (navigation.state.routeName === 'disableYouTubeStack') {
-          return null;
-        }
-        defaultHandler();
-        return null;
-      },
-    },
-    initialRouteName: 'AccountStack',
-  },
-);
-
-export const adminUserTabNavigator = createBottomTabNavigator(
-  {
-    HomeStack,
-    KoranStack,
-    libraryStack,
-    PostWorkflowStack,
-    disableYouTubeStack,
-    UserStack,
-    AccountStack,
-  },
-  {
-    defaultNavigationOptions: {
-      tabBarOnPress: ({navigation, defaultHandler}) => {
-        if (navigation.state.routeName === 'disableYouTubeStack') {
-          return null;
-        }
-        defaultHandler();
-        return null;
-      },
-    },
-    initialRouteName: 'HomeStack',
-  },
-);
-
-export const adminUserWithYoutubeLiveTabNavigator = createBottomTabNavigator({
+export const adminUserTabNavigator = createBottomTabNavigator({
   HomeStack,
   KoranStack,
   libraryStack,
@@ -328,34 +282,10 @@ export const adminUserWithYoutubeLiveTabNavigator = createBottomTabNavigator({
   AccountStack,
 });
 
-export const adminAssociationTabNavigator = createBottomTabNavigator(
-  {
-    HomeStack,
-    KoranStack,
-    PostWorkflowStack,
-    disableYouTubeStack,
-    AccountStack,
-  },
-  {
-    defaultNavigationOptions: {
-      tabBarOnPress: ({navigation, defaultHandler}) => {
-        if (navigation.state.routeName === 'disableYouTubeStack') {
-          return null;
-        }
-        defaultHandler();
-        return null;
-      },
-    },
-    initialRouteName: 'HomeStack',
-  },
-);
-
-export const adminAssociationWithYoutubeLiveTabNavigator = createBottomTabNavigator(
-  {
-    HomeStack,
-    KoranStack,
-    PostWorkflowStack,
-    YouTubeStack,
-    AccountStack,
-  },
-);
+export const adminAssociationTabNavigator = createBottomTabNavigator({
+  HomeStack,
+  KoranStack,
+  PostWorkflowStack,
+  YouTubeStack,
+  AccountStack,
+});

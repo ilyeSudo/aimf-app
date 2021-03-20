@@ -27,7 +27,7 @@ const ActionsButton = (props) => {
 
       {props.action === CREATE_ACCOUNT_ACTION ? (
         <TouchableOpacity
-          onPress={() => props.navigation.navigate('Login')}
+          onPress={() => props.navigation.navigate('LoginScreen')}
           activeOpacity={0.6}
           style={styles.loginLink}>
           <Text>Vous êtes déjà inscrit? Cliquez ici</Text>

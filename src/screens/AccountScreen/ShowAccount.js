@@ -47,7 +47,8 @@ class ShowAccount extends Component {
       icon = require('../../../assets/images/female_unselected.png');
     }
     return (
-      <View style={styles.container}>
+      <View
+        style={{...styles.container, opacity: this.props.scrollViewOpacity}}>
         <Text style={styles.myAccountText}>Mon compte</Text>
         <Image style={styles.logo} source={icon} />
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
@@ -110,6 +111,7 @@ ShowAccount.propTypes = {
   logout: PropTypes.func.isRequired,
   deleteCurrentUserAccount: PropTypes.func.isRequired,
   errorMessage: PropTypes.string.isRequired,
+  scrollViewOpacity: PropTypes.number,
 };
 
 export default ShowAccount;

@@ -191,10 +191,10 @@ export const deleteUserAccountError = () => {
   };
 };
 
-export const storeTokenDevice = (tokenDevice) => {
+export const storeTokenDevice = (fcmToken) => {
   return {
     type: STORE_TOKEN_DEVICE,
-    payload: {tokenDevice},
+    payload: {fcmToken},
   };
 };
 

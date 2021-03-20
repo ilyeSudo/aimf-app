@@ -56,7 +56,7 @@ class AccountScreen extends Component {
 
   componentDidUpdate() {
     if (!this.props.account.user) {
-      this.props.navigation.navigate('Login');
+      this.props.navigation.navigate('LoginScreen');
     }
   }
 
@@ -153,6 +153,13 @@ class AccountScreen extends Component {
         <>
           {this.props.action === SHOW_ACCOUNT_ACTION ? (
             <ShowAccount
+              scrollViewOpacity={
+                this.props.logoutLoading ||
+                this.props.updateLoading ||
+                this.props.errorMessage
+                  ? 0.6
+                  : 1
+              }
               user={this.props.account ? this.props.account.user : null}
               gender={this.state.gender}
               fullName={getFullName(this.state)}
@@ -166,7 +173,11 @@ class AccountScreen extends Component {
           ) : (
             <AccountForm
               scrollViewOpacity={
-                this.props.loading || this.props.errorMessage ? 0.6 : 1
+                this.props.logoutLoading ||
+                this.props.updateLoading ||
+                this.props.errorMessage
+                  ? 0.6
+                  : 1
               }
               action={UPDATE_ACCOUNT_ACTION}
               data={data}
@@ -180,7 +191,9 @@ class AccountScreen extends Component {
           {this.props.errorMessage && (
             <ErrorModal visible message={this.props.errorMessage} />
           )}
-          <Loader visible={!!this.props.loading} />
+          <Loader
+            visible={!!this.props.logoutLoading || !!this.props.updateLoading}
+          />
         </>
       );
     }
@@ -200,11 +213,14 @@ class AccountScreen extends Component {
 
 const mapStateToProps = (state) => {
   const {errorMessage} = state.errorMessageStore;
-  const {action} = state.accountStore;
+  const {action, loading: updateLoading} = state.accountStore;
+  const {loading: logoutLoading} = state.authenticationStore;
   return {
     errorMessage,
     action,
     account: state.accountStore,
+    logoutLoading,
+    updateLoading,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -227,7 +243,8 @@ AccountScreen.propTypes = {
   updateCurrentUser: PropTypes.func,
   updateAction: PropTypes.func,
   deleteUserAccount: PropTypes.func,
-  loading: PropTypes.bool,
+  logoutLoading: PropTypes.bool,
+  updateLoading: PropTypes.bool,
   action: PropTypes.string,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AccountScreen);
