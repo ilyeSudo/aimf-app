@@ -78,10 +78,10 @@ export default class FCMService {
     // When a user tap on a push notification and the app is in background
     this.backgroundNotificationListener = messaging().onNotificationOpenedApp(
       async (remoteMessage) => {
-        console.log(
-          '[FCMService] onNotificationOpenedApp Notification caused app to open from background state :',
-          remoteMessage,
-        );
+        // console.log(
+        //   '[FCMService] onNotificationOpenedApp Notification caused app to open from background state :',
+        //   remoteMessage,
+        // );
         if (remoteMessage) {
           onOpenNotification(remoteMessage);
           // this.removeDeliveredNotification(notification.notificationId)
@@ -95,10 +95,10 @@ export default class FCMService {
       .getInitialNotification()
       .then((remoteMessage) => {
         if (remoteMessage) {
-          console.log(
-            '[FCMService] getInitialNotification Notification caused app to open from quit state:',
-            remoteMessage,
-          );
+          // console.log(
+          //   '[FCMService] getInitialNotification Notification caused app to open from quit state:',
+          //   remoteMessage,
+          // );
 
           if (remoteMessage) {
             onOpenNotification(remoteMessage);
@@ -109,7 +109,7 @@ export default class FCMService {
 
     // Foreground state messages
     this.messageListener = messaging().onMessage(async (remoteMessage) => {
-      console.log('[FCMService] A new FCM message arrived!', remoteMessage);
+      // console.log('[FCMService] A new FCM message arrived!', remoteMessage);
       if (remoteMessage) {
         // let notification = null;
         // if (Platform.OS === 'ios') {

@@ -7,7 +7,7 @@ import {
 } from './Constants/Notifications';
 
 const NotificationHandler = (navigationHandler, action) => {
-  console.log('[NotificationHandler] Handle notification action : ', action);
+  // console.log('[NotificationHandler] Handle notification action : ', action);
   switch (action) {
     case ACCOUNT_ACTIVATED_USER_ALIAS:
       navigationHandler.navigate('LoginScreen');

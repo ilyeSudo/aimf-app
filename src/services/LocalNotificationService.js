@@ -6,10 +6,10 @@ export default class LocalNotificationService {
   configure = (onOpenNotification) => {
     PushNotification.configure({
       onRegister(token) {
-        console.log('[LocalNotificationService] onRegister :', token);
+        // console.log('[LocalNotificationService] onRegister :', token);
       },
       onNotification(notification) {
-        console.log('[LocalNotificationService] onNotification:', notification);
+        // console.log('[LocalNotificationService] onNotification:', notification);
         if (!notification?.data) {
           return;
         }

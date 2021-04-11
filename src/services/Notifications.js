@@ -3,15 +3,15 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 export default class Notifications {
   configure = (onRegister, onNotification) => {
-    console.log('[Notification] configure');
+    // console.log('[Notification] configure');
 
     PushNotification.configure({
       // (optional) Called when Token is generated (iOS and Android)
       // (required) Called when a remote or local notification is opened or received,
       onRegister(token) {
         onRegister(token);
-        console.log('####################loading');
-        console.log('[Notification] onRegister: ', token);
+        // console.log('####################loading');
+        // console.log('[Notification] onRegister: ', token);
       },
       // (required) Called when a remote or local notification is opened or received
       // onNotification, // this._onNotification,

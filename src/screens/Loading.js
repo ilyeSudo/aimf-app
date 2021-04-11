@@ -34,7 +34,7 @@ class Loading extends React.Component {
   }
 
   componentDidMount() {
-    console.log('[Loading] componentDidMount : ', this.props.account);
+    // console.log('[Loading] componentDidMount : ', this.props.account);
     if (this.props.account && this.props.account.access_token) {
       axios.defaults.headers.Authorization = `Bearer ${this.props.account.access_token}`;
     }
@@ -53,14 +53,14 @@ class Loading extends React.Component {
   }
 
   onRegister = (fcmToken) => {
-    console.log('[Loading] fcmToken : ', fcmToken);
+    // console.log('[Loading] fcmToken : ', fcmToken);
     if (!this.props.fcmToken) {
       this.props.storeTokenDevice(fcmToken);
     }
   };
 
   onNotification = (notification) => {
-    console.log('[Loading] onNotification: ', notification);
+    // console.log('[Loading] onNotification: ', notification);
     if (
       notification?.notification_alias ||
       notification?.data?.notification_alias
@@ -83,7 +83,7 @@ class Loading extends React.Component {
   };
 
   onOpenNotification = (notification) => {
-    console.log('[Loading] onOpenNotification: ', notification);
+    // console.log('[Loading] onOpenNotification: ', notification);
     if (
       notification?.notification_alias ||
       notification?.data?.notification_alias
