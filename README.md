@@ -22,10 +22,25 @@ git clone git@github.com:ilyeSudo/AIMFAPP.git
 cd AIMFAPP/
 yarn install
 ```
-- Install react-native-cli globally: 
-``` 
-yarn global add react-native-cli
+- Install Android Studio
+
+- Configure Android SDK BUILD :
+
+In Tools->SDK Manager click on SDK Tools -> check Show Package Details -> Select version 28.0.3 of Android SDK Build
+
+- In windows add the path to platform-tools path to the path environment variable. Exemple: /c/Users/<user names>/AppData/Local/Android/Sdk/platform-tools
+
+- Create environnements variables :
+```shell
+export ANDROID_SDK_ROOT="path to Sdk" # exemple /c/Users/<user names>/AppData/Local/Android/Sdk in widows 
+export JAVA_HOME="path to ja va" # exemple /c/Program\ Files\ \(x86\)/Common\ Files/Oracle/Java/javapath/java.exe in windows 
 ```
+
+- Create debug.keystore file :
+```shell
+path to keytool.exe -genkey -dname "CN=Unknown,O=Unknown,C=Unknown" -keystore  android/app/debug.keystore  -keysize 1024 -alias androiddebugkey -validity 14000 -keypass android -storepass android
+```
+
 - Create a new .env file from .env.example and put your ip private address with 8080 port in API_BASE_URL variable (ex : http://192.168.0.23:8080) 
 - Start the react server
 ```
