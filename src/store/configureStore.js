@@ -68,7 +68,7 @@ const logoutUser = (store) => (next) => (action) => {
     action.meta.batch &&
     action.payload[0].type === DISPATCH_UNAUTHORIZED_ERROR
   ) {
-    NavigationService.navigate('Login');
+    NavigationService.navigate('LoginScreen');
   }
   return next(action);
 };

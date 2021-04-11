@@ -7,15 +7,12 @@ import {createSwitchNavigator, createAppContainer} from 'react-navigation';
 // import the different screens
 import Loading from './src/screens/Loading';
 import SignUp from './src/screens/SignUp';
-import Login from './src/screens/Login';
+import LoginScreen from './src/screens/LoginScreen';
 import {
-  activeUserWithYoutubeLiveTabNavigator,
   unActiveUserTabNavigator,
   adminUserTabNavigator,
-  adminUserWithYoutubeLiveTabNavigator,
   activeUserTabNavigator,
   adminAssociationTabNavigator,
-  adminAssociationWithYoutubeLiveTabNavigator,
 } from './src/MainTabNavigator';
 import {store, persistor} from './src/store/configureStore';
 // create our app's navigation stack
@@ -23,14 +20,11 @@ const switchNavigator = createSwitchNavigator(
   {
     Loading,
     SignUp,
-    Login,
-    activeUserWithYoutubeLiveTabNavigator,
+    LoginScreen,
     unActiveUserTabNavigator,
     adminUserTabNavigator,
-    adminUserWithYoutubeLiveTabNavigator,
     activeUserTabNavigator,
     adminAssociationTabNavigator,
-    adminAssociationWithYoutubeLiveTabNavigator,
   },
   {
     initialRouteName: 'Loading',

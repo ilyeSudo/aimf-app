@@ -7,12 +7,12 @@ import ErrorModal from '../Components/ErrorModal';
 import {CREDENTIALS_EMPTY_ERROR} from '../Utils/Constants';
 import {dispatchErrorMessage} from '../store/reducers/errorMessageRedux';
 import {login} from '../store/reducers/authenticationRedux';
-import {navigate} from '../Utils/Account';
 import RenderInput from '../Components/RenderInput';
 import RenderPassword from '../Components/RenderPassoword';
 import styles from './Login/css';
+import {navigate} from '../Utils/Account';
 
-class Login extends React.Component {
+class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,14 +22,8 @@ class Login extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.loadingLiveVideo === false) {
-      navigate(
-        this.props.account,
-        this.props.navigation,
-        'Login',
-        this.props?.video?.isLive,
-      );
-    }
+    // console.log('[Login] componentDidUpdate : ', this.props.account);
+    navigate(this.props.account, this.props.navigation, 'LoginScreen');
   }
 
   handleLogin = () => {
@@ -38,8 +32,7 @@ class Login extends React.Component {
       this.props.dispatchErrorMessage(CREDENTIALS_EMPTY_ERROR);
       return;
     }
-
-    this.props.login(email, password, this.props.tokenDevice);
+    this.props.login(email, password, this.props.fcmToken);
   };
 
   render() {
@@ -99,22 +92,19 @@ class Login extends React.Component {
 const mapStateToProps = (state) => {
   const {errorMessage} = state.errorMessageStore;
   const {loading} = state.authenticationStore;
-  const {loading: loadingLiveVideo, video} = state.liveVideoStore;
-  const {tokenDevice} = state.accountStore;
+  const {fcmToken} = state.accountStore;
   return {
     errorMessage,
     loading,
-    loadingLiveVideo,
-    video,
     account: state.accountStore,
-    tokenDevice,
+    fcmToken,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (email, password) => {
-      dispatch(login(email, password));
+    login: (email, password, fcmToken) => {
+      dispatch(login(email, password, fcmToken));
     },
     dispatchErrorMessage: (errorMessage) => {
       dispatch(dispatchErrorMessage(errorMessage));
@@ -122,16 +112,14 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-Login.propTypes = {
+LoginScreen.propTypes = {
   errorMessage: PropTypes.string,
   dispatchErrorMessage: PropTypes.func,
   login: PropTypes.func,
   navigation: PropTypes.object,
   loading: PropTypes.bool,
   account: PropTypes.object,
-  loadingLiveVideo: PropTypes.bool,
-  video: PropTypes.object,
-  tokenDevice: PropTypes.string,
+  fcmToken: PropTypes.string,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

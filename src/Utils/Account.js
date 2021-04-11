@@ -76,26 +76,25 @@ export const canReserveBook = (user) => {
 export const navigate = (
   account,
   navigation,
-  defaultNavigation = 'Login',
-  youtube = false,
+  defaultNavigation = 'LoginScreen',
 ) => {
+  // console.log('[Account] navigate : ', account);
   let screen = defaultNavigation;
-  let live = !!youtube;
   if (account.user && account.access_token) {
     axios.defaults.headers.Authorization = `Bearer ${account.access_token}`;
-
-    if (isAdmin(account.user) || isSuperAdmin(account.user)) {
-      screen = 'adminUser';
-    } else if (isAssociationAdmin(account.user)) {
-      screen = 'adminAssociation';
-    } else if (isMember(account.user) || isLibrarian(account.user)) {
-      screen = 'activeUser';
-    } else {
-      screen = 'unActiveUser';
-      live = false;
-      navigation.navigate('unActiveUserTabNavigator');
+    switch (true) {
+      case isAdmin(account.user) || isSuperAdmin(account.user):
+        screen = 'adminUserTabNavigator';
+        break;
+      case isAssociationAdmin(account.user):
+        screen = 'adminAssociationTabNavigator';
+        break;
+      case isMember(account.user) || isLibrarian(account.user):
+        screen = 'activeUserTabNavigator';
+        break;
+      default:
+        screen = 'unActiveUserTabNavigator';
     }
-    screen = `${screen + (live ? 'WithYoutubeLive' : '')}TabNavigator`;
   }
   navigation.navigate(screen);
 };

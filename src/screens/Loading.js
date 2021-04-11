@@ -9,12 +9,13 @@ import {getLiveVideo} from '../store/reducers/liveVideoRedux';
 import FCMService from '../services/FCMService';
 import {storeTokenDevice} from '../store/reducers/accountRedux';
 import {
-  ACTIVE_USER_ALIAS,
+  ACCOUNT_ACTIVATED_USER_ALIAS,
   YOUTUBE_LIVE_FINISHED_ALIAS,
   YOUTUBE_LIVE_START_ALIAS,
 } from '../Utils/Constants/Notifications';
 import NotificationHandler from '../Utils/NotificationHandler';
 import LocalNotificationService from '../services/LocalNotificationService';
+import {logout} from '../store/reducers/authenticationRedux';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,26 +34,16 @@ class Loading extends React.Component {
   }
 
   componentDidMount() {
-    // this.notification = new Notifications(this.onRegister.bind(this), null);
-
+    console.log('[Loading] componentDidMount : ', this.props.account);
     if (this.props.account && this.props.account.access_token) {
       axios.defaults.headers.Authorization = `Bearer ${this.props.account.access_token}`;
-      if (!this.props.video) {
-        this.props.getLiveVideo();
-      }
     }
     NavigationService.setInstance(this.props.navigation);
-    navigate(
-      this.props.account,
-      this.props.navigation,
-      'Login',
-      this.props?.video?.isLive,
-    );
+    navigate(this.props.account, this.props.navigation, 'LoginScreen');
 
     this.fcmService = new FCMService();
     this.localNotificationService = new LocalNotificationService();
 
-    // this.fcmService.registerAppWithFCM();
     this.fcmService.register(
       this.onRegister,
       this.onNotification,
@@ -61,27 +52,15 @@ class Loading extends React.Component {
     this.localNotificationService.configure(this.onOpenNotification);
   }
 
-  onRegister = (token) => {
-    // console.log('[App] token : ', token);
-    if (!this.props.tokenDevice) {
-      this.props.storeTokenDevice(token);
+  onRegister = (fcmToken) => {
+    console.log('[Loading] fcmToken : ', fcmToken);
+    if (!this.props.fcmToken) {
+      this.props.storeTokenDevice(fcmToken);
     }
   };
 
   onNotification = (notification) => {
-    // console.log('[App] onNotification: ', notification);
-    const options = {
-      soundName: 'default',
-      playSound: true,
-    };
-
-    this.localNotificationService.showNotification(
-      0,
-      notification.title,
-      notification.body,
-      notification,
-      options,
-    );
+    console.log('[Loading] onNotification: ', notification);
     if (
       notification?.notification_alias ||
       notification?.data?.notification_alias
@@ -89,6 +68,10 @@ class Loading extends React.Component {
       const action = notification.notification_alias
         ? notification.notification_alias
         : notification.data.notification_alias;
+
+      if (action === ACCOUNT_ACTIVATED_USER_ALIAS) {
+        this.props.logout();
+      }
 
       if (
         action === YOUTUBE_LIVE_START_ALIAS ||
@@ -100,7 +83,7 @@ class Loading extends React.Component {
   };
 
   onOpenNotification = (notification) => {
-    // console.log('[App] onOpenNotification: ', notification);
+    console.log('[Loading] onOpenNotification: ', notification);
     if (
       notification?.notification_alias ||
       notification?.data?.notification_alias
@@ -109,19 +92,11 @@ class Loading extends React.Component {
         ? notification.notification_alias
         : notification.data.notification_alias;
 
-      // console.log('Action: ', action);
-
-      if (action === ACTIVE_USER_ALIAS) {
+      if (action === ACCOUNT_ACTIVATED_USER_ALIAS) {
         this.props.logout();
       }
 
       NotificationHandler(this.props.navigation, action);
-      // if (
-      //   action === YOUTUBE_LIVE_START_ALIAS ||
-      //   action === YOUTUBE_LIVE_FINISHED_ALIAS
-      // ) {
-      //   this.props.getLiveVideo(this.props.account);
-      // }
 
       if (!notification.foreground) {
         NotificationHandler(this.props.navigation, action);
@@ -140,26 +115,24 @@ class Loading extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const {video} = state.liveVideoStore;
   return {
     account: state.accountStore,
-    video,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    logout: () => dispatch(logout()),
     getLiveVideo: (account) => dispatch(getLiveVideo(account)),
-    storeTokenDevice: (tokenDevice) => dispatch(storeTokenDevice(tokenDevice)),
+    storeTokenDevice: (fcmToken) => dispatch(storeTokenDevice(fcmToken)),
   };
 };
 Loading.propTypes = {
   account: PropTypes.object,
   navigation: PropTypes.object,
-  video: PropTypes.object,
   getLiveVideo: PropTypes.func,
   storeTokenDevice: PropTypes.func,
-  tokenDevice: PropTypes.object,
+  fcmToken: PropTypes.object,
   logout: PropTypes.func,
 };
 

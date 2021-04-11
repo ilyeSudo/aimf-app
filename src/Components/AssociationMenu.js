@@ -186,7 +186,7 @@ class AssociationMenu extends Component {
                     <Image
                       style={styles.selAllIconbg}
                       source={{
-                        uri: `${API_BASE_URL}/${item.logo}`,
+                        uri: `${API_BASE_URL}${item.logo}`,
                       }}
                     />
                     <Text
