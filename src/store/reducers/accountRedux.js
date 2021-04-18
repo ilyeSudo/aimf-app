@@ -218,12 +218,10 @@ export const deleteUserAccount = (id) => {
   };
 };
 
-const initialState = {
-  action: SHOW_ACCOUNT_ACTION,
-};
+const initialState = {};
 
-export const accountReducer = (state = initialState, action) => {
-  switch (action.type) {
+export const accountReducer = (state = initialState, data) => {
+  switch (data.type) {
     case PATCH_UPDATE_USER_REQUEST:
     case PATCH_UPDATE_USER_SUCCESS:
     case PATCH_UPDATE_USER_ERROR:
@@ -232,9 +230,9 @@ export const accountReducer = (state = initialState, action) => {
     case POST_REGISTER_USER_ERROR:
     case STORE_TOKEN_DEVICE:
     case STORE_ACCOUNT:
-      return {...state, ...action.payload};
+      return {...state, action: SHOW_ACCOUNT_ACTION, ...data.payload};
     case CHANGE_ACTION: {
-      return {...state, action: action.payload};
+      return {...state, action: data.payload};
     }
     default: {
       return state;

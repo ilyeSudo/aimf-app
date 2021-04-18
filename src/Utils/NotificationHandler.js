@@ -5,26 +5,37 @@ import {
   YOUTUBE_LIVE_START_ALIAS,
   YOUTUBE_LIVE_FINISHED_ALIAS,
 } from './Constants/Notifications';
+import {isAdmin, isNewMember} from './Account';
 
-const NotificationHandler = (navigationHandler, action) => {
+const NotificationHandler = (navigationHandler, action, user) => {
+  console.log('[NotificationHandler]', action);
+
   // console.log('[NotificationHandler] Handle notification action : ', action);
   switch (action) {
     case ACCOUNT_ACTIVATED_USER_ALIAS:
       navigationHandler.navigate('LoginScreen');
       return;
     case ACCOUNT_CREATED_ADMIN:
-      navigationHandler.navigate('UserStack');
+      if (user && isAdmin(user)) {
+        navigationHandler.navigate('UserStack');
+      }
       return;
     case KHATMA_OPENED_ALIAS:
-      navigationHandler.navigate('KoranStack');
+      if (user && !isNewMember(user)) {
+        navigationHandler.navigate('KoranStack');
+      }
       return;
     case YOUTUBE_LIVE_START_ALIAS:
     case YOUTUBE_LIVE_FINISHED_ALIAS:
-      navigationHandler.navigate('HomeStack');
-      navigationHandler.navigate('YouTubeStack');
+      if (user && !isNewMember(user)) {
+        navigationHandler.navigate('HomeStack');
+        navigationHandler.navigate('YouTubeStack');
+      }
       return;
     default:
-      navigationHandler.navigate('HomeStack');
+      if (user && !isNewMember(user)) {
+        navigationHandler.navigate('HomeStack');
+      }
   }
 };
 

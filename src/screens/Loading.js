@@ -59,8 +59,7 @@ class Loading extends React.Component {
     }
   };
 
-  onNotification = (notification) => {
-    // console.log('[Loading] onNotification: ', notification);
+  getNotificationAction = (notification) => {
     if (
       notification?.notification_alias ||
       notification?.data?.notification_alias
@@ -73,34 +72,35 @@ class Loading extends React.Component {
         this.props.logout();
       }
 
-      if (
-        action === YOUTUBE_LIVE_START_ALIAS ||
-        action === YOUTUBE_LIVE_FINISHED_ALIAS
-      ) {
-        this.props.getLiveVideo(this.props.account);
-      }
+      return action;
+    }
+    return null;
+  };
+
+  onNotification = (notification) => {
+    // console.log('[Loading] onNotification: ', notification);
+
+    const action = this.getNotificationAction(notification);
+
+    if (
+      action &&
+      (action === YOUTUBE_LIVE_START_ALIAS ||
+        action === YOUTUBE_LIVE_FINISHED_ALIAS)
+    ) {
+      this.props.getLiveVideo();
     }
   };
 
   onOpenNotification = (notification) => {
     // console.log('[Loading] onOpenNotification: ', notification);
-    if (
-      notification?.notification_alias ||
-      notification?.data?.notification_alias
-    ) {
-      const action = notification.notification_alias
-        ? notification.notification_alias
-        : notification.data.notification_alias;
+    const action = this.getNotificationAction(notification);
 
-      if (action === ACCOUNT_ACTIVATED_USER_ALIAS) {
-        this.props.logout();
-      }
-
-      NotificationHandler(this.props.navigation, action);
-
-      if (!notification.foreground) {
-        NotificationHandler(this.props.navigation, action);
-      }
+    if (action) {
+      NotificationHandler(
+        this.props.navigation,
+        action,
+        this.props.account?.user,
+      );
     }
   };
 
@@ -123,7 +123,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(logout()),
-    getLiveVideo: (account) => dispatch(getLiveVideo(account)),
+    getLiveVideo: () => dispatch(getLiveVideo()),
     storeTokenDevice: (fcmToken) => dispatch(storeTokenDevice(fcmToken)),
   };
 };
