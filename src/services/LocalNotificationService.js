@@ -9,7 +9,7 @@ export default class LocalNotificationService {
         console.log('[LocalNotificationService] onRegister :', token);
       },
       onNotification(notification) {
-        console.log('[LocalNotificationService] onNotification:', notification);
+        // console.log('[LocalNotificationService] onNotification:', notification);
         if (!notification?.data) {
           return;
         }

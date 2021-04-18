@@ -5,6 +5,7 @@ import {
   MEMBER_ROLE,
   SUPER_ADMIN_ROLE,
   ASSOCIATION_ADMIN_ROLE,
+  NEW_MEMBER_ROLE,
 } from './Constants';
 
 export const isSuperAdmin = (user) => {
@@ -46,6 +47,13 @@ export const isSpecifiedAssociationAdmin = (user, associationName) => {
   return false;
 };
 
+const isLibrarian = (user) => {
+  if (user && user.roles) {
+    return !!user.roles.find((role) => role.name === LIBRARIAN_ROLE);
+  }
+  return false;
+};
+
 export const isMember = (user) => {
   if (user && user.roles) {
     return !!user.roles.find((role) => role.name === MEMBER_ROLE);
@@ -53,9 +61,9 @@ export const isMember = (user) => {
   return false;
 };
 
-const isLibrarian = (user) => {
+export const isNewMember = (user) => {
   if (user && user.roles) {
-    return !!user.roles.find((role) => role.name === LIBRARIAN_ROLE);
+    return !!user.roles.find((role) => role.name === NEW_MEMBER_ROLE);
   }
   return false;
 };

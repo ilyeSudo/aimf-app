@@ -58,7 +58,7 @@ const getQrCodeBooking = (qrCodeBooking) => {
       }
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.log(e);
+      // console.log(e);
     }
   }
   return null;
